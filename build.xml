@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Aug 11, 2009 6:01:41 PM                                                        
+
+     westchase    
+     Westchase District
+                   
+     marc                                                                
+     ====================================================================== -->
+<project name="westchase" default="deploy">
+    <description>
+            Westchase District
+    </description>
+	
+	<property name="lib.dir" value="lib" />
+	<property name="webapp.dir" value="webapp" />
+	<property name="src.dir" value="src" />
+	<property name="src.web.dir" value="${src.dir}/web" />
+	<property name="src.ejb.dir" value="${src.dir}/ejb" />
+	<property name="src.persistence.dir" value="${src.dir}/persistence" />
+	<property name="src.utils.dir" value="${src.dir}/utils" />
+	<property name="resources.dir" value="resources" />
+	<property name="resources.metainf.dir" value="${resources.dir}/META-INF" />
+	<property name="build.dir" value="bin" />
+	<property name="build.web.dir" value="${build.dir}/web" />
+	<property name="build.ejb.dir" value="${build.dir}/ejb" />
+	<property name="build.persistence.dir" value="${build.dir}/persistence" />
+	<property name="build.utils.dir" value="${build.dir}/utils" />
+	<property name="build.jobs.dir" value="${build.dir}/jobs" />
+
+	
+	<property name="deploy.dir" value="deploy" />
+	<property name="deploy.ear.dir" value="${deploy.dir}/westchase.ear" />
+	<property name="deploy.metainf.dir" value="${deploy.ear.dir}/META-INF" />
+	<property name="deploy.jar.dir" value="${deploy.ear.dir}/westchase.jar" />
+	<property name="deploy.jar.metainf.dir" value="${deploy.ear.dir}/META-INF" />
+	<property name="deploy.persistence.dir" value="${deploy.ear.dir}/westchase-persistence.jar" />
+	<property name="deploy.persistence.metainf.dir" value="${deploy.persistence.dir}/META-INF" />
+	<property name="deploy.utils.dir" value="${deploy.ear.dir}/westchase-utils.jar" />
+	<property name="deploy.sar.dir" value="${deploy.ear.dir}/westchasesched.sar" />
+	<property name="deploy.sar.metainf.dir" value="${deploy.sar.dir}/META-INF" />
+	
+	
+	<property name="deploy.war.dir" value="${deploy.ear.dir}/westchase.war" />
+	<property name="deploy.webinf.lib.dir" value="${deploy.war.dir}/WEB-INF/lib" />
+	<property name="deploy.webinf.classes.dir" value="${deploy.war.dir}/WEB-INF/classes" />
+
+	<property name="deploy.jboss.dir" value="C:\jboss\jboss-5.1.0.CR1\server\default\deploy" />
+
+    <!-- ================================= 
+          target: deploy              
+         ================================= -->
+    <target name="deploy" depends="depends">
+    	<!--<delete dir="${deploy.dir}" />
+    	<delete dir="${deploy.jboss.dir}/westchase.ear" />-->
+    	
+    	<mkdir dir="${deploy.metainf.dir}" />
+		
+		<mkdir dir="${deploy.jar.metainf.dir}" />
+		<mkdir dir="${deploy.persistence.metainf.dir}" />
+		
+    	
+    	<mkdir dir="${deploy.war.dir}" />
+    	
+    	
+    	<copy todir="${deploy.metainf.dir}">
+    		<fileset dir="${resources.metainf.dir}">
+    			<include name="application.xml" />
+    			<include name="jboss-app.xml" />
+    		</fileset>
+    	</copy>
+    	
+    	<copy todir="${deploy.jar.dir}">
+    		<fileset dir="${build.ejb.dir}"/>
+    	</copy>
+
+    	<copy todir="${deploy.persistence.dir}">
+    		<fileset dir="${build.persistence.dir}"/>
+    	</copy>
+    	
+    	<copy todir="${deploy.persistence.metainf.dir}">
+    		<fileset dir="${resources.metainf.dir}">
+    			<include name="persistence.xml" />
+    		</fileset>
+    	</copy>
+
+    	<copy todir="${deploy.utils.dir}">
+    		<fileset dir="${build.utils.dir}"/>
+    	</copy>
+    	
+    		
+    	<copy todir="${deploy.war.dir}">
+    		<fileset dir="${webapp.dir}" />
+    	</copy>
+    	<copy todir="${deploy.webinf.classes.dir}">
+    		
+    		<fileset dir="${build.web.dir}"/>
+    
+    	</copy>
+    	
+    	<mkdir dir="${deploy.webinf.lib.dir}" />
+    	<copy todir="${deploy.webinf.lib.dir}">
+    		<fileset dir="${lib.dir}">
+    			<include name="commons*.jar" />
+    			<include name="struts2-core*.jar" />
+    			<include name="struts2-spring*.jar" />
+    			<include name="struts2-tiles*.jar" />
+    			<include name="struts2-sitemesh*.jar" />
+    			<include name="struts2-dojo*.jar" />
+    			<include name="struts2-dwr*.jar" />
+    			<include name="struts2-jasper*.jar" />
+    			<include name="struts2-jquery*.jar" />
+    			<include name="jasperreports*.jar" />
+    			<include name="iText*.jar" />
+    			<include name="spring.jar" />
+    			<include name="xwork-patched*.jar" />
+    			<include name="tiles*.jar" />
+    			<include name="sitemesh*.jar" />
+    			<include name="dwr*.jar" />
+    			<include name="myfaces*.jar" />
+    			<include name="freemarker*.jar" />
+    			<include name="ognl*.jar" />
+    			<include name="jta.jar" />
+    			<include name="cglib-nodep.jar" />
+    			<!-- <include name="jxl.jar" /> -->
+    			<include name="poi*.jar" />
+    			<include name="xbean.jar" />
+    			<include name="jdom*jar" />
+    			<exclude name="commons-email*jar" />
+    		</fileset>
+    	</copy>
+    	
+
+		<mkdir dir="${deploy.sar.metainf.dir}" />
+    	<copy todir="${deploy.sar.dir}">
+    		<fileset dir="${build.jobs.dir}"/>
+    		<fileset dir="${lib.dir}">
+    			<include name="htmlparser.jar" />
+    			<include name="axis.jar" />
+    			<include name="saaj.jar" />
+    			<include name="wsdl4j-1.5.1.jar" />
+    			<include name="jaxrpc.jar" />
+    			<include name="commons-discovery-0.4.jar" />
+    		</fileset>
+    		<fileset dir="../westchasews/">
+    			<include name="westchasews.jar" />
+    		</fileset>
+    	</copy>
+    	
+    	<copy todir="${deploy.sar.metainf.dir}">
+    		<fileset dir="${resources.metainf.dir}">
+    			<include name="jboss-service.xml" />
+    		</fileset>
+    	</copy>
+    	
+    	
+    	<copy todir="${deploy.jboss.dir}">
+    		<fileset dir="${deploy.dir}"/>
+    	</copy>
+    	
+    	<antcall target="touch"></antcall>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: depends                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="depends">
+    </target>
+	
+	<target name="touch">
+		<touch file="${deploy.jboss.dir}/westchase.ear/META-INF/application.xml" />
+	</target>
+
+</project>
