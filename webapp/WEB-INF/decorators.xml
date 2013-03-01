@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<decorators defaultdir="/WEB-INF/decorators">
+    <!-- Any urls that are excluded will never be decorated by Sitemesh -->
+    <excludes>
+        <pattern>/WEB-INF/login.jsp</pattern>
+        <pattern>/error.jsp</pattern>
+        <pattern>*logout*</pattern>
+        <pattern>/styles/*</pattern>
+        <pattern>/scripts/*</pattern>
+        <pattern>/images/*</pattern>
+        <pattern>/dojo/*</pattern>
+        <pattern>/nodecorate/*</pattern>
+        <pattern>/ckeditor*</pattern>
+    </excludes>
+
+    <decorator name="layout" page="layout.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+    <!--<decorator name="panel" page="panel.jsp"/>-->
+    <!--<decorator name="dashedBox" page="dashedBox.jsp"/>-->
+    <!--<decorator name="printable" page="printable.jsp"/>-->
+</decorators>

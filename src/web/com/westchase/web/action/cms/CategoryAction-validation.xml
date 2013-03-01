@@ -1,0 +1,24 @@
+<!DOCTYPE validators PUBLIC
+        "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+        "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="currentCategory.categoryCode">
+        <field-validator type="requiredstring">
+            <message>Code is required</message>
+        </field-validator>
+    </field>
+	<field name="currentCategory.categoryCode">
+		<field-validator type="stringlength">
+			<param name="maxLength">2</param>
+			<param name="minLength">2</param>
+			<param name="trim">true</param>
+			<message><![CDATA[ Code must be 2 characters ]]></message>
+		</field-validator>
+	</field>    
+    <field name="currentCategory.categoryDesc">
+        <field-validator type="requiredstring">
+            <message>Description is required</message>
+        </field-validator>
+    </field>
+</validators>

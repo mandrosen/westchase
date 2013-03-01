@@ -1,0 +1,21 @@
+<!DOCTYPE validators PUBLIC
+        "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+        "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="currentMessage.text">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Text is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentMessage.dueDate">
+        <field-validator type="required">
+            <message><![CDATA[ Due Date is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentMessage.dueDate">
+        <field-validator type="date">
+            <message><![CDATA[ Due Date must be a date ]]></message>
+        </field-validator>
+    </field>
+</validators>

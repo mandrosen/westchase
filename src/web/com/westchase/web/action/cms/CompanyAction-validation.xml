@@ -1,0 +1,79 @@
+<!DOCTYPE validators PUBLIC
+        "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+        "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="currentCompany.company">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Company Name is required ]]></message>
+        </field-validator>
+    </field>
+    <!-- not required because of POBoxes
+    <field name="currentCompany.stNumber">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Street Number is required ]]></message>
+        </field-validator>
+    </field>
+    -->
+    <field name="currentCompany.stAddress">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Address is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentCompany.city">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ City is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentCompany.state">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ State is required ]]></message>
+        </field-validator>
+		<field-validator type="regex">
+			<param name="expression">[A-Z]{2}</param>
+			<message><![CDATA[ State must be two characters ]]></message>
+		</field-validator>    
+    </field>
+    <field name="currentCompany.zipCode">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Zip Code is required ]]></message>
+        </field-validator>
+		<field-validator type="regex">
+			<param name="expression">[0-9]{5}(-[0-9]{4})?</param>
+			<message><![CDATA[ ZipCode must be in the format ##### or #####-#### ]]></message>
+		</field-validator>
+    </field>	
+    <field name="currentCompany.wkPhone">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Work Phone is required ]]></message>
+        </field-validator>
+		<field-validator type="regex">
+			<param name="expression">([0-9\-\(\)\. ])*</param>
+			<message><![CDATA[ Phone numbers can only contain numbers and () and - and . ]]></message>
+		</field-validator>
+    </field>
+    <field name="currentCompany.classification">
+		<field-validator type="requiredstring">
+			<message><![CDATA[ Classification is required ]]></message>
+		</field-validator>
+		<field-validator type="regex">
+			<param name="expression">(Non )?WC Business</param>
+			<message><![CDATA[ Classification must be WC Business or Non WC Business ]]></message>
+		</field-validator>
+	</field>
+	<!--  this requires an 'http:' and I don't want that now
+	<field name="currentCompany.website">
+		<field-validator type="url">
+			<message><![CDATA[ Website must be a valid url if supplied ]]></message>
+		</field-validator>
+	</field>
+	--> 
+	
+    <field name="currentCompany.faxPhone">
+		<field-validator type="regex">
+			<param name="expression">([0-9\-\(\)\. ])*</param>
+			<message><![CDATA[ Phone numbers can only contain numbers and () and - and . ]]></message>
+		</field-validator>
+    </field>
+    
+</validators>
