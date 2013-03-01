@@ -689,11 +689,10 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 		//			addFieldError("currentPatrolActivity.endMiles", "End miles is required");
 					addActionError("End Miles is required");
 				}
-				if (currentPatrolActivity.getStartMiles() > currentPatrolActivity.getEndMiles()) {
-		//			addFieldError("currentPatrolActivity.startMiles", "Start miles can not be greater than end miles");
-					addActionError("Start miles can not be greater than end miles");
-				}
-
+			}
+			if (currentPatrolActivity.getStartMiles() > 0 && currentPatrolActivity.getEndMiles() > 0 && currentPatrolActivity.getStartMiles() > currentPatrolActivity.getEndMiles()) {
+	//			addFieldError("currentPatrolActivity.startMiles", "Start miles can not be greater than end miles");
+				addActionError("Start miles can not be greater than end miles");
 			}
 		}
 	}
