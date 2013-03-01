@@ -24,33 +24,18 @@
 	.main {
 		width: 500px;
 		margin: 0 auto;
+		border: 4px solid navy;
+		background-color: #eee;
+
+		text-align: center;
+
+		-moz-border-radius: 15px;
+		border-radius: 15px;
 	}
-	.roundedcornr_box_343864 {
-		background: url(http://localhost/images/roundedcornr_343864_tl.png) no-repeat top left;
+	.login-form table {
+		margin-left: 50px;
 	}
-	.roundedcornr_top_343864 {
-		background: url(http://localhost/images/roundedcornr_343864_tr.png) no-repeat top right;
-	}
-	.roundedcornr_bottom_343864 {
-		background: url(http://localhost/images/roundedcornr_343864_bl.png) no-repeat bottom left;
-	}
-	.roundedcornr_bottom_343864 div {
-		background: url(http://localhost/images/roundedcornr_343864_br.png) no-repeat bottom right;
-	}
-	.roundedcornr_content_343864 {
-		background: url(http://localhost/images/roundedcornr_343864_r.png) top right repeat-y;
-	}
-	
-	.roundedcornr_top_343864 div,.roundedcornr_top_343864,
-	.roundedcornr_bottom_343864 div, .roundedcornr_bottom_343864 {
-		width: 100%;
-		height: 15px;
-		font-size: 1px;
-	}
-	.roundedcornr_content_343864, .roundedcornr_bottom_343864 {
-		margin-top: -19px;
-	}
-	.roundedcornr_content_343864 { padding: 0 15px; }	
+
 	</style>
 	<script type="text/javascript">
 		function trim(val) {
@@ -89,15 +74,10 @@
 
 	<div class="content">
 		<div class="main">
-		
-		
-		<div class="roundedcornr_box_343864">
-   <div class="roundedcornr_top_343864"><div></div></div>
-      <div class="roundedcornr_content_343864">
 
 
 		
-			<div class="loginform">
+			<div class="login-form">
 				<p>
 					Please login using your given username and password.  
 				</p>
@@ -119,12 +99,9 @@
 			</div>
 			<p>
 				If you have forgotten one or both, or if you are having an issue logging in, please contact 
-				<a href="mailto:marcr@alumni.rice.edu">Marc (mandrosen@gmail.com)</a> for help.
+				<a href="mailto:mandrosen@gmail.com">Marc (mandrosen@gmail.com)</a> for help.
 			</p>
-			
-      </div>
-   <div class="roundedcornr_bottom_343864"><div></div></div>
-</div>			
+				
 		</div>
 	</div>
 	
