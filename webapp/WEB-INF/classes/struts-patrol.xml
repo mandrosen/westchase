@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <package name="patrol-default" extends="struts-default">
+        <interceptors>
+            <interceptor-stack name="crudStack">
+              	<interceptor-ref name="checkbox" />
+                <interceptor-ref name="params" />
+        		<interceptor-ref name="staticParams" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+         
+		<global-results>
+			<result name="Exception" type="chain">
+				<param name="actionName">error</param>
+				<param name="namespace">/</param>
+			</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="Exception"/>
+        </global-exception-mappings>     
+
+    </package>
+
+	 <package name="patrol" extends="patrol-default" namespace="/patrol">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="listActivity" class="com.westchase.web.action.patrol.PatrolActivityAction" method="list">
+            <result>/WEB-INF/patrol/patrolActivityList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        <action name="sortActivity" class="com.westchase.web.action.patrol.PatrolActivityAction" method="sort">
+            <result>/WEB-INF/patrol/patrolActivityList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="goToPageActivity-*" class="com.westchase.web.action.patrol.PatrolActivityAction" method="goToPage">
+        	<param name="nextPage">{1}</param>
+            <result>/WEB-INF/patrol/patrolActivityList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="firstActivity" class="com.westchase.web.action.patrol.PatrolActivityAction" method="first">
+            <result>/WEB-INF/patrol/patrolActivityList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="nextActivity" class="com.westchase.web.action.patrol.PatrolActivityAction" method="next">
+            <result>/WEB-INF/patrol/patrolActivityList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prevActivity" class="com.westchase.web.action.patrol.PatrolActivityAction" method="prev">
+            <result>/WEB-INF/patrol/patrolActivityList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="sortActivity" class="com.westchase.web.action.patrol.PatrolActivityAction" method="sort">
+            <result>/WEB-INF/patrol/patrolActivityList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="editActivity-*" class="com.westchase.web.action.patrol.PatrolActivityAction">
+      		<param name="patrolActivityId">{1}</param>
+            <result>/WEB-INF/patrol/patrolActivityEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="saveActivity" class="com.westchase.web.action.patrol.PatrolActivityAction" method="save">
+            <result name="input">/WEB-INF/patrol/patrolActivityEdit.jsp</result>
+            <result type="redirect">editActivity-${currentPatrolActivity.id}.action</result>
+        </action>
+        
+        <action name="deleteActivity" class="com.westchase.web.action.patrol.PatrolActivityAction" method="delete">
+            <result name="error">/WEB-INF/patrol/patrolActivityList.jsp</result>
+            <result type="redirect">listActivity.action</result>
+        </action>
+
+        
+        <action name="editActivityDetail-*" class="com.westchase.web.action.patrol.PatrolActivityDetailAction">
+      		<param name="patrolActivityDetailId">{1}</param>
+            <result>/WEB-INF/patrol/patrolActivityDetailEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="saveActivityDetail" class="com.westchase.web.action.patrol.PatrolActivityDetailAction" method="save">
+            <result name="input">/WEB-INF/patrol/patrolActivityDetailEdit.jsp</result>
+            <result type="redirect">editActivityDetail-${currentPatrolActivityDetail.id}.action</result>
+        </action>
+        
+        <action name="deleteActivityDetail" class="com.westchase.web.action.patrol.PatrolActivityDetailAction" method="delete">
+            <result name="error">/WEB-INF/patrol/patrolActivityList.jsp</result>
+            <result type="redirect">editActivityDetail-${currentPatrolActivityDetail.id}.action</result>
+        </action>
+
+
+
+
+
+        <action name="listOfficer" class="com.westchase.web.action.patrol.OfficerAction" method="list">
+            <result>/WEB-INF/patrol/officerList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="goToPageOfficer-*" class="com.westchase.web.action.patrol.OfficerAction" method="goToPage">
+        	<param name="nextPage">{1}</param>
+            <result>/WEB-INF/patrol/officerList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="firstOfficer" class="com.westchase.web.action.patrol.OfficerAction" method="first">
+            <result>/WEB-INF/patrol/officerList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="nextOfficer" class="com.westchase.web.action.patrol.OfficerAction" method="next">
+            <result>/WEB-INF/patrol/officerList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prevOfficer" class="com.westchase.web.action.patrol.OfficerAction" method="prev">
+            <result>/WEB-INF/patrol/officerList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="sortOfficer" class="com.westchase.web.action.patrol.OfficerAction" method="sort">
+            <result>/WEB-INF/patrol/officerList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="editOfficer-*" class="com.westchase.web.action.patrol.OfficerAction">
+      		<param name="officerId">{1}</param>
+            <result>/WEB-INF/patrol/officerEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="saveOfficer" class="com.westchase.web.action.patrol.OfficerAction" method="save">
+            <result name="input">/WEB-INF/patrol/officerEdit.jsp</result>
+            <result type="redirect">editOfficer-${currentOfficer.id}.action</result>
+        </action>
+
+
+        
+        
+        
+        <action name="listCitizen" class="com.westchase.web.action.patrol.CitizenAction" method="list">
+            <result>/WEB-INF/patrol/citizenList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="goToPageCitizen-*" class="com.westchase.web.action.patrol.CitizenAction" method="goToPage">
+        	<param name="nextPage">{1}</param>
+            <result>/WEB-INF/patrol/citizenList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="firstCitizen" class="com.westchase.web.action.patrol.CitizenAction" method="first">
+            <result>/WEB-INF/patrol/citizenList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="nextCitizen" class="com.westchase.web.action.patrol.CitizenAction" method="next">
+            <result>/WEB-INF/patrol/citizenList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prevCitizen" class="com.westchase.web.action.patrol.CitizenAction" method="prev">
+            <result>/WEB-INF/patrol/citizenList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="sortCitizen" class="com.westchase.web.action.patrol.CitizenAction" method="sort">
+            <result>/WEB-INF/patrol/citizenList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="editCitizen-*" class="com.westchase.web.action.patrol.CitizenAction">
+      		<param name="citizenId">{1}</param>
+            <result>/WEB-INF/patrol/citizenEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="saveCitizen" class="com.westchase.web.action.patrol.CitizenAction" method="save">
+            <result name="input">/WEB-INF/patrol/citizenEdit.jsp</result>
+            <result type="redirect">editCitizen-${currentCitizen.id}.action</result>
+        </action>
+        
+       
+       	<!--  reports -->
+        <action name="activityReportInput" class="com.westchase.web.action.patrol.report.PatrolActivityReportAction" method="input">
+            <result>/WEB-INF/patrol/report/patrolActivity.jsp</result>
+        </action>
+        <action name="activityReport" class="com.westchase.web.action.patrol.report.PatrolActivityReportAction">
+            <result>/WEB-INF/patrol/report/patrolActivity.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+    </package>
+
+</struts>

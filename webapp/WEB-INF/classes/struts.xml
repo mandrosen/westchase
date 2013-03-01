@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.custom.i18n.resources" value="globalMessages" />
+
+	<!-- 
+    <include file="example.xml"/>
+ 	
+ 	-->
+    <include file="struts-admin.xml"/>
+    <include file="struts-cms.xml"/>
+    <include file="struts-reports.xml"/>
+    <include file="struts-cmu.xml"/>
+    <include file="struts-patrol.xml"/>
+
+
+
+    <package name="wc-default" namespace="/" extends="struts-default">
+    
+       	<interceptors>
+            <interceptor-stack name="crudStack">
+              	<interceptor-ref name="checkbox" />
+                <interceptor-ref name="params" />
+        		<interceptor-ref name="staticParams" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+    
+        <default-action-ref name="home" />
+        <!-- 
+        <action name="index">
+            <result type="redirectAction">
+                <param name="actionName">HelloWorld</param>
+                <param name="namespace">/example</param>
+            </result>
+        </action>
+         -->
+         
+		<global-results>
+			<result name="Exception" type="chain">
+				<param name="actionName">error</param>
+				<param name="namespace">/</param>
+			</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="Exception"/>
+        </global-exception-mappings>
+         
+         
+        <action name="error" class="com.westchase.web.action.ErrorAction">
+            <result>/error.jsp</result>
+        </action>        
+         
+        <action name="home" class="com.westchase.web.action.HomeAction">
+            <result>/WEB-INF/home.jsp</result>
+        </action>
+        <action name="logout" class="com.westchase.web.action.LogoutAction">
+            <result>/WEB-INF/logout.jsp</result>
+        </action>
+        
+        
+        <action name="emailBlastInput" class="com.westchase.web.action.utils.EmailBlastAction" method="input">
+        	<result>/WEB-INF/utils/email/emailBlast.jsp</result>
+        </action>
+        <action name="emailBlastSearch" class="com.westchase.web.action.utils.EmailBlastAction" method="search">
+        	<result>/WEB-INF/utils/email/emailBlast.jsp</result>
+        </action>      
+        <action name="emailBlastSelect" class="com.westchase.web.action.utils.EmailBlastAction" method="select">
+        	<result>/WEB-INF/utils/email/emailBlastEmail.jsp</result>
+        	<result name="input">/WEB-INF/utils/email/emailBlast.jsp</result>
+        </action>   
+        <action name="emailBlastSend" class="com.westchase.web.action.utils.EmailBlastAction" method="send">
+        	<result>/WEB-INF/utils/email/emailBlastSend.jsp</result>
+        	<result name="email">/WEB-INF/utils/email/emailBlastEmail.jsp</result>
+        	<result name="error">/WEB-INF/utils/email/emailBlastEmail.jsp?error=1</result>
+        </action>         
+        
+        
+        <action name="sentEmailsList" class="com.westchase.web.action.utils.SentEmailsAction" method="list">
+        	<result>/WEB-INF/utils/email/sentEmailsList.jsp</result>
+        </action>      
+        <action name="sentEmailView-*" class="com.westchase.web.action.utils.SentEmailsAction" method="view">
+        	<param name="sentEmailId">{1}</param>
+        	<result>/WEB-INF/utils/email/sentEmailView.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>     
+        <action name="sentEmailViewAttachment-*" class="com.westchase.web.action.utils.SentEmailsAction" method="viewAttachment">
+        	<param name="sentEmailId">{1}</param>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action> 
+        
+        <action name="ckeditorUpload" class="com.westchase.web.action.utils.ckeditor.UploadAction">
+        </action>
+        <action name="ckeditorBrowse" class="com.westchase.web.action.utils.ckeditor.BrowseAction">
+        	<result>/WEB-INF/utils/email/imageBrowse.jsp</result>
+        </action>
+        <action name="ckeditorSelect" class="com.westchase.web.action.utils.ckeditor.BrowseAction" method="select">
+        </action>
+        
+        
+        <action name="mapXml" class="com.westchase.web.action.utils.MapXmlAction">
+        	<result>/WEB-INF/utils/mapXml.jsp</result>
+        </action>
+    </package>
+
+    <!-- Add packages here -->
+    <include file="struts-hcad.xml"/>
+
+</struts>

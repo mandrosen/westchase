@@ -1,0 +1,66 @@
+<!DOCTYPE validators PUBLIC
+        "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+        "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="currentProperty.buildingName">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Building Name is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentProperty.geoNumber">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Number is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentProperty.geoAddress">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Address is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentProperty.geoCity">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ City is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentProperty.geoState">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ State is required ]]></message>
+        </field-validator>
+		<field-validator type="regex">
+			<param name="expression">[A-Z]{2}</param>
+			<message><![CDATA[ State must be two characters ]]></message>
+		</field-validator>    
+    </field>
+    <field name="currentProperty.geoZipCode">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Zip Code is required ]]></message>
+        </field-validator>
+		<field-validator type="regex">
+			<param name="expression">[0-9]{5}(-[0-9]{4})?</param>
+			<message><![CDATA[ ZipCode must be in the format ##### or #####-#### ]]></message>
+		</field-validator>
+    </field>	
+    <field name="currentProperty.owner">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Owner is required ]]></message>
+        </field-validator>
+    </field>	
+    <field name="currentProperty.businessType">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Business Type is required ]]></message>
+        </field-validator>
+    </field>	
+    <field name="currentProperty.availableForLease">
+		<field-validator type="int">
+			<message>Available for Lease must be an integer supplied</message>
+		</field-validator>
+	</field>
+    <field name="currentProperty.acreage">
+		<field-validator type="regex">
+			<param name="expression">[0-9]{0,15}\.[0-9]{0,5}</param>
+			<message>Acreage must be a number</message>
+		</field-validator>
+	</field>
+    
+</validators>

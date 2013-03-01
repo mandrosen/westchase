@@ -1,0 +1,109 @@
+<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="sx" uri="/struts-dojo-tags" %>
+<html>
+<head>
+    <title>Patrol Activity List</title>
+    
+    <sx:head />
+    
+    
+    <script type="text/javascript">
+		function confirmremove(id) {
+			if (confirm("Are you sure you want to remove this patrol?")) {
+				document.location.href = "/westchase/patrol/deleteActivity.action?delId=" + id;
+			}
+		}
+    </script>
+</head>
+<body>
+
+<h1>Patrol Activity List</h1>
+
+<p><a href="<s:url action="listActivity"/>">Refresh</a></p>
+<p><a href="<s:url action="editActivity-" includeParams="none"/>">Create new Patrol Activity</a></p>
+
+<p class="total"><s:property value="totalCount" /> total results</p>
+<div class="prevnext">
+	<s:if test="%{page > 0}">
+		<s:url id="first" action="firstActivity"><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+		<s:a href="%{first}">First</s:a>
+		
+		<s:url id="prev" action="prevActivity"><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+		<s:a href="%{prev}">Previous</s:a>
+	</s:if>  
+	<s:if test="%{page < (maxPage - 1)}">
+		<s:url id="next" action="nextActivity"><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url> 
+		<s:a href="%{next}">Next</s:a>
+		
+		<s:url id="goToPage" action="goToPageActivity"><s:param name="nextPage" value="%{maxPage - 1}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+		<s:a href="%{goToPage}">Last</s:a>
+	</s:if>
+</div>
+
+<s:form method="listActivity" action="listActivity" theme="simple">
+	<table>
+		<tbody>
+			<tr>
+				<th>Officer</th>
+				<td>
+					<s:select list="availableOfficers" name="searchObject.officer.id"  headerKey="-1" headerValue="-- Please Select --" listValue="fullNameReverse" listKey="id" />
+				</td>
+			</tr>
+			<tr>
+				<th>Date</th>
+				<td>
+					<sx:datetimepicker name="startDate" displayFormat="MM/dd/yyyy"/>
+				</td>
+			</tr>
+		</tbody>
+	</table>	
+	<s:submit />
+</s:form>
+
+<table class="results">
+	<thead>
+	    <tr>
+	    	<s:url action="sortActivity" id="sortid"><s:param name="orderCol" value="'id'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+	    	<s:url action="sortActivity" id="sortofficer"><s:param name="orderCol" value="'officer.lastName'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+	    	<s:url action="sortActivity" id="sortdate"><s:param name="orderCol" value="'startDateTime'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+
+	    
+	    
+        	<th><s:a href="%{sortid}">Id</s:a></th>
+        	<th><s:a href="%{sortofficer}">Officer</s:a></th>
+        	<th><s:a href="%{sortdate}">Activity Date</s:a></th>
+	    	<th></th>
+	    </tr>
+	</thead>
+	<tbody>
+	    <s:iterator value="patrolActivities" status="status" id="pb">
+	        <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>">
+	 
+	            <td><a href="<s:url action="editActivity-%{id}" />"><s:property value="id"/></a></td>
+	            <td><s:property value="officer.fullNameReverse"/></td>
+	
+	            <td><s:date name="startDateTime" format="MM/dd/yyyy" /></td>
+	            <td>
+	           		<a href="<s:url action="editActivity-%{id}" />">Edit</a>
+            	<a href="javascript:confirmremove(${pb.id})">Delete</a>
+	            </td>
+	        </tr>
+	    </s:iterator>
+	</tbody>
+</table>    
+
+<div class="prevnext">
+	<s:if test="%{page > 0}">
+		<s:url id="prev" action="prevActivity"><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+		<s:a href="%{prev}">Previous</s:a>
+	</s:if>  
+	<s:if test="%{page < (maxPage - 1)}">
+		<s:url id="next" action="nextActivity"><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url> 
+		<s:a href="%{next}">Next</s:a>
+	</s:if>
+</div>
+
+<p><a href="<s:url action="editActivity-" includeParams="none"/>">Create new Patrol Activity</a></p>
+
+</body>
+</html>

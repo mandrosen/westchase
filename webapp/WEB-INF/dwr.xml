@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dwr PUBLIC 
+	"-//GetAhead Limited//DTD Direct Web Remoting 1.0//EN" 
+	"http://www.getahead.ltd.uk/dwr/dwr10.dtd">
+
+<dwr>
+	<allow>
+		<create creator="new" javascript="validator">
+			<param name="class" value="org.apache.struts2.validators.DWRValidator" />
+		</create>
+		<create creator="new" javascript="CMSUtilities">
+			<param name="class" value="com.westchase.web.dwr.CMSUtilities" />
+		</create>
+
+		<convert converter="bean" match="com.opensymphony.xwork2.ValidationAwareSupport" />
+		<convert converter="bean" match="com.westchase.persistence.dto.*" />
+		
+		
+		<convert converter="bean" match="com.westchase.persistence.model.Property">
+			<param name="exclude" value="phoneBookRelations" />
+		</convert>
+		<convert converter="bean" match="com.westchase.persistence.model.PhoneBook">
+			<param name="exclude" value="phoneBookCategories, phoneBookRelations" />
+		</convert>
+		
+		<convert converter="bean" match="com.westchase.persistence.model.Company">
+			<param name="exclude" value="companyMapnos,phoneBooks,auditCompanies" />
+		</convert>
+		
+	</allow>
+	
+    <signatures>
+        <![CDATA[
+        import java.util.Map;
+        import org.apache.struts2.validators.DWRValidator;
+
+        DWRValidator.doPost(String, String, Map<String, String>);
+        ]]>
+    </signatures>
+
+</dwr>

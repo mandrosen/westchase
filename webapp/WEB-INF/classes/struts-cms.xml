@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <package name="cms-default" extends="struts-default">
+        <interceptors>
+            <interceptor-stack name="crudStack">
+              	<interceptor-ref name="checkbox" />
+                <interceptor-ref name="params" />
+        		<interceptor-ref name="staticParams" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+        
+		<global-results>
+			<result name="Exception" type="chain">
+				<param name="actionName">error</param>
+				<param name="namespace">/</param>
+			</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="Exception"/>
+        </global-exception-mappings>
+
+    </package>
+    
+    <package name="cmsajax" extends="cms-default" namespace="/cmsajax">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="ajax" class="com.westchase.web.action.cms.AjaxAction">
+            <result>/WEB-INF/cms/phoneBookEdit.jsp</result>
+        </action>
+    	
+    </package>
+    
+    <package name="companyProperty" extends="cms-default" namespace="/companyProperty">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="selectInit-*" class="com.westchase.web.action.cms.CompanyPropertyAction" method="selectInit">
+      		<param name="currentCompanyId">{1}</param>
+            <result>/WEB-INF/cms/companyPropertySelect.jsp</result>
+            <interceptor-ref name="crudStack"/>
+        </action>
+        
+        <action name="companyPropertySave" class="com.westchase.web.action.cms.CompanyPropertyAction" method="save">
+            <result type="redirect">/company/edit-${currentCompanyId}.action</result>
+            <interceptor-ref name="basicStack"/>
+        </action>      
+        
+        <action name="remove-*" class="com.westchase.web.action.cms.CompanyPropertyAction" method="remove">
+            <param name="companyPropertyId">{1}</param>
+            <result type="redirect">/company/edit-${currentCompanyId}.action</result>
+            <interceptor-ref name="crudStack"/>
+        </action>      
+        
+        
+
+    </package>    
+    
+    <package name="phoneBookRelations" extends="cms-default" namespace="/phoneBookRelations">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list-*" class="com.westchase.web.action.cms.PhoneBookRelationsAction">
+      		<param name="phoneBookId">{1}</param>
+            <result>/WEB-INF/cms/phoneBookRelations.jsp</result>
+            <interceptor-ref name="crudStack"/>
+        </action>
+        
+        <action name="saveNew" class="com.westchase.web.action.cms.PhoneBookRelationsAction" method="saveNew">
+            <result type="redirect">/phoneBookRelations/list-${phoneBookId}.action</result>
+            <interceptor-ref name="basicStack"/>
+        </action>      
+        
+        <action name="delete" class="com.westchase.web.action.cms.PhoneBookRelationsAction" method="delete">
+            <result type="redirect">/phoneBookRelations/list-${phoneBookId}.action</result>
+            <interceptor-ref name="crudStack"/>
+        </action>      
+        
+        
+
+    </package> 
+    
+    
+
+    <package name="todo" extends="cms-default" namespace="/todo">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="com.westchase.web.action.utils.TodoAction" method="list">
+            <result>/WEB-INF/utils/todoList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="next" class="com.westchase.web.action.utils.TodoAction" method="next">
+            <result>/WEB-INF/utils/todoList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prev" class="com.westchase.web.action.utils.TodoAction" method="prev">
+            <result>/WEB-INF/utils/todoList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="com.westchase.web.action.utils.TodoAction">
+      		<param name="todoId">{1}</param>
+            <result>/WEB-INF/utils/todoEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="com.westchase.web.action.utils.TodoAction" method="save">
+            <result name="input">/WEB-INF/utils/todoEdit.jsp</result>
+            <result type="redirect">edit-${currentTodo.id}.action</result>
+        </action>
+        <action name="delete" class="com.westchase.web.action.utils.TodoAction" method="delete">
+            <result name="error">/WEB-INF/utils/todoList.jsp</result>
+            <result type="redirect">list.action</result>
+        </action>
+        <action name="complete-*" class="com.westchase.web.action.utils.TodoAction" method="complete">
+      		<param name="todoId">{1}</param>
+            <result name="error">/WEB-INF/utils/todoList.jsp</result>
+            <result name="success">/WEB-INF/utils/todoList.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+    </package>
+    
+    
+
+    <package name="message" extends="cms-default" namespace="/message">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="com.westchase.web.action.utils.MessageAction" method="list">
+            <result>/WEB-INF/utils/messageList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="next" class="com.westchase.web.action.utils.MessageAction" method="next">
+            <result>/WEB-INF/utils/messageList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prev" class="com.westchase.web.action.utils.MessageAction" method="prev">
+            <result>/WEB-INF/utils/messageList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="com.westchase.web.action.utils.MessageAction">
+      		<param name="messageId">{1}</param>
+            <result>/WEB-INF/utils/messageEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="com.westchase.web.action.utils.MessageAction" method="save">
+            <result name="input">/WEB-INF/utils/messageEdit.jsp</result>
+            <result type="redirect">edit-${currentMessage.id}.action</result>
+        </action>
+        <action name="delete" class="com.westchase.web.action.utils.MessageAction" method="delete">
+            <result name="error">/WEB-INF/utils/messageList.jsp</result>
+            <result type="redirect">list.action</result>
+        </action>
+    </package>
+
+    <package name="category" extends="cms-default" namespace="/category">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="com.westchase.web.action.cms.CategoryAction" method="list">
+            <result>/WEB-INF/cms/categoryList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="next" class="com.westchase.web.action.cms.CategoryAction" method="next">
+            <result>/WEB-INF/cms/categoryList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prev" class="com.westchase.web.action.cms.CategoryAction" method="prev">
+            <result>/WEB-INF/cms/categoryList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="com.westchase.web.action.cms.CategoryAction">
+      		<param name="categoryCode">{1}</param>
+            <result>/WEB-INF/cms/categoryEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="com.westchase.web.action.cms.CategoryAction" method="save">
+            <result name="input">/WEB-INF/cms/categoryEdit.jsp</result>
+            <result type="redirect">edit-${currentCategory.categoryCode}.action</result>
+        </action>
+        <action name="delete" class="com.westchase.web.action.cms.CategoryAction" method="delete">
+            <result name="error">/WEB-INF/cms/categoryEdit.jsp</result>
+            <result type="redirect">edit-${currentCategory.categoryCode}.action</result>
+        </action>
+    </package>
+
+    <package name="phonebook" extends="cms-default" namespace="/phonebook">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="com.westchase.web.action.cms.PhoneBookAction" method="list">
+            <result>/WEB-INF/cms/phoneBookList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        <action name="goToPage-*" class="com.westchase.web.action.cms.PhoneBookAction" method="goToPage">
+        	<param name="nextPage">{1}</param>
+            <result>/WEB-INF/cms/phoneBookList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="first" class="com.westchase.web.action.cms.PhoneBookAction" method="first">
+            <result>/WEB-INF/cms/phoneBookList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        <action name="next" class="com.westchase.web.action.cms.PhoneBookAction" method="next">
+            <result>/WEB-INF/cms/phoneBookList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prev" class="com.westchase.web.action.cms.PhoneBookAction" method="prev">
+            <result>/WEB-INF/cms/phoneBookList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="sort" class="com.westchase.web.action.cms.PhoneBookAction" method="sort">
+            <result>/WEB-INF/cms/phoneBookList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="com.westchase.web.action.cms.PhoneBookAction">
+      		<param name="phoneBookId">{1}</param>
+            <result>/WEB-INF/cms/phoneBookEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="create" class="com.westchase.web.action.cms.PhoneBookAction">
+            <result>/WEB-INF/cms/phoneBookCreate.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="com.westchase.web.action.cms.PhoneBookAction" method="save">
+            <result name="input">/WEB-INF/cms/phoneBookEdit.jsp</result>
+            <result type="redirect">edit-${currentPhoneBook.id}.action</result>
+        </action>
+        <action name="savenew" class="com.westchase.web.action.cms.PhoneBookAction" method="savenew">
+            <result name="input">/WEB-INF/cms/phoneBookCreate.jsp</result>
+            <result type="redirect">edit-${currentPhoneBook.id}.action</result>
+        </action>
+        <action name="delete" class="com.westchase.web.action.cms.PhoneBookAction" method="delete">
+            <interceptor-ref name="basicStack"/>
+			<result name="success">/WEB-INF/cms/message.jsp</result>
+        </action>
+    </package>
+
+    <package name="property" extends="cms-default" namespace="/property">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="com.westchase.web.action.cms.PropertyAction" method="list">
+            <result>/WEB-INF/cms/propertyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        <action name="goToPage-*" class="com.westchase.web.action.cms.PropertyAction" method="goToPage">
+        	<param name="nextPage">{1}</param>
+            <result>/WEB-INF/cms/propertyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="first" class="com.westchase.web.action.cms.PropertyAction" method="first">
+            <result>/WEB-INF/cms/propertyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        <action name="next" class="com.westchase.web.action.cms.PropertyAction" method="next">
+            <result>/WEB-INF/cms/propertyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prev" class="com.westchase.web.action.cms.PropertyAction" method="prev">
+            <result>/WEB-INF/cms/propertyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="sort" class="com.westchase.web.action.cms.PropertyAction" method="sort">
+            <result>/WEB-INF/cms/propertyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="com.westchase.web.action.cms.PropertyAction">
+      		<param name="propertyId">{1}</param>
+            <result>/WEB-INF/cms/propertyEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="com.westchase.web.action.cms.PropertyAction" method="save">
+            <result name="input">/WEB-INF/cms/propertyEdit.jsp</result>
+            <result type="redirect">edit-${currentProperty.id}.action</result>
+        </action>
+        <action name="delete" class="com.westchase.web.action.cms.PropertyAction" method="delete">
+            <result name="error">/WEB-INF/cms/propertyEdit.jsp</result>
+            <result type="redirect">edit-${currentProperty.id}.action</result>
+        </action>
+    </package>
+
+    <package name="company" extends="cms-default" namespace="/company">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="com.westchase.web.action.cms.CompanyAction" method="list">
+            <result>/WEB-INF/cms/companyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        <action name="goToPage-*" class="com.westchase.web.action.cms.CompanyAction" method="goToPage">
+        	<param name="nextPage">{1}</param>
+            <result>/WEB-INF/cms/companyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="first" class="com.westchase.web.action.cms.CompanyAction" method="first">
+            <result>/WEB-INF/cms/companyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        <action name="next" class="com.westchase.web.action.cms.CompanyAction" method="next">
+            <result>/WEB-INF/cms/companyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prev" class="com.westchase.web.action.cms.CompanyAction" method="prev">
+            <result>/WEB-INF/cms/companyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="sort" class="com.westchase.web.action.cms.CompanyAction" method="sort">
+            <result>/WEB-INF/cms/companyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="com.westchase.web.action.cms.CompanyAction">
+      		<param name="companyId">{1}</param>
+            <result>/WEB-INF/cms/companyEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="com.westchase.web.action.cms.CompanyAction" method="save">
+            <result name="input">/WEB-INF/cms/companyEdit.jsp</result>
+            <result type="redirect">edit-${currentCompany.id}.action</result>
+        </action>
+        <action name="delete" class="com.westchase.web.action.cms.CompanyAction" method="delete">
+            <interceptor-ref name="basicStack"/>
+			<result name="success">/WEB-INF/cms/message.jsp</result>
+			<result name="phonebooks">/WEB-INF/cms/companyPhoneBooks.jsp</result>
+        </action>
+    </package>
+
+<!-- 
+    <package name="quarter" extends="cms-default" namespace="/quarter">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="com.westchase.web.action.cms.QuarterAction" method="list">
+            <result>/WEB-INF/cms/quarterList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="next" class="com.westchase.web.action.cms.QuarterAction" method="next">
+            <result>/WEB-INF/cms/quarterList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prev" class="com.westchase.web.action.cms.QuarterAction" method="prev">
+            <result>/WEB-INF/cms/quarterList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="com.westchase.web.action.cms.QuarterAction">
+      		<param name="quarterId">{1}</param>
+            <result>/WEB-INF/cms/quarterEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="com.westchase.web.action.cms.QuarterAction" method="save">
+            <result name="input">/WEB-INF/cms/quarterEdit.jsp</result>
+            <result type="redirect">edit-${currentQuarter.id}.action</result>
+        </action>
+        <action name="delete" class="com.westchase.web.action.cms.QuarterAction" method="delete">
+            <result name="error">/WEB-INF/cms/quarterEdit.jsp</result>
+            <result type="redirect">edit-${currentQuarter.id}.action</result>
+        </action>
+    </package>
+
+    <package name="cmuLease" extends="cms-default" namespace="/cmuLease">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="com.westchase.web.action.cms.CmuLeaseAction" method="list">
+            <result>/WEB-INF/cms/cmuLeaseList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="next" class="com.westchase.web.action.cms.CmuLeaseAction" method="next">
+            <result>/WEB-INF/cms/cmuLeaseList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prev" class="com.westchase.web.action.cms.CmuLeaseAction" method="prev">
+            <result>/WEB-INF/cms/cmuLeaseList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="com.westchase.web.action.cms.CmuLeaseAction">
+      		<param name="cmuLeaseId">{1}</param>
+            <result>/WEB-INF/cms/cmuLeaseEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="com.westchase.web.action.cms.CmuLeaseAction" method="save">
+            <result name="input">/WEB-INF/cms/cmuLeaseEdit.jsp</result>
+            <result type="redirect">edit-${currentCmuLease.id}.action</result>
+        </action>
+        <action name="delete" class="com.westchase.web.action.cms.CmuLeaseAction" method="delete">
+            <result name="error">/WEB-INF/cms/cmuLeaseEdit.jsp</result>
+            <result type="redirect">edit-${currentCmuLease.id}.action</result>
+        </action>
+    </package>
+
+    <package name="cmuOccupancy" extends="cms-default" namespace="/cmuOccupancy">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="com.westchase.web.action.cms.CmuOccupancyAction" method="list">
+            <result>/WEB-INF/cms/cmuOccupancyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="next" class="com.westchase.web.action.cms.CmuOccupancyAction" method="next">
+            <result>/WEB-INF/cms/cmuOccupancyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="prev" class="com.westchase.web.action.cms.CmuOccupancyAction" method="prev">
+            <result>/WEB-INF/cms/cmuOccupancyList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="com.westchase.web.action.cms.CmuOccupancyAction">
+      		<param name="cmuOccupancyId">{1}</param>
+            <result>/WEB-INF/cms/cmuOccupancyEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="com.westchase.web.action.cms.CmuOccupancyAction" method="save">
+            <result name="input">/WEB-INF/cms/cmuOccupancyEdit.jsp</result>
+            <result type="redirect">edit-${currentCmuOccupancy.id}.action</result>
+        </action>
+        <action name="delete" class="com.westchase.web.action.cms.CmuOccupancyAction" method="delete">
+            <result name="error">/WEB-INF/cms/cmuOccupancyEdit.jsp</result>
+            <result type="redirect">edit-${currentCmuOccupancy.id}.action</result>
+        </action>
+    </package>
+-->
+</struts>

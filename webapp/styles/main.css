@@ -1,0 +1,274 @@
+body {
+	background-color: #fff;
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+a:link,
+a:visited {
+	color: #00f;	
+}
+
+a:hover {
+	color: #900;	
+}
+
+.message-section {
+	border: 1px solid #000;
+	padding: 6px;
+}
+
+.error {
+	color: #f00;
+}
+
+.actionmessages {
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.header img {
+	/*float: left;*/
+	border: 0;
+	padding-left: 10px;
+} 
+
+.line {
+    float: left;
+    width: 100%;
+    display: block;
+    position: relative;
+    z-index: 0;    
+}
+
+.item {
+    float: left;
+    left: 100%;
+    position: relative;
+    z-index: 0;
+}
+
+
+.header,
+.content,
+.footer {
+	clear: both;
+}
+
+.header .line {
+	/*border-bottom: 1px solid #009;*/
+	background-color: #eee;
+}
+.footer {
+	border-top: 1px solid #eee;
+}
+
+.content {
+	/*border-top: 3px solid green;*/
+	border-top: 1px solid #009;
+	/*background: transparent url(../images/bg_grad.gif) repeat-x top left;*/	
+	padding-top: 10px;
+}
+
+.logoimg {
+	margin-left: -100%;
+	width:70%;
+}
+
+.logoimg img {
+	float: left;
+	margin: 5px;
+}
+
+
+.loginstuff {
+	margin-left: -30%;
+	width: 30%;
+	text-align: right;
+	padding-top: 20px;
+}
+.loginstuff a {
+	padding-right: 10px;	
+}
+input[type=submit] {
+	font-size: 16px;	
+}
+
+p.copyright {
+	color: #555;
+	font-size: 10px;
+}
+
+table.main tr {
+	vertical-align: top;
+}
+table.main td.links {
+	width: 210px !important;
+	/*background-color: #ddd;*/
+	border: 0 !important;
+}
+
+td.links h4 {
+	width: 210px;
+	margin-top: 0
+}
+
+td.links div {
+	margin: 0 0 5px 0;	
+}
+
+td.links h4 span {
+	margin: 2px 4px;	
+}
+
+td.links .cms {
+	border: 1px solid #0086B3;
+}
+td.links .cms h4 {
+	background-color: #EBEFF9;
+}
+td.links .reports {
+	border: 1px solid #007300;
+}
+td.links .reports h4 {
+	background-color: #EAF7EA;
+}
+td.links .cmu {
+	border: 1px solid #FF6600;
+}
+td.links .cmu h4 {
+	background-color: #FFF1EC;
+}
+td.links .utils {
+	border: 1px solid #FFC300;
+}
+td.links .utils h4 {
+	background-color: #FFF7DB;	
+}
+td.links .hcad {
+	border: 1px solid #999;
+}
+td.links .hcad h4 {
+	background-color: #ddd;	
+}
+td.links .admin {
+	border: 1px solid #999;
+}
+td.links .admin h4 {
+	background-color: #ddd;	
+}
+td.links .public-safety {
+	border: 1px solid #0B0B61;
+}
+td.links .public-safety h4 {
+	background-color: #E0E0F8;
+}
+
+table.main td.links ul,
+table.main td.links ul li {
+	margin: 0;
+	padding: 0;
+}
+
+table.main td.links ul li {
+	list-style-type: none;
+	margin-left: 5px;
+	margin-bottom: 5px;
+	width: 200px !important;
+	white-space: nowrap;
+}
+
+td.wrapper {
+	width: 100%;
+	padding-left: 10px;	
+}
+
+p.backhome {
+	text-align: center;
+}
+
+table.results {
+	border-collapse: collapse;
+	border: 1px solid #eee;
+	width: 92%;
+	margin: 10px auto;
+}
+table.results th, 
+table.results td {
+	padding: 2px 4px;
+	border: 1px solid #eee;
+}
+
+.odd, .odd td {
+	background-color: #E0E0FF;
+}
+
+.msg, .todo {
+	border-bottom: 1px dashed #eee;
+}
+
+table.companies,
+table.properties,
+table.phonebooks {
+	width: 92%;
+	border: 1px solid #000;
+}
+
+thead tr,
+thead tr th {
+	background-color: #C0C0FF;
+}
+
+.sentemail table thead th,
+.sentemail table thead td {
+	background-color: #C0C0FF;
+}
+
+.sentemail table {
+	width: 92%;
+}
+
+#comp_props label {
+	display: block;
+}
+
+.companyproperty div {
+	margin: 5px 0;
+}
+
+.properties .actions a {
+	font-weight: bold;
+	padding: 0px 4px;
+}
+
+.companyproperties {
+	width: 400px;	
+	border-collapse: collapse;
+}
+
+.companyproperties,
+.companyproperties td {
+	border: 1px solid #ccc;
+}
+
+.phonebookrels {
+	width: 400px;
+	border-collapse: collapse;
+	margin-bottom: 10px;
+}
+.phonebookrels caption {
+	text-align: left;
+	font-weight: bold;
+	margin-top: 10px;
+}
+.phonebookrels,
+.phonebookrels td {
+	border: 1px solid #ccc;
+}
+
+.checkbox-controls a {
+	cursor: pointer;
+	text-decoration: underline;
+	padding-right: 12px;
+}

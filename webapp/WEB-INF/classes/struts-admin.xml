@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <package name="admin-default" extends="struts-default">
+        <interceptors>
+            <interceptor-stack name="crudStack">
+              	<interceptor-ref name="checkbox" />
+                <interceptor-ref name="params" />
+        		<interceptor-ref name="staticParams" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+        
+		<global-results>
+			<result name="Exception" type="chain">
+				<param name="actionName">error</param>
+				<param name="namespace">/</param>
+			</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="Exception"/>
+        </global-exception-mappings>
+
+    </package>
+    
+
+
+    <package name="employee" extends="admin-default" namespace="/employee">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="com.westchase.web.action.admin.EmployeeAction" method="list">
+            <result>/WEB-INF/admin/employeeList.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="com.westchase.web.action.admin.EmployeeAction">
+      		<param name="employeeId">{1}</param>
+            <result>/WEB-INF/admin/employeeEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="create" class="com.westchase.web.action.admin.EmployeeAction">
+            <result>/WEB-INF/admin/employeeEdit.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="com.westchase.web.action.admin.EmployeeAction" method="save">
+            <result name="input">/WEB-INF/admin/employeeEdit.jsp</result>
+            <result type="redirect">edit-${currentEmployee.id}.action</result>
+        </action>
+    </package>
+
+</struts>

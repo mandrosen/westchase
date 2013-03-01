@@ -1,0 +1,36 @@
+<!DOCTYPE validators PUBLIC
+        "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+        "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+	<field name="currentPatrolActivity.officer.id">
+	    <field-validator type="int">
+	        <param name="min">1</param>
+	        <message><![CDATA[ Officer is required ]]></message>
+	    </field-validator>
+	</field>
+	<field name="currentPatrolActivity.patrolShop.id">
+	    <field-validator type="int">
+	        <param name="min">1</param>
+	        <message><![CDATA[ Shop is required ]]></message>
+	    </field-validator>
+	</field>
+	<field name="currentPatrolActivity.patrolType.id">
+	    <field-validator type="int">
+	        <param name="min">1</param>
+	        <message><![CDATA[ Type is required ]]></message>
+	    </field-validator>
+	</field>
+	<field name="currentPatrolActivity.startMiles">
+	    <field-validator type="int">
+	        <param name="min">1</param>
+	        <message><![CDATA[ Start Miles is required ]]></message>
+	    </field-validator>
+	</field>
+	<field name="currentPatrolActivity.endMiles">
+	    <field-validator type="int">
+	        <param name="min">1</param>
+	        <message><![CDATA[ End Miles is required ]]></message>
+	    </field-validator>
+	</field>
+</validators>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <package name="cmu-report-default" extends="jasperreports-default">
+        <interceptors>
+            <interceptor-stack name="crudStack">
+              	<interceptor-ref name="checkbox" />
+                <interceptor-ref name="params" />
+        		<interceptor-ref name="staticParams" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+         
+		<global-results>
+			<result name="Exception" type="chain">
+				<param name="actionName">error</param>
+				<param name="namespace">/</param>
+			</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="Exception"/>
+        </global-exception-mappings>     
+
+    </package>
+
+	 <package name="cmu" extends="cmu-report-default" namespace="/cmu">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="apartment" class="com.westchase.web.action.cmu.report.CmuApartmentReportAction">
+            <result>/WEB-INF/cmu/report/apartments.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result> 
+        </action>
+
+        <action name="devsite" class="com.westchase.web.action.cmu.report.CmuDevsiteReportAction">
+            <result>/WEB-INF/cmu/report/devsites.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result> 
+        </action>
+
+        <action name="hotel" class="com.westchase.web.action.cmu.report.CmuHotelReportAction">
+            <result>/WEB-INF/cmu/report/hotels.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result> 
+        </action>
+
+        <action name="office" class="com.westchase.web.action.cmu.report.CmuOfficeReportAction">
+            <result>/WEB-INF/cmu/report/offices.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+        </action>
+
+        <action name="retail" class="com.westchase.web.action.cmu.report.CmuRetailReportAction">
+            <result>/WEB-INF/cmu/report/retails.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result> 
+        </action>
+
+        <action name="serviceCtr" class="com.westchase.web.action.cmu.report.CmuServiceCtrReportAction">
+            <result>/WEB-INF/cmu/report/serviceCenters.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+        </action>
+
+        <action name="lease" class="com.westchase.web.action.cmu.report.CmuLeaseReportAction">
+            <result>/WEB-INF/cmu/report/leases.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>
+        </action>
+
+        <action name="leaseStats" class="com.westchase.web.action.cmu.report.CmuLeaseStatsReportAction">
+            <result>/WEB-INF/cmu/report/leaseStats.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        <action name="apartmentQuarter-*" class="com.westchase.web.action.cmu.report.CmuApartmentReportAction">
+        	<param name="quarterId">{1}</param>            
+            <result>/WEB-INF/cmu/report/apartments.jsp</result>
+        </action>     
+        
+        <action name="devsiteQuarter-*" class="com.westchase.web.action.cmu.report.CmuDevsiteReportAction">
+        	<param name="quarterId">{1}</param>            
+            <result>/WEB-INF/cmu/report/devsites.jsp</result>
+        </action>     
+        
+        <action name="hotelQuarter-*" class="com.westchase.web.action.cmu.report.CmuHotelReportAction">
+        	<param name="quarterId">{1}</param>            
+            <result>/WEB-INF/cmu/report/hotels.jsp</result>
+        </action>     
+        
+        <action name="officeQuarter-*" class="com.westchase.web.action.cmu.report.CmuOfficeReportAction">
+        	<param name="quarterId">{1}</param>            
+            <result>/WEB-INF/cmu/report/offices.jsp</result>
+        </action>   
+        
+        <action name="retailQuarter-*" class="com.westchase.web.action.cmu.report.CmuRetailReportAction">
+        	<param name="quarterId">{1}</param>            
+            <result>/WEB-INF/cmu/report/retails.jsp</result>
+        </action>    
+        
+        <action name="serviceCtrQuarter-*" class="com.westchase.web.action.cmu.report.CmuServiceCtrReportAction">
+        	<param name="quarterId">{1}</param>            
+            <result>/WEB-INF/cmu/report/serviceCenters.jsp</result>
+        </action>   
+
+        <action name="leaseQuarter-*" class="com.westchase.web.action.cmu.report.CmuLeaseReportAction">
+        <param name="quarterId">{1}</param>
+            <result>/WEB-INF/cmu/report/leases.jsp</result>
+        </action>  
+        
+        
+        <action name="apartmentEdit-*" class="com.westchase.web.action.cmu.CmuApartmentEditAction">
+        	<param name="id">{1}</param>
+            <result>/WEB-INF/cmu/apartmentEdit.jsp</result>
+        </action>
+        <action name="apartmentSave" class="com.westchase.web.action.cmu.CmuApartmentEditAction" method="save">
+            <result>/WEB-INF/cmu/apartmentEdit.jsp</result>
+        </action>
+        
+        <action name="hotelEdit-*" class="com.westchase.web.action.cmu.CmuHotelEditAction">
+        	<param name="id">{1}</param>
+            <result>/WEB-INF/cmu/hotelEdit.jsp</result>
+        </action>
+        <action name="hotelSave" class="com.westchase.web.action.cmu.CmuHotelEditAction" method="save">
+            <result>/WEB-INF/cmu/hotelEdit.jsp</result>
+        </action>
+        
+        <action name="devsiteEdit-*" class="com.westchase.web.action.cmu.CmuDevsiteEditAction">
+        	<param name="id">{1}</param>
+            <result>/WEB-INF/cmu/devsiteEdit.jsp</result>
+        </action>
+        <action name="devsiteSave" class="com.westchase.web.action.cmu.CmuDevsiteEditAction" method="save">
+            <result>/WEB-INF/cmu/devsiteEdit.jsp</result>
+        </action>
+        
+        <action name="leaseEdit-*-*" class="com.westchase.web.action.cmu.CmuLeaseEditAction">
+        	<param name="id">{1}</param>
+        	<param name="officeRetailSvcId">{2}</param>
+            <result>/WEB-INF/cmu/leaseEdit.jsp</result>
+        </action>
+        
+        <action name="leaseAdd-*" class="com.westchase.web.action.cmu.CmuLeaseEditAction">
+        	<param name="officeRetailSvcId">{1}</param>
+            <result>/WEB-INF/cmu/leaseEdit.jsp</result>
+        </action>
+        <action name="leaseSave" class="com.westchase.web.action.cmu.CmuLeaseEditAction" method="save">
+            <result>/WEB-INF/cmu/leaseEdit.jsp</result>
+        </action>
+        
+        <action name="officeRetailSvcEdit-*-*" class="com.westchase.web.action.cmu.CmuOfficeRetailSvcEditAction">
+        	<param name="id">{1}</param>
+        	<param name="businessTypeId">{2}</param>
+            <result>/WEB-INF/cmu/officeRetailSvcEdit.jsp</result>
+        </action>
+        <action name="officeRetailSvcSave" class="com.westchase.web.action.cmu.CmuOfficeRetailSvcEditAction" method="save">
+            <result>/WEB-INF/cmu/officeRetailSvcEdit.jsp</result>
+        </action>  
+        
+    </package>
+
+</struts>

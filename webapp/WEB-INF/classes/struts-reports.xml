@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <package name="report-default" extends="jasperreports-default">
+        <interceptors>
+            <interceptor-stack name="crudStack">
+              	<interceptor-ref name="checkbox" />
+                <interceptor-ref name="params" />
+        		<interceptor-ref name="staticParams" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+         
+		<global-results>
+			<result name="Exception" type="chain">
+				<param name="actionName">error</param>
+				<param name="namespace">/</param>
+			</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="Exception"/>
+        </global-exception-mappings>     
+
+    </package>
+
+	 <package name="reports" extends="report-default" namespace="/reports">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="trespassAgreementMapNoInput" class="com.westchase.web.action.report.TrespassAgreementMapNoReportAction" method="input">
+            <result>/WEB-INF/report/trespassAgreementMapNo.jsp</result>
+        </action>
+        <action name="trespassAgreementMapNo" class="com.westchase.web.action.report.TrespassAgreementMapNoReportAction">
+            <result>/WEB-INF/report/trespassAgreementMapNo.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>    
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        
+        <action name="companyByNameInput" class="com.westchase.web.action.report.CompanyByNameReportAction" method="input">
+            <result>/WEB-INF/report/companyByName.jsp</result>
+        </action>
+        <action name="companyByName" class="com.westchase.web.action.report.CompanyByNameReportAction">
+            <result>/WEB-INF/report/companyByName.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        
+        
+        <action name="emailContactsByCategoryCodeInput" class="com.westchase.web.action.report.EmailContactsByCategoryCodeReportAction" method="input">
+            <result>/WEB-INF/report/emailContactsByCategoryCode.jsp</result>
+        </action>
+        
+        <action name="emailContactsByCategoryCode" class="com.westchase.web.action.report.EmailContactsByCategoryCodeReportAction">
+            <result>/WEB-INF/report/emailContactsByCategoryCode.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        
+        <action name="contactsByCategoryCodeInput" class="com.westchase.web.action.report.ContactsByCategoryCodeReportAction" method="input">
+            <result>/WEB-INF/report/contactsByCategoryCode.jsp</result>
+        </action>
+        
+        <action name="contactsByCategoryCode" class="com.westchase.web.action.report.ContactsByCategoryCodeReportAction">
+            <result>/WEB-INF/report/contactsByCategoryCode.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+			<result name="labels" type="jasper">
+				<param name="location">jasper/labels.jasper</param>
+				<param name="dataSource">filteredResults</param>
+			</result>
+			<result name="labels23" type="jasper">
+				<param name="location">jasper/labels_2x3.jasper</param>
+				<param name="dataSource">filteredResults</param>
+			</result>
+			<result name="labels23wdlogo" type="jasper">
+				<param name="location">jasper/labels_2x3wdlogo.jasper</param>
+				<param name="dataSource">filteredResults</param>
+			</result>
+			<result name="nametags" type="jasper">
+				<param name="location">jasper/labels_nametag.jasper</param>
+				<param name="dataSource">filteredResults</param>
+			</result>
+			
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        
+        
+        
+        <action name="wcBusinessContactsByNAICSInput" class="com.westchase.web.action.report.WCBusinessContactsByNAICSReportAction" method="input">
+            <result>/WEB-INF/report/wcBusinessContactsByNAICS.jsp</result>
+        </action>
+        
+        <action name="wcBusinessContactsByNAICS" class="com.westchase.web.action.report.WCBusinessContactsByNAICSReportAction">
+            <result>/WEB-INF/report/wcBusinessContactsByNAICS.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        
+        
+        
+        <action name="officeBuildingPropertyInput" class="com.westchase.web.action.report.OfficeBuildingPropertyReportAction" method="input">
+            <result>/WEB-INF/report/officeBuildingProperty.jsp</result>
+        </action>
+        
+        <action name="officeBuildingProperty" class="com.westchase.web.action.report.OfficeBuildingPropertyReportAction">
+            <result>/WEB-INF/report/officeBuildingProperty.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+            <interceptor-ref name="basicStack"/>
+        </action>
+                
+                
+        
+        
+        <action name="flagPoleContactsInput" class="com.westchase.web.action.report.FlagPoleContactsReportAction" method="input">
+            <result>/WEB-INF/report/flagPoleContacts.jsp</result>
+        </action>
+        <action name="flagPoleContacts" class="com.westchase.web.action.report.FlagPoleContactsReportAction">
+            <result>/WEB-INF/report/flagPoleContacts.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>   
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+        <!--  CMU (move?) -->
+        <!-- 
+       	<action name="cmuApartmentAMInput" class="com.westchase.web.action.cmu.ApartmentAMReportAction" method="input">
+            <result>/WEB-INF/cmu/apartmentAM.jsp</result>
+        </action>
+        <action name="cmuApartmentAM" class="com.westchase.web.action.cmu.ApartmentAMReportAction">
+            <result>/WEB-INF/cmu/apartmentAM.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
+       	<action name="cmuApartmentASInput" class="com.westchase.web.action.cmu.ApartmentASReportAction" method="input">
+            <result>/WEB-INF/cmu/apartmentAS.jsp</result>
+        </action>
+        <action name="cmuApartmentAS" class="com.westchase.web.action.cmu.ApartmentASReportAction">
+            <result>/WEB-INF/cmu/apartmentAS.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+            <interceptor-ref name="basicStack"/>
+        </action>
+		-->
+        
+        <action name="customReportInput" class="com.westchase.web.action.report.JasperreportsAction" method="input">
+			<result>/WEB-INF/report/jasper.jsp</result>
+        </action>        
+
+        <action name="customReport" class="com.westchase.web.action.report.JasperreportsAction">
+			<result>/WEB-INF/report/jasper.jsp</result>
+        </action>
+        
+    </package>
+
+</struts>

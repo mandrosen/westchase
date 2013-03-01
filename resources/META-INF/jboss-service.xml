@@ -1,0 +1,21 @@
+<server>
+
+	<mbean code="org.jboss.varia.scheduler.Scheduler" name="com.westchase:service=Scheduler,name=HpdNewsJob">
+		<attribute name="StartAtStartup">true</attribute>
+		<attribute name="SchedulableClass">com.westchase.jobs.HpdNewsJob</attribute>
+		<attribute name="InitialStartDate">NOW</attribute>
+		<attribute name="SchedulePeriod">360000</attribute>
+		<attribute name="InitialRepetitions">-1</attribute>
+		<attribute name="FixedRate">true</attribute>
+	</mbean>
+
+	<mbean code="org.jboss.varia.scheduler.Scheduler" name="com.westchase:service=Scheduler,name=CmuTransferJob">
+		<attribute name="StartAtStartup">true</attribute>
+		<attribute name="SchedulableClass">com.westchase.jobs.CmuTransferJob</attribute>
+		<attribute name="InitialStartDate">NOW</attribute>
+		<attribute name="SchedulePeriod">3600000</attribute>
+		<attribute name="InitialRepetitions">-1</attribute>
+		<attribute name="FixedRate">true</attribute>
+	</mbean>
+
+</server>

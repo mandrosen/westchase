@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+<!--
+<table-filter match-name="flag_size"></table-filter>
+<table-filter match-name="property"></table-filter>
+<table-filter match-name="phone_book_monument_sign_number"></table-filter>
+<table-filter match-name="phone_book"></table-filter>
+
+<table-filter match-name="property_type"></table-filter>
+<table-filter match-name="property"></table-filter>
+<table-filter match-name="cmu_quarter"></table-filter>
+<table-filter match-name="cmu_transaction_type"></table-filter>
+<table-filter match-name="cmu_apartment"></table-filter>
+<table-filter match-name="cmu_devsite"></table-filter>
+<table-filter match-name="cmu_hotel"></table-filter>
+<table-filter match-name="cmu_office_retail_svc"></table-filter>
+<table-filter match-name="cmu_lease"></table-filter>
+-->
+
+
+<table-filter match-name="officer"></table-filter>
+<table-filter match-name="patrol_type"></table-filter>
+<table-filter match-name="patrol_phone"></table-filter>
+<table-filter match-name="patrol_shop"></table-filter>
+<table-filter match-name="patrol_activity"></table-filter>
+<table-filter match-name="patrol_detail_category"></table-filter>
+<table-filter match-name="patrol_detail_type"></table-filter>
+<table-filter match-name="patrol_activity_detail"></table-filter>
+<table-filter match-name="citizen"></table-filter>
+<table-filter match-name="patrol_activity_detail_citizen"></table-filter>
+<table-filter match-name="property"></table-filter>
+</hibernate-reverse-engineering>

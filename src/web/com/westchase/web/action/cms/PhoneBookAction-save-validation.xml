@@ -1,0 +1,75 @@
+<!DOCTYPE validators PUBLIC
+        "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+        "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="currentPhoneBook.title">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Title is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentPhoneBook.firstName">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ First Name is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentPhoneBook.lastName">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Last Name is required ]]></message>
+        </field-validator>
+    </field>
+    <field name="currentPhoneBook.wkPhone">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Work Phone is required ]]></message>
+        </field-validator>
+		<field-validator type="regex">
+			<param name="expression">([0-9\-\(\)\. ])*</param>
+			<message><![CDATA[ Phone numbers can only contain numbers and () and - and . ]]></message>
+		</field-validator>
+    </field>
+    <field name="currentPhoneBook.directPhone">
+		<field-validator type="regex">
+			<param name="expression">([0-9\-\(\)\. ])*</param>
+			<message><![CDATA[ Phone numbers can only contain numbers and () and - and . ]]></message>
+		</field-validator>
+    </field>
+    <field name="currentPhoneBook.faxPhone">
+        <field-validator type="requiredstring">
+            <message><![CDATA[ Fax Number is required ]]></message>
+        </field-validator>
+		<field-validator type="regex">
+			<param name="expression">([0-9\-\(\)\. ])*</param>
+			<message><![CDATA[ Phone numbers can only contain numbers and () and - and . ]]></message>
+		</field-validator>
+    </field>
+    <field name="currentPhoneBook.mobilePhone">
+		<field-validator type="regex">
+			<param name="expression">([0-9\-\(\)\. ])*</param>
+			<message><![CDATA[ Phone numbers can only contain numbers and () and - and . ]]></message>
+		</field-validator>
+    </field>
+    <field name="currentPhoneBook.company.id">
+        <field-validator type="required">
+            <message><![CDATA[ Company is required ]]></message>
+        </field-validator>
+    </field>
+    
+    <field name="currentPhoneBook.mobilePhone">
+		<field-validator type="regex">
+			<param name="expression">([0-9\-\(\)\. ])*</param>
+			<message><![CDATA[ Phone numbers can only contain numbers and () and - and . ]]></message>
+		</field-validator>
+    </field>
+    <field name="currentPhoneBook.homePhone">
+		<field-validator type="regex">
+			<param name="expression">([0-9\-\(\)\. ])*</param>
+			<message><![CDATA[ Phone numbers can only contain numbers and () and - and . ]]></message>
+		</field-validator>
+    </field>
+    <field name="currentPhoneBook.homeFax">
+		<field-validator type="regex">
+			<param name="expression">([0-9\-\(\)\. ])*</param>
+			<message><![CDATA[ Phone numbers can only contain numbers and () and - and . ]]></message>
+		</field-validator>
+    </field>
+</validators>
