@@ -135,7 +135,7 @@ public class PatrolServiceBean implements PatrolService {
 			// check consistent times
 			//List<PatrolActivity> sameOfficerSameDayList = listOtherByOfficerAndDay(patrolActivity.getId(), patrolActivity.getOfficer().getId(), patrolActivity.getStartDateTime());
 			
-			if (patrolActivity.getPatrolPhone() != null && patrolActivity.getPatrolPhone().getId() != null && patrolActivity.getPatrolPhone().getId().intValue() <= 0) {
+			if (patrolActivity.getPatrolPhone() != null && patrolActivity.getPatrolPhone().getId() != null && patrolActivity.getPatrolPhone().getId().intValue() < 0) {
 				patrolActivity.setPatrolPhone(null);
 			}
 			final PatrolActivityDAO dao = new PatrolActivityDAO();
