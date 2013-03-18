@@ -1,0 +1,56 @@
+.warnings {
+	color: #900;
+}
+label { font-weight: bold; }
+#patrol-activity-form th, #patrol-activity-form td { vertical-align: middle; }
+.field-desc { font-size: 10px; }
+.activity-counts {
+	border-spacing:0;
+	border-collapse:collapse;
+	margin: 20px 0;
+}
+.count-section {
+	border: 1px solid #555;
+	margin: 10px 0;
+}
+.count-section h2, caption {
+	text-align: center;
+	font-weight: bold;
+	font-size: 13px;
+	text-decoration: underline;
+}
+.activity-counts th { text-align: left; }
+.activity-counts td { text-align: right; }
+.patrol-details {
+	margin: 20px 0;
+}
+
+.duty-hours th, .duty-hours td, .miles th, .miles td {
+	vertical-align: middle;
+}
+.activity-counts table {
+	width: 100%;
+}
+.activity-counts td, .activity-counts th {
+	padding: 2px 4px;
+}
+.header-fields td, .header-fields th,
+div.field {
+	padding: 2px 4px 2px 0;
+}
+.community-services { text-align: center; }
+.patrol-details table {
+	width: 80%;
+}
+.calculated {
+	border: 1px solid #ccc;
+	padding: 4px;
+}
+#hike {
+	width: 245px;
+	padding-bottom: 10px;
+}
+#hike td,
+.east-west {
+	white-space: nowrap;
+}
