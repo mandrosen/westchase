@@ -10,7 +10,7 @@
 		document.getElementById('typeparam').value=typ;
 		document.getElementById('frm').submit();
 	}
-	var TSort_Data = new Array('results_table', '', 'i', 'i', 's', 's', 's', 's', 's', 's', 's', 'g', 's', 'g', 'g', 's', 's', 's', 's', 's', 's');
+	var TSort_Data = new Array('results_table', '', 'i', 'i', 's', 's', 's', 's', 's', 's', 'g', 's', 'g', 'g', 's', 's', 's', 's', 's');
 	tsRegister();
 	</script>
 
@@ -56,7 +56,6 @@
 		<th>Contact Company</th> 
 		<th>Leasing Agent Email</th>   
 		<th>Phone</th>
-		<th>Fax</th>
 		<th>Size (sq. ft.)</th>
 		<th>Occupancy Rate</th>
 		<th>Largest Contiguous (sq. ft.)</th>
@@ -65,7 +64,6 @@
 		<th>Mgmt Company</th>
 		<th>Manager Email</th>
 		<th>Phone</th>
-		<th>Fax</th>
 		<th>Comments</th>
     </tr>
 </thead>
@@ -86,7 +84,6 @@
 			<td><s:property value="leasingCompany" /></td>
 			<td><s:property value="leasingAgentEmail" /></td>
 			<td><s:property value="leasingAgentPhone" /></td>
-			<td><s:property value="leasingAgentFax" /></td>
 			
 			<td><s:property value="property.buildingSize" /></td>
 			<td><fmt:formatNumber maxFractionDigits="2" value="${result.occupancy}" />%</td>
@@ -97,7 +94,6 @@
 			<td><s:property value="mgmtCompany" /></td>
 			<td><s:property value="propertyMgrEmail" /></td>
 			<td><s:property value="propertyMgrPhone" /></td>
-			<td><s:property value="propertyMgrFax" /></td>
 			<td><s:property value="comments" /></td>
         </tr>
     </s:iterator>
