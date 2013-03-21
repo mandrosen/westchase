@@ -78,7 +78,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 			writeTitle(wb, sheet, title);
 			
 
-            String[] headers = { "Map #", "Building Name", "Address", "Leasing Agent", "Contact Company", "Email", "Phone", "Fax", "Size (sq. ft.)", "Occupancy Rate", "Largest Space", "Occupied Sq. Ft", "Building Manager", "Phone", "Fax" }; 
+            String[] headers = { "Map #", "Building Name", "Address", "Leasing Agent", "Contact Company", "Email", "Phone", "Size (sq. ft.)", "Occupancy Rate", "Largest Space", "Occupied Sq. Ft", "Building Manager", "Phone" }; 
             // Write the Header to the excel file
             writeHeaders(wb, sheet, headers);
 
@@ -143,7 +143,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 							String leasingCompany = result.getLeasingCompany();
 							String leasingEmail = result.getLeasingAgentEmail();
 							String leasingAgentPhone = result.getLeasingAgentPhone();
-							String leasingAgentFax = result.getLeasingAgentFax();
+//							String leasingAgentFax = result.getLeasingAgentFax();
 							
 							if (ors.isSingleTenant() && StringUtils.isBlank(leasingAgent)) {
 								if (reportServ != null) {
@@ -153,7 +153,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 										leasingCompany = leasingAgentDTO.getCompany();
 										leasingEmail = leasingAgentDTO.getEmail();
 										leasingAgentPhone = leasingAgentDTO.getPhone();
-										leasingAgentFax = leasingAgentDTO.getFax();
+//										leasingAgentFax = leasingAgentDTO.getFax();
 									}
 								}
 							}
@@ -162,7 +162,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 							writeCell(wb, sheet, row, col++, leasingCompany, style);
 							writeCell(wb, sheet, row, col++, leasingEmail, style);
 							writeCell(wb, sheet, row, col++, leasingAgentPhone, style);
-							writeCell(wb, sheet, row, col++, leasingAgentFax, style);
+//							writeCell(wb, sheet, row, col++, leasingAgentFax, style);
 							
 //							String sizeStr = "Unknown";
 							Integer size = ors.getBuildingSize();
@@ -205,6 +205,8 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 								double forLeaseDouble = forLease.doubleValue();
 								occupied = sizeInt - forLeaseDouble;
 								writeCell(wb, sheet, row, col++, new Double(occupied), style);
+							} else if (ors.isSingleTenant()) {
+								writeCell(wb, sheet, row, col++, new Double(sizeInt), style);
 							} else {
 								writeCell(wb, sheet, row, col++, "", style);
 							}
@@ -213,7 +215,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 							
 							writeCell(wb, sheet, row, col++, result.getPropertyMgr(), style);
 							writeCell(wb, sheet, row, col++, result.getPropertyMgrPhone(), style);
-							writeCell(wb, sheet, row, col++, result.getPropertyMgrFax(), style);
+//							writeCell(wb, sheet, row, col++, result.getPropertyMgrFax(), style);
 							
 							rowNum++;
 						} catch (Exception e) {
