@@ -128,8 +128,13 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 						try {
 							int col = 0;
 							writeCell(wb, sheet, row, col++, ors.getId(), style);
+							
+							String buildingName = ors.getBuildingName();
+							if (ors.isSingleTenant()) {
+								buildingName = "*" + buildingName; 
+							}
 	
-							writeCell(wb, sheet, row, col++, ors.getBuildingName(), style);
+							writeCell(wb, sheet, row, col++, buildingName, style);
 	
 							String location = ors.getGeoNumber() + " " + WordUtils.capitalizeFully(ors.getGeoAddress());
 							writeCell(wb, sheet, row, col++, location, style);
