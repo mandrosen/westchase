@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.naming.InitialContext;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -75,7 +74,7 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 			writeTitle(wb, sheet, title);
 			
 
-            String[] headers = { "Name & Address", "# of Units", "Occupance Rate", "Available Units", "Manager", "Management Co.", "Owner" }; 
+            String[] headers = { "Name & Address", "# of Units", "Occupance Rate", "Manager", "Mgr. Email", "Management Co.", "Owner" }; 
             // Write the Header to the excel file
             writeHeaders(wb, sheet, headers);
 
@@ -101,11 +100,18 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
             percentStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
             setBorders(percentStyle);
             
+            
+            
 			if (results != null && !results.isEmpty()) {
+				int totalApts = 0;
+				int totalRooms = 0;
+				double avgOcc = 0;
+				
 				int rowNum = FIRST_DATA_ROW;
 				for (CmuApartment result : results) {
 					Property apartment = result.getProperty();
 					if (apartment != null && apartment.getId() != null && apartment.getId().intValue() > 0) {
+						totalApts++;
 						Row row = sheet.createRow(rowNum);
 						int col = 0;
 						
@@ -120,6 +126,7 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 						int noUnitsInt = 0;
 						if (noUnits != null) {
 							noUnitsInt = noUnits.intValue();
+							totalRooms += noUnitsInt;
 //							noUnitsStr = noUnits.toString();
 							writeCell(wb, sheet, row, col++, noUnits, style);
 						} else {
@@ -129,28 +136,37 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 						//writeCell(wb, sheet, row, col++, noUnits, style);
 						
 //						writeCell(wb, sheet, row, col++, formatPercent(result.getOccupancyRate()), style);
-						writeCellPct(wb, sheet, row, col++, result.getOccupancyRate(), percentStyle);
-
-						int availUnits = 0;
-						if (result.getOccupancyRate() != null) {
-							availUnits = (int) Math.rint((100 - result.getOccupancyRate().doubleValue()) * noUnitsInt / 100);
+//						writeCellPct(wb, sheet, row, col++, result.getOccupancyRate(), percentStyle);
+						Double occRate = result.getOccupancyRate();
+						if (occRate != null) {
+							avgOcc += occRate.doubleValue();
+							writeCellPct(wb, sheet, row, col++, occRate, percentStyle);
+						} else {
+							writeCell(wb, sheet, row, col++, "", style);
 						}
-//						writeCell(wb, sheet, row, col++, String.valueOf(availUnits), style);
-						writeCell(wb, sheet, row, col++, new Integer(availUnits), style);
+
+						// removed 2013-03-21 meeting
+//						int availUnits = 0;
+//						if (result.getOccupancyRate() != null) {
+//							availUnits = (int) Math.rint((100 - result.getOccupancyRate().doubleValue()) * noUnitsInt / 100);
+//						}
+////						writeCell(wb, sheet, row, col++, String.valueOf(availUnits), style);
+//						writeCell(wb, sheet, row, col++, new Integer(availUnits), style);
 						
 						
 						StringBuffer propertyManager = new StringBuffer();
 						propertyManager.append(result.getCommunityMgr()).append("\n");
-						if (result.getCommunityMgrEmail() != null) {
-							propertyManager.append(result.getCommunityMgrEmail()).append("\n");
-						}
 						if (result.getCommunityMgrPhone() != null) {
 							propertyManager.append(result.getCommunityMgrPhone());
 						}
-						if (StringUtils.isNotBlank(result.getCommunityMgrFax())) {
-							propertyManager.append("\n(f)").append(result.getCommunityMgrFax());
-						}
+
 						writeCell(wb, sheet, row, col++, propertyManager.toString(), style);
+						
+						String email = "";
+						if (result.getCommunityMgrEmail() != null) {
+							email = result.getCommunityMgrEmail();
+						}
+						writeCell(wb, sheet, row, col++, email, style);
 						
 						
 						StringBuffer propertyMgmt = new StringBuffer();
@@ -164,9 +180,7 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 						if (result.getSupervisorPhone() != null) {
 							propertyMgmt.append(result.getSupervisorPhone());
 						}
-						if (StringUtils.isNotBlank(result.getSupervisorFax())) {
-							propertyMgmt.append("\n(f)").append(result.getSupervisorFax());
-						}
+
 						writeCell(wb, sheet, row, col++, propertyMgmt.toString(), style);
 						
 						StringBuffer owner = new StringBuffer();
@@ -179,14 +193,28 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 						if (result.getOwnerPhone() != null) {
 							owner.append(result.getOwnerPhone());
 						}
-						if (StringUtils.isNotBlank(result.getOwnerFax())) {
-							owner.append("\n(f)").append(result.getOwnerFax());
-						}
 						writeCell(wb, sheet, row, col++, owner.toString(), style);
 						
 						rowNum++;
 					}
 				}
+				if (totalApts > 0) {
+		    		CellStyle boldStyle = wb.createCellStyle();
+		    		style.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+		    		Font boldFont = wb.createFont();
+		    		boldFont.setFontName(FONT_NAME);
+		    		boldFont.setFontHeightInPoints(FONT_HEIGHT);
+		    		boldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		    		boldStyle.setFont(boldFont);
+
+		    		Row row = sheet.createRow(rowNum);
+					writeCell(wb, sheet, row, 0, "TOTAL: " + String.valueOf(totalApts), boldStyle);
+					
+					writeCell(wb, sheet, row, 1, String.valueOf(totalRooms), boldStyle);
+//					writeCell(wb, sheet, row, 3, String.valueOf(totalOccupied), boldStyle);
+					
+					writeCell(wb, sheet, row, 2, formatPercent(new Double(avgOcc / totalApts)), boldStyle);
+				}	
 			}
 			
 			fixColumns(sheet, headers.length);

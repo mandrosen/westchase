@@ -65,7 +65,7 @@
 	<s:select label="Property Type" list="availablePropertyTypes" name="currentProperty.propertyType.id" 
 		    headerKey="" headerValue="-- Please Select --" listValue="name" listKey="id" emptyOption="false"/>
 	         
-	<s:textfield label="Available for Lease" name="currentProperty.availableForLease" size="10" maxlength="10"/>
+	<s:textfield label="Building Size" name="currentProperty.availableForLease" size="10" maxlength="10"/>
 	<s:textfield label="Acreage" name="currentProperty.acreage" size="20" maxlength="20"/>
     
     <s:select label="Business Type" list="availableBusinessTypes" name="currentProperty.businessType" 

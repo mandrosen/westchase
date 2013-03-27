@@ -152,7 +152,7 @@
         <th><s:a href="%{sortlat}">Latitude</s:a></th>
         <th><s:a href="%{sortlong}">Longitude</s:a></th>
         <th><s:a href="%{sortproptype}">Property Type</s:a></th>
-        <th><s:a href="%{sortavail}">Avail for Lease</s:a></th>
+        <th><s:a href="%{sortavail}">Building Size</s:a></th>
         <th><s:a href="%{sortacreage}">Acreage</s:a></th>
         <th><s:a href="%{sortbtype}">Business Type</s:a></th>
         <th><s:a href="%{sortcenter}">Center</s:a></th>

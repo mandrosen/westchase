@@ -10,7 +10,7 @@
 		document.getElementById('typeparam').value=typ;
 		document.getElementById('frm').submit();
 	}
-	var TSort_Data = new Array('results_table', '', 'i', 'h', 'i', 's', 'i', 'h', 'h', 'h', 's');
+	var TSort_Data = new Array('results_table', '', 'i', 'h', 'i', 's', 's', 'h', 'h', 'h', 's');
 	tsRegister();
 	</script>
 
@@ -39,7 +39,9 @@
     <tr><td colspan="2"><input type="button" value="Email Report" onclick="exportreport('email')" /></td></tr>
     </table>
 </s:form>
-
+<c:set var="totalNum" value="0" />
+<c:set var="totRooms" value="0" />
+<c:set var="totOcc" value="0" />
 <table class="results" id="results_table">
 <thead>
     <tr>
@@ -48,8 +50,9 @@
 		<th>Name &amp; Address</th>
 		<th># of Units</th>  
 		<th>Occupance Rate</th>  
-		<th>Available Units</th>  
+		<th>Occ Rooms</th>  
 		<th>Manager</th>  
+		<th>Mgr. Email</th>  
 		<th>Managment Co</th>  
 		<th>Owner</th>  
 		<th>Comments</th>  
@@ -57,6 +60,9 @@
 </thead>
 <tbody>
     <s:iterator value="results" status="status" id="result">
+    	<c:set var="totalNum" value="${totalNum + 1}" />
+		<c:set var="totRooms" value="${totRooms +  result.property.noUnits}" />
+
         <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else> <c:if test="${not empty verified}">verified</c:if>">
 
             <td><c:if test="${not empty verified}"><img src="<s:url value="/images/checkmark.gif" />" alt="Verified" /></c:if></td>
@@ -72,33 +78,33 @@
 			<td><fmt:formatNumber maxFractionDigits="0" value="${(100 - result.occupancyRate) * result.property.noUnits / 100}" /></td>
 			<td>
 				<s:property value="communityMgr" /><br/>
-				<s:property value="communityMgrEmail" /><br/>
 				<s:property value="communityMgrPhone" />
-				<c:if test="${not empty result.communityMgrFax}">
-					<br>(f)<s:property value="communityMgrFax" />
-				</c:if>
 			</td>
+			<td><s:property value="communityMgrEmail" /></td>
 			<td>
 				<s:property value="mgmtCompany" /><br/>
 				<s:property value="supervisor" /><br/>
 				<s:property value="mgmtCompanyAddr" /><br/>
 				<s:property value="supervisorEmail" /><br/>
 				<s:property value="supervisorPhone" />
-				<c:if test="${not empty result.supervisorFax}">
-					<br>(f)<s:property value="supervisorFax" />
-				</c:if>
+
 			</td>
 			<td>
 				<s:property value="owner" /><br/>
 				<s:property value="ownerAddress" /><br/>
 				<s:property value="ownerPhone" />
-				<c:if test="${not empty result.ownerFax}">
-					<br>(f)<s:property value="ownerFax" />
-				</c:if>
+
 			</td>
 			<td><s:property value="comments" /></td>
         </tr>
     </s:iterator>
+    <tr>
+    	<td><c:out value="${totalNum}" /></td>
+    	<td colspan="4"><strong>Total</strong></td>
+    	<td><strong><fmt:formatNumber maxFractionDigits="0" value="${totRooms}" /></strong></td>
+    	<td>&#160;</td>
+    	<td colspan="4"></td>
+    </tr>
 </tbody>
 </table>
 

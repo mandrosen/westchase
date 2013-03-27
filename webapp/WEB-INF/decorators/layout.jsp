@@ -41,7 +41,7 @@
 				<tr>
 					<td class="links">
 						<div class="cms">
-							<h4><span>CMS</span></h4>
+							<h4><span>Manage Contacts</span></h4>
 							<ul>
 								<li><a href="<s:url action="list" namespace="/phonebook" />">Phone Book List</a></li>
 								<li><a href="<s:url action="list" namespace="/company" />">Company List</a></li>

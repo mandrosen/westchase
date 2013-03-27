@@ -165,7 +165,8 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 //							writeCell(wb, sheet, row, col++, leasingAgentFax, style);
 							
 //							String sizeStr = "Unknown";
-							Integer size = ors.getBuildingSize();
+//							Integer size = ors.getBuildingSize();
+							Double size = result.getSqFtForLease();
 							int sizeInt = 0;
 							if (size != null) {
 								sizeInt = size.intValue();

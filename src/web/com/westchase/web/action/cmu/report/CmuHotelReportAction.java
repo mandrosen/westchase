@@ -74,7 +74,7 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 			writeTitle(wb, sheet, title);
 			
 
-            String[] headers = { "Name & Address", "# of Rooms", "Occupancy Rate", "Occupied Rooms", "General Manager" }; 
+            String[] headers = { "Name & Address", "# of Rooms", "Occupancy Rate", "General Manager" }; 
             // Write the Header to the excel file
             writeHeaders(wb, sheet, headers);
 
@@ -103,7 +103,7 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 			if (results != null && !results.isEmpty()) {
 				int totalHotels = 0;
 				int totalRooms = 0;
-				int totalOccupied = 0;
+//				int totalOccupied = 0;
 				double avgOcc = 0;
 				int rowNum = FIRST_DATA_ROW;
 				for (CmuHotel result : results) {
@@ -144,13 +144,13 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 //						writeCell(wb, sheet, row, col++, formatPercent(occRate), style);
 						//`writeCellPct(wb, sheet, row, col++, occRate, style);
 
-						int occRooms = 0;
-						if (occRate != null && noUnitsInt > 0) {
-							occRooms = (int) (occRate * noUnitsInt / 100);
-							totalOccupied += occRooms;
-						}
-//						writeCell(wb, sheet, row, col++, String.valueOf(occRooms), style);
-						writeCell(wb, sheet, row, col++, new Integer(occRooms), style);
+//						int occRooms = 0;
+//						if (occRate != null && noUnitsInt > 0) {
+//							occRooms = (int) (occRate * noUnitsInt / 100);
+//							totalOccupied += occRooms;
+//						}
+////						writeCell(wb, sheet, row, col++, String.valueOf(occRooms), style);
+//						writeCell(wb, sheet, row, col++, new Integer(occRooms), style);
 						
 						StringBuffer manager = new StringBuffer();
 						if (result.getGeneralMgr() != null) {
@@ -182,7 +182,7 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 					writeCell(wb, sheet, row, 0, "TOTAL: " + String.valueOf(totalHotels), boldStyle);
 					
 					writeCell(wb, sheet, row, 1, String.valueOf(totalRooms), boldStyle);
-					writeCell(wb, sheet, row, 3, String.valueOf(totalOccupied), boldStyle);
+//					writeCell(wb, sheet, row, 3, String.valueOf(totalOccupied), boldStyle);
 					
 					writeCell(wb, sheet, row, 2, formatPercent(new Double(avgOcc / totalHotels)), boldStyle);
 				}				

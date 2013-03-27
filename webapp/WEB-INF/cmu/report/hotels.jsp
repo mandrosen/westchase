@@ -39,6 +39,7 @@
     <tr><td colspan="2"><input type="button" value="Email Report" onclick="exportreport('email')" /></td></tr>
     </table>
 </s:form>
+<c:set var="totalNum" value="0" />
 <c:set var="totRooms" value="0" />
 <c:set var="totOcc" value="0" />
 <table class="results" id="results_table">
@@ -60,6 +61,7 @@
 </thead>
 <tbody>
     <s:iterator value="results" status="status" id="result">
+    	<c:set var="totalNum" value="${totalNum + 1}" />
 		<c:set var="totRooms" value="${totRooms +  result.property.noUnits}" />
 		<c:set var="occRooms" value="${result.property.noUnits * result.occupancy}" />
 		<c:set var="totOcc" value="${totOcc + occRooms}" />
@@ -80,9 +82,10 @@
         </tr>
     </s:iterator>
     <tr>
-    	<td colspan="5"><strong>Total</strong></td>
+    	<td><c:out value="${totalNum}" /></td>
+    	<td colspan="4"><strong>Total</strong></td>
     	<td><strong><fmt:formatNumber maxFractionDigits="0" value="${totRooms}" /></strong></td>
-    	<td><strong><fmt:formatNumber maxFractionDigits="0" value="${totOcc}" /></strong></td>
+    	<td>&#160;</td>
     	<td colspan="4"></td>
     </tr>
 </tbody>
