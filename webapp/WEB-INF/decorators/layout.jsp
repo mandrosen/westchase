@@ -131,7 +131,7 @@
 			If you are having an issue, please contact 
 			<a href="mailto:mandrosen@gmail.com">Marc (mandrosen@gmail.com)</a> for help.
 		</p>
-		<p class="copyright">Copyright &#169; 2012 Westchase District</p>
+		<p class="copyright">Copyright &#169; 2009-2013 Westchase District</p>
 	</div>
 
 </body>
