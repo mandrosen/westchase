@@ -39,7 +39,11 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			}
 		}
 		if (StringUtils.isNotBlank(criteria.getOrderCol())) {
-			query.append(" order by ").append(alias).append(".").append(criteria.getOrderCol()).append(" ").append(criteria.getOrderDir());
+			String orderBy = alias + "." + criteria.getOrderCol() + " " + criteria.getOrderDir();
+			if (!"officer.lastName".equals(criteria.getOrderCol())) {
+				orderBy += ", " + alias + ".officer.lastName asc";
+			}
+			query.append("order by ").append(orderBy);
 		}
 		Query q = getSession().createQuery(query.toString());
 		if (paramMap != null && !paramMap.isEmpty()) {

@@ -62,6 +62,8 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 
 	public PatrolActivityAction() {
 		super();
+		setOrderCol("startDateTime");
+		setOrderDir("desc");
 	}
 
 	private void setupDateAndTime() {
@@ -658,7 +660,7 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 			shopId = currentPatrolActivity.getPatrolShop().getId().intValue();
 		}
 		// only required for 1, 2, 3, 4, and P (5)
-		return shopId == 1 || shopId == 2 || shopId == 3 || shopId == 4 || shopId == 5;
+		return shopId == 1 || shopId == 2 || shopId == 3 || shopId == 4;
 	}
 
 	/**

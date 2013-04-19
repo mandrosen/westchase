@@ -9,6 +9,7 @@ import com.westchase.ejb.PatrolService;
 import com.westchase.persistence.criteria.OfficerSearchCriteria;
 import com.westchase.persistence.model.Employee;
 import com.westchase.persistence.model.Officer;
+import com.westchase.utils.FormatUtils;
 import com.westchase.utils.ejb.ServiceLocator;
 import com.westchase.web.action.cms.AbstractCMSAction;
 
@@ -95,6 +96,8 @@ public class OfficerAction extends AbstractCMSAction<Officer, OfficerSearchCrite
         if (patrolServ != null && currentOfficer != null) {
         	Employee emp = getEmployee();
         	if (emp != null && emp.getId() != null) {
+        		
+        		currentOfficer.setCellPhone(FormatUtils.formatPhoneNumber(currentOfficer.getCellPhone()));
 
         		setOfficerId(patrolServ.saveOrUpdateOfficer(currentOfficer));
 

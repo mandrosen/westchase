@@ -75,7 +75,7 @@ public class PatrolServiceBean implements PatrolService {
 	@Override
 	public List<PatrolDetailCategory> listDetailCategories() {
 		final PatrolDetailCategoryDAO dao = new PatrolDetailCategoryDAO();
-		return dao.findAll(Order.asc("name"));
+		return dao.findAll(Order.asc("id"));
 	}
 
 	@Override

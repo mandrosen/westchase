@@ -22,6 +22,32 @@
 <p><a href="<s:url action="listActivity"/>">Refresh</a></p>
 <p><a href="<s:url action="editActivity-" includeParams="none"/>">Create new Patrol Activity</a></p>
 
+<s:form method="listActivity" action="listActivity" theme="simple">
+	<table>
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>
+					<s:textfield name="searchObject.id" />
+				</td>
+			</tr>
+			<tr>
+				<th>Officer</th>
+				<td>
+					<s:select list="availableOfficers" name="searchObject.officer.id"  headerKey="-1" headerValue="-- Please Select --" listValue="fullNameReverse" listKey="id" />
+				</td>
+			</tr>
+			<tr>
+				<th>Date</th>
+				<td>
+					<sx:datetimepicker name="startDate" displayFormat="MM/dd/yyyy"/>
+				</td>
+			</tr>
+		</tbody>
+	</table>	
+	<s:submit />
+</s:form>
+
 <p class="total"><s:property value="totalCount" /> total results</p>
 <div class="prevnext">
 	<s:if test="%{page > 0}">
@@ -39,26 +65,6 @@
 		<s:a href="%{goToPage}">Last</s:a>
 	</s:if>
 </div>
-
-<s:form method="listActivity" action="listActivity" theme="simple">
-	<table>
-		<tbody>
-			<tr>
-				<th>Officer</th>
-				<td>
-					<s:select list="availableOfficers" name="searchObject.officer.id"  headerKey="-1" headerValue="-- Please Select --" listValue="fullNameReverse" listKey="id" />
-				</td>
-			</tr>
-			<tr>
-				<th>Date</th>
-				<td>
-					<sx:datetimepicker name="startDate" displayFormat="MM/dd/yyyy"/>
-				</td>
-			</tr>
-		</tbody>
-	</table>	
-	<s:submit />
-</s:form>
 
 <table class="results">
 	<thead>

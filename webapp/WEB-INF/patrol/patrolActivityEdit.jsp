@@ -11,8 +11,9 @@
     
     <sx:head />
     
-    <script type="text/javascript" src="http://localhost/scripts/patrolActivity.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://localhost/styles/patrolActivity.css" />
+    <!--  // these need to point to 172... for westchase office. TODO add to config file -->
+    <script type="text/javascript" src="http://172.25.16.64/scripts/patrolActivity.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://172.25.16.64/styles/patrolActivity.css" />
    
 </head>
 

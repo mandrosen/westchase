@@ -10,6 +10,9 @@
     <title>Edit Patrol Detail</title>
     
     <sx:head />
+    
+    <!--  // these need to point to 172... for westchase office. TODO add to config file -->
+    <script type="text/javascript" src="http://172.25.16.64/scripts/patrolActivityDetail.js"></script>
 </head>
 
 <body>
@@ -25,6 +28,11 @@
 	
 	<p><a href="/westchase/patrol/editActivity-${patrolActivityId}">Back to Patrol Activity</a></p>
 	<p><a href="/westchase/patrol/listActivity?useLast=1">Back to Current Patrol Activity List</a></p>
+	
+	<p>
+	    <a href="/westchase/patrol/editActivityDetail.action?patrolActivityId=<c:out value='${patrolActivityId}' />">Add new Detail</a>
+	</p>
+	<p><a href="<s:url action="editActivity-" includeParams="none"/>">Create new Patrol Activity</a></p>
 	
 	
 	<s:if test="hasActionErrors()">
@@ -82,11 +90,13 @@
 		
 		<s:select label="Property" list="availableProperties" name="currentPatrolActivityDetail.property.id" 
    			headerKey="" headerValue="-- Please Select --" 
-   			listValue="summaryString" listKey="id" emptyOption="false" required="true" />
+   			listValue="summaryStringForPublicSafety" listKey="id" emptyOption="false" required="true" />
 		    
 		<s:textfield label="Location Description" name="currentPatrolActivityDetail.locationDesc" />
 		
 		<s:textarea label="Comments" name="currentPatrolActivityDetail.comments" rows="5" cols="75" required="true"></s:textarea>
+			
+		<s:submit value="Save" />
 		
 		<s:optiontransferselect 
 			label="Citizens"
@@ -113,6 +123,11 @@
 		<s:submit value="Save" />
 		    
 	</s:form>
+	
+	<p>
+	    <a href="/westchase/patrol/editActivityDetail.action?patrolActivityId=<c:out value='${patrolActivityId}' />">Add new Detail</a>
+	</p>
+	<p><a href="<s:url action="editActivity-" includeParams="none"/>">Create new Patrol Activity</a></p>
 
 </body>
 </html>

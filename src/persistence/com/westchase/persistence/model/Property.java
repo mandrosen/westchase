@@ -585,7 +585,7 @@ public class Property implements java.io.Serializable {
 	public String getSummaryString() {
 		return this.buildingName + "[" + this.hcad + "] (" + this.geoAddress + ")";
 	}
-	public void setSummaryString(String summaryString) {}
+	public void setSummaryString(String summaryString) {}	
 
 	@Column(name = "deleted", nullable = false)
 	public boolean isDeleted() {

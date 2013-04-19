@@ -35,7 +35,7 @@ public class PatrolActivityDetail implements java.io.Serializable {
 	private Date clearedTime;
 	private String officerRole;
 	private String disposition;
-	private Integer incidentId;
+	private String incidentId;
 	private String locationDesc;
 	private String comments;
 	private Set<PatrolActivityDetailCitizen> patrolActivityDetailCitizens = new HashSet<PatrolActivityDetailCitizen>(0);
@@ -53,7 +53,7 @@ public class PatrolActivityDetail implements java.io.Serializable {
 
 	public PatrolActivityDetail(Property property, PatrolDetailCategory patrolDetailCategory,
 			PatrolActivity patrolActivity, PatrolDetailType patrolDetailType, Date receivedTime, Date arrivedTime,
-			Date clearedTime, String officerRole, String disposition, Integer incidentId, String locationDesc,
+			Date clearedTime, String officerRole, String disposition, String incidentId, String locationDesc,
 			String comments, Set<PatrolActivityDetailCitizen> patrolActivityDetailCitizens) {
 		this.property = property;
 		this.patrolDetailCategory = patrolDetailCategory;
@@ -170,11 +170,11 @@ public class PatrolActivityDetail implements java.io.Serializable {
 	}
 
 	@Column(name = "incident_id")
-	public Integer getIncidentId() {
+	public String getIncidentId() {
 		return this.incidentId;
 	}
 
-	public void setIncidentId(Integer incidentId) {
+	public void setIncidentId(String incidentId) {
 		this.incidentId = incidentId;
 	}
 
