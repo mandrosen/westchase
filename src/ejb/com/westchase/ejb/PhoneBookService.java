@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.ejb.Local;
 
 import com.westchase.persistence.criteria.PhoneBookSearchCriteria;
+import com.westchase.persistence.dto.cms.PhoneBookCategoryDTO;
 import com.westchase.persistence.dto.cms.PhoneBookPropertyDTO;
 import com.westchase.persistence.model.PhoneBook;
 
@@ -22,7 +23,7 @@ public interface PhoneBookService {
 
 	long findAllCount(PhoneBookSearchCriteria criteria);
 
-	List<PhoneBook> findByCompany(Integer companyId);
+	List<PhoneBookCategoryDTO> findByCompany(Integer companyId);
 
 	List<PhoneBookPropertyDTO> findPhoneBookProperties(Integer phoneBookId, Integer companyId);
 

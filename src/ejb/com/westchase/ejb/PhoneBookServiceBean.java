@@ -13,6 +13,7 @@ import com.westchase.persistence.criteria.PhoneBookSearchCriteria;
 import com.westchase.persistence.dao.PhoneBookCategoryDAO;
 import com.westchase.persistence.dao.PhoneBookDAO;
 import com.westchase.persistence.dao.PhoneBookPropertyDAO;
+import com.westchase.persistence.dto.cms.PhoneBookCategoryDTO;
 import com.westchase.persistence.dto.cms.PhoneBookPropertyDTO;
 import com.westchase.persistence.model.Category;
 import com.westchase.persistence.model.PhoneBook;
@@ -123,7 +124,7 @@ public class PhoneBookServiceBean implements PhoneBookService {
 	}
 
 	@Override
-	public List<PhoneBook> findByCompany(Integer companyId) {
+	public List<PhoneBookCategoryDTO> findByCompany(Integer companyId) {
 		PhoneBookDAO dao = new PhoneBookDAO();
 		return dao.findByCompany(companyId);
 	}

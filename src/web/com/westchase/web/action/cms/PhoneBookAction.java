@@ -345,6 +345,13 @@ public class PhoneBookAction extends AbstractCMSAction<PhoneBook, PhoneBookSearc
             	}
             }
             
+            // new rule (2013-05-16) requested by Irene 
+            // at least one category code required
+            if (categoryCodes == null || categoryCodes.isEmpty()) {
+        		getRequest().getSession(true).setAttribute("message", "At least one category code is required!");
+        		return SUCCESS;
+            }
+            
             Map<Integer, String> propIds = getSelectedProperties();
             
             Employee emp = getEmployee();

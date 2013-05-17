@@ -12,6 +12,10 @@
     <sx:head />
     
     <!--  // these need to point to 172... for westchase office. TODO add to config file -->
+    <!-- 
+    <script type="text/javascript" src="http://localhost/scripts/patrolActivity.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://localhost/styles/patrolActivity.css" />
+     -->
     <script type="text/javascript" src="http://172.25.16.64/scripts/patrolActivity.js"></script>
     <link rel="stylesheet" type="text/css" href="http://172.25.16.64/styles/patrolActivity.css" />
    
@@ -62,80 +66,85 @@
 	    <s:hidden name="currentPatrolActivity.id"/>
 	</c:if>
 	
-	<table class="header-fields">
-		<tbody>
-			<tr>
-				<td>
-					<label for="officer-id">Officer</label>
-					<s:select list="availableOfficers" name="currentPatrolActivity.officer.id" id="officer-id"
-					    headerKey="-1" headerValue="-- Please Select --" listValue="fullNameReverse" listKey="id" emptyOption="false" 
-					    required="true" tabindex="1" />
-				</td>
-				<td>
-					<label for="patrol-type-id">Patrol Type</label>
-					<s:select list="availablePatrolTypes" name="currentPatrolActivity.patrolType.id" id="patrol-type-id"
-					    headerKey="-1" headerValue="-- Please Select --" listValue="name" listKey="id" emptyOption="false" 
-					    required="true" tabindex="2" />
-					<!--  <label for="patrol-type-desc">Description</label> -->
-					<!-- <s:textfield name="currentPatrolActivity.patrolTypeDesc" id="patrol-type-desc" tabindex="3" size="10" /> -->
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="officer-patrol-info">
+		<h2>Officer Patrol Info</h2>
+		
+		<table class="header-fields">
+			<tbody>
+				<tr>
+					<td>
+						<label for="officer-id">Officer</label>
+						<s:select list="availableOfficers" name="currentPatrolActivity.officer.id" id="officer-id"
+						    headerKey="-1" headerValue="-- Please Select --" listValue="fullNameReverse" listKey="id" emptyOption="false" 
+						    required="true" tabindex="1" />
+					</td>
+					<td>
+						<label for="patrol-type-id">Patrol Type</label>
+						<s:select list="availablePatrolTypes" name="currentPatrolActivity.patrolType.id" id="patrol-type-id"
+						    headerKey="-1" headerValue="-- Please Select --" listValue="name" listKey="id" emptyOption="false" 
+						    required="true" tabindex="2" />
+						<!--  <label for="patrol-type-desc">Description</label> -->
+						<!-- <s:textfield name="currentPatrolActivity.patrolTypeDesc" id="patrol-type-desc" tabindex="3" size="10" /> -->
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<table class="header-fields duty-hours">
+			<tbody>
+				<tr>
+					<th>Duty Hours</th>
+					<td><label>Start: 
+						<sx:datetimepicker type="date" name="startDate" id="startDate" displayFormat="MMddyyyy" tabindex="4" valueNotifyTopics="/startDateChanged" />
+						<!-- <sx:datetimepicker type="time" name="startTime" id="startTime" displayFormat="HH:mm" tabindex="5" /> -->
+						<s:textfield name="startTime" id="startTime" size="4" maxlength="4" tabindex="5" onblur="calculateDutySpan()" />
+						</label></td>
+					<td><label>End:
+						<sx:datetimepicker type="date" name="endDate" id="endDate" displayFormat="MMddyyyy" tabindex="6" />
+						<!-- <s:hidden name="endDate" id="endDate" />  -->
+						<!-- <sx:datetimepicker type="time" name="endTime" id="endTime" displayFormat="HH:mm" tabindex="7" /> -->
+						<s:textfield name="endTime" id="endTime" size="4" maxlength="4" tabindex="7" onblur="calculateDutySpan()" />
+						</label></td>
+					<td><span id="dutySpan" class="calculated">&#160;</span></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div class="field">
+			<label for="phone-num">Phone #</label>
+			<s:select list="availablePatrolPhones" name="currentPatrolActivity.patrolPhone.id" id="phone-num"
+			    headerKey="-1" headerValue="--" listValue="name" listKey="id" emptyOption="false" 
+			    tabindex="8" />
+		</div>
+		
+		<table class="header-fields miles">
+			<tbody>
+				<tr>
+					<th>Miles</th>
+					<td><label>Start: <s:textfield name="currentPatrolActivity.startMiles" id="startMiles" tabindex="9" size="5" onblur="calculateMileSpan()" /></label></td>
+					<td><label>End: <s:textfield name="currentPatrolActivity.endMiles" id="endMiles" tabindex="10" size="5" onblur="calculateMileSpan()" /></label></td>
+					<td><span id="milesSpan" class="calculated">&#160</span></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<table class="header-fields shop">
+			<tbody>
+				<tr>
+					<th><label for="shop-shop">Shop #</label></th>
+					<td>
+						<s:select list="availablePatrolShops" name="currentPatrolActivity.patrolShop.id" id="phone-shop"
+						    headerKey="-1" headerValue="--" listValue="name" listKey="id" emptyOption="false" 
+						    required="true" tabindex="11" />
+					</td>
+					<td>
+						<s:textfield name="currentPatrolActivity.patrolShopComments" maxlength="250" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	
-	<table class="header-fields duty-hours">
-		<tbody>
-			<tr>
-				<th>Duty Hours</th>
-				<td><label>Start: 
-					<sx:datetimepicker type="date" name="startDate" id="startDate" displayFormat="MM/dd/yyyy" tabindex="4" valueNotifyTopics="/startDateChanged" />
-					<!-- <sx:datetimepicker type="time" name="startTime" id="startTime" displayFormat="HH:mm" tabindex="5" /> -->
-					<s:textfield name="startTime" id="startTime" size="5" maxlength="5" tabindex="5" onblur="calculateDutySpan()" />
-					</label></td>
-				<td><label>End:
-					<sx:datetimepicker type="date" name="endDate" id="endDate" displayFormat="MM/dd/yyyy" tabindex="6" />
-					<!-- <s:hidden name="endDate" id="endDate" />  -->
-					<!-- <sx:datetimepicker type="time" name="endTime" id="endTime" displayFormat="HH:mm" tabindex="7" /> -->
-					<s:textfield name="endTime" id="endTime" size="5" maxlength="5" tabindex="7" onblur="calculateDutySpan()" />
-					</label></td>
-				<td><span id="dutySpan" class="calculated">&#160;</span></td>
-			</tr>
-		</tbody>
-	</table>
-	
-	<div class="field">
-		<label for="phone-num">Phone #</label>
-		<s:select list="availablePatrolPhones" name="currentPatrolActivity.patrolPhone.id" id="phone-num"
-		    headerKey="-1" headerValue="-- Please Select --" listValue="name" listKey="id" emptyOption="false" 
-		    tabindex="8" />
 	</div>
-	
-	<table class="header-fields miles">
-		<tbody>
-			<tr>
-				<th>Miles</th>
-				<td><label>Start: <s:textfield name="currentPatrolActivity.startMiles" id="startMiles" tabindex="9" size="5" onblur="calculateMileSpan()" /></label></td>
-				<td><label>End: <s:textfield name="currentPatrolActivity.endMiles" id="endMiles" tabindex="10" size="5" onblur="calculateMileSpan()" /></label></td>
-				<td><span id="milesSpan" class="calculated">&#160</span></td>
-			</tr>
-		</tbody>
-	</table>
-	
-	<table class="header-fields shop">
-		<tbody>
-			<tr>
-				<th><label for="shop-shop">Shop #</label></th>
-				<td>
-					<s:select list="availablePatrolShops" name="currentPatrolActivity.patrolShop.id" id="phone-shop"
-					    headerKey="-1" headerValue="-- Please Select --" listValue="name" listKey="id" emptyOption="false" 
-					    required="true" tabindex="11" />
-				</td>
-				<td>
-					<s:textfield name="currentPatrolActivity.patrolShopComments" maxlength="250" />
-				</td>
-			</tr>
-		</tbody>
-	</table>
 	
 	
 	
@@ -214,15 +223,15 @@
 								<tr>
 									<th>Start1</th>
 									<td>
-										<sx:datetimepicker type="date" name="hikeDateStart1" id="hikeDateStart1" displayFormat="MM/dd/yyyy" tabindex="32" />
-										<s:textfield name="hikeTimeStart1" id="hikeTimeStart1" size="3" maxlength="5" tabindex="33" onblur="calculateHikeSpan(1)" />
+										<sx:datetimepicker type="date" name="hikeDateStart1" id="hikeDateStart1" displayFormat="MMddyyyy" tabindex="32" />
+										<s:textfield name="hikeTimeStart1" id="hikeTimeStart1" size="4" maxlength="4" tabindex="33" onblur="calculateHikeSpan(1)" />
 									</td>
 								</tr>
 								<tr>
 									<th>End1</th>
 									<td>
-										<sx:datetimepicker type="date" name="hikeDateEnd1" id="hikeDateEnd1" displayFormat="MM/dd/yyyy" tabindex="34" />
-										<s:textfield name="hikeTimeEnd1" id="hikeTimeEnd1" size="3" maxlength="5" tabindex="35" onblur="calculateHikeSpan(1)" />
+										<sx:datetimepicker type="date" name="hikeDateEnd1" id="hikeDateEnd1" displayFormat="MMddyyyy" tabindex="34" />
+										<s:textfield name="hikeTimeEnd1" id="hikeTimeEnd1" size="4" maxlength="4" tabindex="35" onblur="calculateHikeSpan(1)" />
 									</td>
 								</tr>
 								<tr>
@@ -234,15 +243,15 @@
 								<tr>
 									<th>Start2</th>
 									<td>
-										<sx:datetimepicker type="date" name="hikeDateStart2" id="hikeDateStart2" displayFormat="MM/dd/yyyy" tabindex="36" />
-										<s:textfield name="hikeTimeStart2" id="hikeTimeStart2" size="3" maxlength="5" tabindex="37" onblur="calculateHikeSpan(2)" />
+										<sx:datetimepicker type="date" name="hikeDateStart2" id="hikeDateStart2" displayFormat="MMddyyyy" tabindex="36" />
+										<s:textfield name="hikeTimeStart2" id="hikeTimeStart2" size="4" maxlength="4" tabindex="37" onblur="calculateHikeSpan(2)" />
 									</td>
 								</tr>
 								<tr>
 									<th>End2</th>
 									<td>
-										<sx:datetimepicker type="date" name="hikeDateEnd2" id="hikeDateEnd2" displayFormat="MM/dd/yyyy" tabindex="38" />
-										<s:textfield name="hikeTimeEnd2" id="hikeTimeEnd2" size="3" maxlength="5" tabindex="39" onblur="calculateHikeSpan(2)" />
+										<sx:datetimepicker type="date" name="hikeDateEnd2" id="hikeDateEnd2" displayFormat="MMddyyyy" tabindex="38" />
+										<s:textfield name="hikeTimeEnd2" id="hikeTimeEnd2" size="4" maxlength="4" tabindex="39" onblur="calculateHikeSpan(2)" />
 									</td>
 								</tr>
 								<tr>
@@ -255,15 +264,15 @@
 								<tr>
 									<th>Start3</th>
 									<td>
-										<sx:datetimepicker type="date" name="hikeDateStart3" id="hikeDateStart3" displayFormat="MM/dd/yyyy" tabindex="40" />
-										<s:textfield name="hikeTimeStart3" id="hikeTimeStart3" size="3" maxlength="5" tabindex="41" onblur="calculateHikeSpan(3)" />
+										<sx:datetimepicker type="date" name="hikeDateStart3" id="hikeDateStart3" displayFormat="MMddyyyy" tabindex="40" />
+										<s:textfield name="hikeTimeStart3" id="hikeTimeStart3" size="4" maxlength="4" tabindex="41" onblur="calculateHikeSpan(3)" />
 									</td>
 								</tr>
 								<tr>
 									<th>End3</th>
 									<td>
-										<sx:datetimepicker type="date" name="hikeDateEnd3" id="hikeDateEnd3" displayFormat="MM/dd/yyyy" tabindex="42" />
-										<s:textfield name="hikeTimeEnd3" id="hikeTimeEnd3" size="3" maxlength="5" tabindex="43" onblur="calculateHikeSpan(3)" />
+										<sx:datetimepicker type="date" name="hikeDateEnd3" id="hikeDateEnd3" displayFormat="MMddyyyy" tabindex="42" />
+										<s:textfield name="hikeTimeEnd3" id="hikeTimeEnd3" size="4" maxlength="4" tabindex="43" onblur="calculateHikeSpan(3)" />
 									</td>
 								</tr>
 								<tr>
@@ -326,9 +335,9 @@
 									<td>
 										<table>
 											<tbody>
+												<tr><th>Citizen Contacts</th><td><s:select list="availableCountsBig" emptyOption="false" headerKey="0" headerValue="0" required="true" name="currentPatrolActivity.communityCitizenContacts" tabindex="60" /></td></tr>
+												<tr><th>Crime Prevention Pamphlets</th><td><s:select list="availableCountsBig" emptyOption="false" headerKey="0" headerValue="0" required="true" name="currentPatrolActivity.communityCrimePreventionPamphlets" tabindex="61" /></td></tr>
 												<tr><th>Apartment Liaison Meetings</th><td><s:select list="availableCounts" emptyOption="false" headerKey="0" headerValue="0" required="true" name="currentPatrolActivity.communityApartmentLiaisonMeetings" tabindex="56" /></td></tr>
-												<tr><th>Hotel Liaison Meetings</th><td><s:select list="availableCounts" emptyOption="false" headerKey="0" headerValue="0" required="true" name="currentPatrolActivity.communityHotelLiaisonMeetings" tabindex="57" /></td></tr>
-												<tr><th>Retail Liaison Meetings</th><td><s:select list="availableCounts" emptyOption="false" headerKey="0" headerValue="0" required="true" name="currentPatrolActivity.communityRetailLiaisonMeetings" tabindex="58" /></td></tr>
 											</tbody>
 										</table>
 									</td>
@@ -336,9 +345,9 @@
 									<td>
 										<table>
 											<tbody>
+												<tr><th>Hotel Liaison Meetings</th><td><s:select list="availableCounts" emptyOption="false" headerKey="0" headerValue="0" required="true" name="currentPatrolActivity.communityHotelLiaisonMeetings" tabindex="57" /></td></tr>
+												<tr><th>Retail Liaison Meetings</th><td><s:select list="availableCounts" emptyOption="false" headerKey="0" headerValue="0" required="true" name="currentPatrolActivity.communityRetailLiaisonMeetings" tabindex="58" /></td></tr>
 												<tr><th>Office Building Liaison Meetings</th><td><s:select list="availableCounts" emptyOption="false" headerKey="0" headerValue="0" required="true" name="currentPatrolActivity.communityOfficeBuildingLiasonMeetings" tabindex="59" /></td></tr>
-												<tr><th>Citizen Contacts</th><td><s:select list="availableCountsBig" emptyOption="false" headerKey="0" headerValue="0" required="true" name="currentPatrolActivity.communityCitizenContacts" tabindex="60" /></td></tr>
-												<tr><th>Crime Prevention Pamphlets</th><td><s:select list="availableCountsBig" emptyOption="false" headerKey="0" headerValue="0" required="true" name="currentPatrolActivity.communityCrimePreventionPamphlets" tabindex="61" /></td></tr>
 											</tbody>
 										</table>				
 									</td>

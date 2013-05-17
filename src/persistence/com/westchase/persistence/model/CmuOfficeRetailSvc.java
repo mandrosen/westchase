@@ -31,6 +31,7 @@ public class CmuOfficeRetailSvc implements java.io.Serializable {
 	private String forSalePhone;
 	private Double sqFtForLease;
 	private Double occupancy;
+	private Double occupied;
 	private Double largestSpace;
 	private Double largestSpace6mths;
 	private Double largestSpace12mths;
@@ -177,6 +178,15 @@ public class CmuOfficeRetailSvc implements java.io.Serializable {
 
 	public void setOccupancy(Double occupancy) {
 		this.occupancy = occupancy;
+	}
+
+	@Column(name = "occupied")
+	public Double getOccupied() {
+		return occupied;
+	}
+
+	public void setOccupied(Double occupied) {
+		this.occupied = occupied;
 	}
 
 	@Column(name = "largest_space", precision = 22, scale = 0)

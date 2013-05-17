@@ -8,6 +8,7 @@ import org.hibernate.Query;
 
 import com.westchase.persistence.Constants;
 import com.westchase.persistence.criteria.PhoneBookSearchCriteria;
+import com.westchase.persistence.dto.cms.PhoneBookCategoryDTO;
 import com.westchase.persistence.dto.cms.PhoneBookPropertyDTO;
 import com.westchase.persistence.dto.cmu.LeasingAgentDTO;
 import com.westchase.persistence.dto.report.ContactDTO;
@@ -468,9 +469,9 @@ public class PhoneBookDAO extends BaseDAO<PhoneBook>{
 	}
 
 
-	public List<PhoneBook> findByCompany(Integer companyId) {
-		List<PhoneBook> phonebooks = new ArrayList<PhoneBook>();
-		String query = "select p from PhoneBook p where p.company.id = :compid order by p.lastName, p.firstName";
+	public List<PhoneBookCategoryDTO> findByCompany(Integer companyId) {
+		List<PhoneBookCategoryDTO> phonebooks = new ArrayList<PhoneBookCategoryDTO>();
+		String query = "select new com.westchase.persistence.dto.cms.PhoneBookCategoryDTO(p, group_concat(pbc.category.categoryCode)) from PhoneBook p left join p.phoneBookCategories pbc where p.company.id = :compid group by p.id order by p.lastName, p.firstName";
 		try {
 			phonebooks = getSession().createQuery(query).setParameter("compid", companyId).list();
 		} catch (Exception e) {

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.criterion.Order;
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -169,6 +170,10 @@ public class PatrolServiceBean implements PatrolService {
 	@Override
 	public Long saveOrUpdateActivityDetail(PatrolActivityDetail patrolActivityDetail, List<Long> selectedCitizens) throws Exception {
 		if (patrolActivityDetail != null) {
+			if (StringUtils.isBlank(patrolActivityDetail.getOfficerRole())) {
+				patrolActivityDetail.setOfficerRole(null);
+			}
+			
 			final PatrolActivityDetailDAO dao = new PatrolActivityDetailDAO();
 			dao.saveOrUpdate(patrolActivityDetail);
 			

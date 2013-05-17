@@ -11,6 +11,7 @@ import com.westchase.ejb.PhoneBookService;
 import com.westchase.ejb.PropertyService;
 import com.westchase.persistence.criteria.CompanySearchCriteria;
 import com.westchase.persistence.dto.cms.CompanyPropertyDTO;
+import com.westchase.persistence.dto.cms.PhoneBookCategoryDTO;
 import com.westchase.persistence.model.Company;
 import com.westchase.persistence.model.CompanyType;
 import com.westchase.persistence.model.Employee;
@@ -39,7 +40,7 @@ public class CompanyAction extends AbstractCMSAction<Company, CompanySearchCrite
     private Integer delId;
     private List<Company> companies;
     private List<CompanyPropertyDTO> currentProperties;
-    private List<PhoneBook> currentPhoneBooks;
+    private List<PhoneBookCategoryDTO> currentPhoneBooks;
     private List<PhoneBook> phoneBooksToDelete;
     
     private List<State> availableStates = new ArrayList<State>();
@@ -137,7 +138,7 @@ public class CompanyAction extends AbstractCMSAction<Company, CompanySearchCrite
         }
         if (empId != null && empId.intValue() > 0 && delId != null && delId.intValue() > 0) {
         	if (pbServ != null && compServ != null && propServ != null) {
-		        List<PhoneBook> currPhoneBooks = pbServ.findByCompany(delId);
+		        List<PhoneBookCategoryDTO> currPhoneBooks = pbServ.findByCompany(delId);
 		        if (currPhoneBooks == null || currPhoneBooks.isEmpty()) {
 		        	compServ.delete(delId);
 		        	getRequest().getSession(true).setAttribute("message", "Deleted Company #" + delId);
@@ -323,11 +324,11 @@ public class CompanyAction extends AbstractCMSAction<Company, CompanySearchCrite
     	return SUCCESS;
     }
 
-	public List<PhoneBook> getCurrentPhoneBooks() {
+	public List<PhoneBookCategoryDTO> getCurrentPhoneBooks() {
 		return currentPhoneBooks;
 	}
 
-	public void setCurrentPhoneBooks(List<PhoneBook> currentPhoneBooks) {
+	public void setCurrentPhoneBooks(List<PhoneBookCategoryDTO> currentPhoneBooks) {
 		this.currentPhoneBooks = currentPhoneBooks;
 	}
 
@@ -367,8 +368,14 @@ public class CompanyAction extends AbstractCMSAction<Company, CompanySearchCrite
 		return phoneBooksToDelete;
 	}
 
-	public void setPhoneBooksToDelete(List<PhoneBook> phoneBooksToDelete) {
-		this.phoneBooksToDelete = phoneBooksToDelete;
+	public void setPhoneBooksToDelete(List<PhoneBookCategoryDTO> phoneBooksToDelete) {
+		List<PhoneBook> pbs = new ArrayList<PhoneBook>();
+		if (phoneBooksToDelete != null && !phoneBooksToDelete.isEmpty()) {
+			for (PhoneBookCategoryDTO pbc : phoneBooksToDelete) {
+				pbs.add(pbc.getPhoneBook());
+			}
+		}
+		this.phoneBooksToDelete = pbs;
 	}
 
 	public Integer getMapNo() {

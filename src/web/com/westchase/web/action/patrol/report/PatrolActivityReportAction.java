@@ -104,12 +104,12 @@ public class PatrolActivityReportAction extends AbstractReportAction {
             		"Miles", 
             		"Hike/Bike Patrol Hours", 
             		
-            		"General Patrol Count",
-            		"Bike Patrol Count",
-            		"Apt Init Count",
-            		"Special Ops Count",
-            		"Event Count",
-            		"Other Count",
+            		"General Patrols",
+            		"Bike Patrols",
+            		"Apt Initiatives",
+            		"Special Ops",
+            		"Events",
+            		"Others",
             		
             		"Felony",
             		"Class A/B Misdemeanor",
@@ -179,7 +179,7 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 				for (PatrolActivityReportDTO result : results) {
 					rowNum = 0;
 					
-					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getOfficer().getFullNameReverse(), style);
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getOfficer().getLastName(), style);
 
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getDutyHours(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getMiles(), style);

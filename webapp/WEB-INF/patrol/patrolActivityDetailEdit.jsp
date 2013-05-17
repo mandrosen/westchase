@@ -63,7 +63,7 @@
 	
 	
 		<s:select label="Category" list="availableDetailCategories" name="currentPatrolActivityDetail.patrolDetailCategory.id"
-		    headerKey="-1" headerValue="-- Please Select --" listValue="name" listKey="id" emptyOption="false" 
+		    headerKey="-1" headerValue="--" listValue="name" listKey="id" emptyOption="false" 
 		    required="true" />
 		
 		<!-- 
@@ -78,10 +78,10 @@
 		<s:textfield label="Cleared (HHMM)" name="clearedTime" size="5" maxlength="5" />
 		
 		<s:select label="Officer Role" list="#{'Primary':'Primary', 'Secondary':'Secondary'}" name="currentPatrolActivityDetail.officerRole"
-		    headerKey="" headerValue="-- Please Select --" emptyOption="false" required="true" />
+		    headerKey="" headerValue="--" emptyOption="false"/>
 	
 		<s:select label="Type" list="availableDetailTypes" name="currentPatrolActivityDetail.patrolDetailType.id"
-		    headerKey="-1" headerValue="-- Please Select --" listValue="summaryString" listKey="id" emptyOption="false" 
+		    headerKey="-1" headerValue="--" listValue="summaryString" listKey="id" emptyOption="false" 
 		    required="true" />
 		    
 		<s:textfield label="Disposition" name="currentPatrolActivityDetail.disposition" />
@@ -89,7 +89,7 @@
 		<s:textfield label="Incident ID" name="currentPatrolActivityDetail.incidentId" required="false" />
 		
 		<s:select label="Property" list="availableProperties" name="currentPatrolActivityDetail.property.id" 
-   			headerKey="" headerValue="-- Please Select --" 
+   			headerKey="" headerValue="--" 
    			listValue="summaryStringForPublicSafety" listKey="id" emptyOption="false" required="true" />
 		    
 		<s:textfield label="Location Description" name="currentPatrolActivityDetail.locationDesc" />

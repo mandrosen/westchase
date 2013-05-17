@@ -103,6 +103,7 @@ public class CmuObjectHelper {
 		cmuOrs.setMgmtCompany(input.getMgmt_company());
 		cmuOrs.setMgmtCompanyAddr(input.getMgmt_company_addr());
 		cmuOrs.setOccupancy(new Double(input.getOccupancy()));
+		cmuOrs.setOccupied(new Double(input.getOccupied()));
 		cmuOrs.setProperty(new Property(input.getProperty()));
 		cmuOrs.setPropertyMgr(input.getProperty_mgr());
 		cmuOrs.setPropertyMgrEmail(input.getProperty_mgr_email());

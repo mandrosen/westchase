@@ -70,7 +70,7 @@ public class PropertyDTO {
 
 	public String getSummaryStringForPublicSafety() {
 		StringBuffer summary = new StringBuffer();
-		summary.append(buildingName).append(" [").append(StringUtils.leftPad(String.valueOf(id), 3, '0')).append("]");
+		summary.append(StringUtils.leftPad(String.valueOf(id), 3, '0')).append(" - ").append(buildingName);
 		return summary.toString();
 	}
 
