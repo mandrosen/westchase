@@ -196,7 +196,7 @@ public class Property implements java.io.Serializable {
 		this.buildingName = buildingName;
 	}
 
-	@Column(name = "GeoNumber", length = 10)
+	@Column(name = "GeoNumber", length = 50)
 	@Length(max = 10)
 	public String getGeoNumber() {
 		return this.geoNumber;
