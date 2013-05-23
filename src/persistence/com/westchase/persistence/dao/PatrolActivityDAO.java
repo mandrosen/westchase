@@ -82,14 +82,17 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 
 	public List<PatrolActivityReportDTO> runReport(Integer officerId, Date startDate, Date endDate) {
 		List<PatrolActivityReportDTO> results = null;
+		
+		Date now = new Date(); // date used for coalesce with null patrol times (hikeBike)
+		
 		StringBuffer query = new StringBuffer("select new com.westchase.persistence.dto.patrol.PatrolActivityReportDTO(")
 		
 		.append("p.officer, ") 
-		.append("sum(timestampdiff(MINUTE, p.startDateTime, p.endDateTime)), ")
+		.append("sum(timestampdiff(MINUTE, coalesce(p.startDateTime, :now), coalesce(p.endDateTime, :now))), ")
 		.append("sum(p.endMiles - p.startMiles), ")
-		.append("sum(timestampdiff(MINUTE, p.hikePatrolledDateTimeStart1, p.hikePatrolledDateTimeEnd1)) + ")
-			.append("sum(timestampdiff(MINUTE, p.hikePatrolledDateTimeStart2, p.hikePatrolledDateTimeEnd2)) + ")
-			.append("sum(timestampdiff(MINUTE, p.hikePatrolledDateTimeStart3, p.hikePatrolledDateTimeEnd3)), ")
+		.append("sum(timestampdiff(MINUTE, coalesce(p.hikePatrolledDateTimeStart1, :now), coalesce(p.hikePatrolledDateTimeEnd1, :now))) + ")
+			.append("sum(timestampdiff(MINUTE, coalesce(p.hikePatrolledDateTimeStart2, :now), coalesce(p.hikePatrolledDateTimeEnd2, :now))) + ")
+			.append("sum(timestampdiff(MINUTE, coalesce(p.hikePatrolledDateTimeStart3, :now), coalesce(p.hikePatrolledDateTimeEnd3, :now))), ")
 			
 
 		.append("sum(case when p.patrolType.id = 1 then 1 else 0 end), ")
@@ -155,6 +158,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		query.append(" group by p.officer.id order by p.officer.lastName, p.officer.firstName ");
 		try {
 			Query q = getSession().createQuery(query.toString());
+			q.setParameter("now", now);
 			if (officerId != null && officerId.intValue() > 0) {
 				q.setParameter("officerId", officerId);
 			}

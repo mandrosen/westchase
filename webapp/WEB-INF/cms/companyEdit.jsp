@@ -170,7 +170,7 @@
     <tbody>
 		<s:iterator value="currentPhoneBooks" status="status" id="pb">
 			<tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>">
-				<td><a href="<s:url action="edit-%{id}" namespace="/phonebook" />"><s:property value="phoneBook.id"/></a></td>
+				<td><a href="<s:url action="edit-%{phoneBook.id}" namespace="/phonebook" />"><s:property value="phoneBook.id"/></a></td>
 				<td><s:property value="phoneBook.firstName"/></td>
 	            <td><s:property value="phoneBook.lastName"/></td>
 	            <td><s:property value="phoneBook.jobTitle"/></td>

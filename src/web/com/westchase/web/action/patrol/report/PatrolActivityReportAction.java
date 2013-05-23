@@ -98,6 +98,60 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 			writeSuperHeaderCell(wb, sheet, "Directed Patrol Activity", HEADER_ROW, 29, 34);
 			writeSuperHeaderCell(wb, sheet, "Community Services", HEADER_ROW, 35, 43);
 			
+			int totalOfficers = 0;
+			int totalDutyHoursMins = 0;
+			
+			int totalMiles = 0;
+			int totalHikePatrolMins = 0;
+			
+			int totalGeneralPatrolCount = 0;
+			int totalBikePatrolCount = 0;
+			int totalAptInitCount = 0;
+			int totalSpecialOpsCount = 0;
+			int totalEventCount = 0;
+			int totalOtherCount = 0;
+			
+			int totalCrimeArrestsFelony = 0;
+			int totalCrimeArrestsClassAbMisdemeanor = 0;
+			int totalCrimeArrestsClassCTicket = 0;
+			int totalCrimeArrestsTrafficDrt = 0;
+			int totalWarrantsCity = 0;
+			int totalWarrantsFelony = 0;
+			int totalWarrantsMisdemeanor = 0;
+			int totalWarrantsSetcic = 0;
+			int totalDrtInvestigationsWarnings = 0;
+			int totalDrtInvestigationsAbatements = 0;
+			int totalDrtInvestigationsTickets = 0;
+			int totalDrtInvestigationsOffenseReports = 0;
+			int totalFieldParking = 0;
+			int totalFieldChargesFiled = 0;
+			int totalFieldSuspectsInJail = 0;
+			int totalFieldHolds = 0;
+			int totalFieldTrafficStops = 0;
+			int totalTrafficMoving = 0;
+			int totalTrafficNonMoving = 0;
+			int totalPrimaryCalls = 0;
+			int totalSecondaryCalls = 0;
+			int totalOnViewsFlaggedDown = 0;
+			int totalIncidentReports = 0;
+			int totalAccidentReports = 0;
+			int totalSupplementReports = 0;
+			int totalCrimeInitiatives = 0;
+			int totalCrimeInitiativesInWcVehicle = 0;
+			int totalAdminAssignments = 0;
+			int totalAmChecklistCompleted = 0;
+			int totalBusinessChecksCompletedEast = 0;
+			int totalBusinessChecksCompletedWest = 0;
+			int totalCommunityApartmentLiaisonMeetings = 0;
+			int totalCommunityHotelLiaisonMeetings = 0;
+			int totalCommunityRetailLiaisonMeetings = 0;
+			int totalCommunityOfficeBuildingLiasonMeetings = 0;
+			int totalCommunityCitizenContacts = 0;
+			int totalCommunityCrimePreventionPamphlets = 0;
+			int totalCommunityEvents = 0;
+			int totalCommunityCptedInspections = 0;
+			int totalCommunityCrimePreventionSeminars = 0;
+			
 
             String[] headers = {"Officer", 
             		"Duty Hours", 
@@ -138,7 +192,7 @@ public class PatrolActivityReportAction extends AbstractReportAction {
             		"Supplement Reports",
             		"Crime Initiatives",
             		"Crime Initiatives In WC Vehicle",
-            		"admin Assignments",
+            		"Admin Assignments",
             		"AM Checklist Completed",
             		"Business Checks Completed East",
             		"Business Checks Completed West",
@@ -150,7 +204,8 @@ public class PatrolActivityReportAction extends AbstractReportAction {
             		"Crime Prevention Pamphlets",
             		"Events",
             		"CPTED Inspections",
-            		"Crime Prevention Seminars" };
+            		"Crime Prevention Seminars",
+            		"TOTAL" };
             
 
 
@@ -173,8 +228,8 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 				rowNum++;
             }
 
+            int col = 2;
 			if (results != null && !results.isEmpty()) {
-				int col = 2;
 				
 				for (PatrolActivityReportDTO result : results) {
 					rowNum = 0;
@@ -182,10 +237,11 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getOfficer().getLastName(), style);
 
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getDutyHours(), style);
+					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getMiles(), style);
+					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getHikePatrolHours(), style);
 					
-
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getGeneralPatrolCount(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getBikePatrolCount(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getAptInitCount(), style);
@@ -234,12 +290,120 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCommunityCptedInspections(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCommunityCrimePreventionSeminars(), style);
 					
+
+					totalOfficers++;
+					totalDutyHoursMins = addMins(totalDutyHoursMins, result.getDutyHours());
+					totalMiles += result.getMiles();
+					totalHikePatrolMins = addMins(totalHikePatrolMins, result.getHikePatrolHours());
+					totalGeneralPatrolCount += result.getGeneralPatrolCount();
+					totalBikePatrolCount += result.getBikePatrolCount();
+					totalAptInitCount += result.getAptInitCount();
+					totalSpecialOpsCount += result.getSpecialOpsCount();
+					totalEventCount += result.getEventCount();
+					totalOtherCount += result.getOtherCount();
+					totalCrimeArrestsFelony += result.getCrimeArrestsFelony();
+					totalCrimeArrestsClassAbMisdemeanor += result.getCrimeArrestsClassAbMisdemeanor();
+					totalCrimeArrestsClassCTicket += result.getCrimeArrestsClassCTicket();
+					totalCrimeArrestsTrafficDrt += result.getCrimeArrestsTrafficDrt();
+					totalWarrantsCity += result.getWarrantsCity();
+					totalWarrantsFelony += result.getWarrantsFelony();
+					totalWarrantsMisdemeanor += result.getWarrantsMisdemeanor();
+					totalWarrantsSetcic += result.getWarrantsSetcic();
+					totalDrtInvestigationsWarnings += result.getDrtInvestigationsWarnings();
+					totalDrtInvestigationsAbatements += result.getDrtInvestigationsAbatements();
+					totalDrtInvestigationsTickets += result.getDrtInvestigationsTickets();
+					totalDrtInvestigationsOffenseReports += result.getDrtInvestigationsOffenseReports();
+					totalFieldParking += result.getFieldParking();
+					totalFieldChargesFiled += result.getFieldChargesFiled();
+					totalFieldSuspectsInJail += result.getFieldSuspectsInJail();
+					totalFieldHolds += result.getFieldHolds();
+					totalFieldTrafficStops += result.getFieldTrafficStops();
+					totalTrafficMoving += result.getTrafficMoving();
+					totalTrafficNonMoving += result.getTrafficNonMoving();
+					totalPrimaryCalls += result.getPrimaryCalls();
+					totalSecondaryCalls += result.getSecondaryCalls();
+					totalOnViewsFlaggedDown += result.getOnViewsFlaggedDown();
+					totalIncidentReports += result.getIncidentReports();
+					totalAccidentReports += result.getAccidentReports();
+					totalSupplementReports += result.getSupplementReports();
+					totalCrimeInitiatives += result.getCrimeInitiatives();
+					totalCrimeInitiativesInWcVehicle += result.getCrimeInitiativesInWcVehicle();
+					totalAdminAssignments += result.getAdminAssignments();
+					totalAmChecklistCompleted += result.getAmChecklistCompleted();
+					totalBusinessChecksCompletedEast += result.getBusinessChecksCompletedEast();
+					totalBusinessChecksCompletedWest += result.getBusinessChecksCompletedWest();
+					totalCommunityApartmentLiaisonMeetings += result.getCommunityApartmentLiaisonMeetings();
+					totalCommunityHotelLiaisonMeetings += result.getCommunityHotelLiaisonMeetings();
+					totalCommunityRetailLiaisonMeetings += result.getCommunityRetailLiaisonMeetings();
+					totalCommunityOfficeBuildingLiasonMeetings += result.getCommunityOfficeBuildingLiasonMeetings();
+					totalCommunityCitizenContacts += result.getCommunityCitizenContacts();
+					totalCommunityCrimePreventionPamphlets += result.getCommunityCrimePreventionPamphlets();
+					totalCommunityEvents += result.getCommunityEvents();
+					totalCommunityCptedInspections += result.getCommunityCptedInspections();
+					totalCommunityCrimePreventionSeminars += result.getCommunityCrimePreventionSeminars();
+					
 					rowNum++;
 					
 					col++;
 				}
 				
 			}
+			
+			// write totals
+			int totalRowStart = 0;
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalOfficers, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, convertMinutesToHoursMinutes(totalDutyHoursMins), style);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalMiles, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, convertMinutesToHoursMinutes(totalHikePatrolMins), style);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalGeneralPatrolCount, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalBikePatrolCount, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAptInitCount, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalSpecialOpsCount, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalEventCount, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalOtherCount, style);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsFelony, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsClassAbMisdemeanor, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsClassCTicket, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsTrafficDrt, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsCity, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsFelony, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsMisdemeanor, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsSetcic, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsWarnings, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsAbatements, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsTickets, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsOffenseReports, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldParking, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldChargesFiled, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldSuspectsInJail, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldHolds, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldTrafficStops, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalTrafficMoving, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalTrafficNonMoving, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalPrimaryCalls, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalSecondaryCalls, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalOnViewsFlaggedDown, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalIncidentReports, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAccidentReports, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalSupplementReports, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeInitiatives, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeInitiativesInWcVehicle, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAdminAssignments, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAmChecklistCompleted, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalBusinessChecksCompletedEast, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalBusinessChecksCompletedWest, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityApartmentLiaisonMeetings, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityHotelLiaisonMeetings, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityRetailLiaisonMeetings, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityOfficeBuildingLiasonMeetings, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCitizenContacts, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCrimePreventionPamphlets, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityEvents, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCptedInspections, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCrimePreventionSeminars, style);
 			
 			wb.write(bos);
 			bos.close();
@@ -250,8 +414,28 @@ public class PatrolActivityReportAction extends AbstractReportAction {
     	
 		return bos;
 	}
+	
+	private String convertMinutesToHoursMinutes(int totalMinutes) {
+		int hours = totalMinutes / 60; //since both are ints, you get an int
+		int minutes = totalMinutes % 60;
+		return String.format("%d:%02d", hours, minutes);
+	}
 
-	protected ByteArrayOutputStream createWorkbook2() {
+	private int addMins(int totalDutyHoursMins, String dutyHours) {
+		if (StringUtils.isBlank(dutyHours)) {
+			return totalDutyHoursMins;
+		}
+		int totalMins = totalDutyHoursMins;
+		String[] hoursMinsSplit = dutyHours.split(":");
+		if (hoursMinsSplit.length == 2) {
+			int hours = Integer.parseInt(hoursMinsSplit[0]);
+			int mins = Integer.parseInt(hoursMinsSplit[1]);
+			totalMins += (60 * hours) + mins;
+		}
+		return totalMins;
+	}
+
+	/*protected ByteArrayOutputStream createWorkbook2() {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(); 
 		try {
 			Workbook wb = new XSSFWorkbook();
@@ -410,7 +594,7 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 		}
     	
 		return bos;
-	}
+	}*/
 
 	@Override
 	protected String getReportFileName() {

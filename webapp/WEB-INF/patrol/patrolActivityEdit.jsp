@@ -97,10 +97,10 @@
 					<td><label>Start: 
 						<sx:datetimepicker type="date" name="startDate" id="startDate" displayFormat="MMddyyyy" tabindex="4" valueNotifyTopics="/startDateChanged" />
 						<!-- <sx:datetimepicker type="time" name="startTime" id="startTime" displayFormat="HH:mm" tabindex="5" /> -->
-						<s:textfield name="startTime" id="startTime" size="4" maxlength="4" tabindex="5" onblur="calculateDutySpan()" />
+						<s:textfield name="startTime" id="startTime" size="4" maxlength="4" tabindex="6" onblur="calculateDutySpan()" />
 						</label></td>
 					<td><label>End:
-						<sx:datetimepicker type="date" name="endDate" id="endDate" displayFormat="MMddyyyy" tabindex="6" />
+						<sx:datetimepicker type="date" name="endDate" id="endDate" displayFormat="MMddyyyy" tabindex="5" />
 						<!-- <s:hidden name="endDate" id="endDate" />  -->
 						<!-- <sx:datetimepicker type="time" name="endTime" id="endTime" displayFormat="HH:mm" tabindex="7" /> -->
 						<s:textfield name="endTime" id="endTime" size="4" maxlength="4" tabindex="7" onblur="calculateDutySpan()" />
