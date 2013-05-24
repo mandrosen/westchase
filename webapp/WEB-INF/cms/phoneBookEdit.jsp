@@ -217,7 +217,9 @@
 					<span class='none'>No Current Relations</span>
 				</c:otherwise>
 			</c:choose>
+			<c:if test="${not empty currentPhoneBook.id}">
 			<p><a href="/westchase/phoneBookRelations/list-${currentPhoneBook.id}">Edit Relations</a></p>
+    		</c:if>
 		</td></tr>
 	
     <tr><td><s:submit value="Save" theme="simple" /></td></tr>
