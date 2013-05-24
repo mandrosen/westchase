@@ -85,10 +85,24 @@
 			<td><s:property value="leasingAgentEmail" /></td>
 			<td><s:property value="leasingAgentPhone" /></td>
 			
-			<td><s:property value="property.buildingSize" /></td>
+			<td><s:property value="sqFtForLease" /></td>
 			<td><fmt:formatNumber maxFractionDigits="2" value="${result.occupancy}" />%</td>
 			<td><s:property value="largestSpace" /></td>
-			<td><c:out value="${result.property.buildingSize - result.sqFtForLease}" /></td>
+			<c:choose>
+				<c:when test="${not empty(result.sqFtForLease) and result.sqFtForLease gt 0 and not empty(result.occupancy) and result.occupancy gt 0}">
+					<c:choose>
+						<c:when test="${result.occupancy lt 100}">
+							<td><c:out value="${result.sqFtForLease * result.occupancy / 100}" /></td>
+						</c:when>
+						<c:otherwise>
+							<td><c:out value="${result.sqFtForLease}" /></td>
+						</c:otherwise>
+					</c:choose>
+				</c:when>
+				<c:otherwise>
+				<td>0</td>
+				</c:otherwise>
+			</c:choose>
 			
 			<td><s:property value="propertyMgr" /></td>
 			<td><s:property value="mgmtCompany" /></td>

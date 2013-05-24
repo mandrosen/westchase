@@ -55,7 +55,7 @@
 			<s:select list="availablePropertyTypes" name="searchObject.propertyType.id" 
 		    headerKey="" headerValue="" listValue="name" listKey="id" emptyOption="false"/>
 		</th>
-		<th><s:textfield name="searchObject.availableForLease" size="5"/></th>
+		<th><s:textfield name="searchObject.buildingSize" size="5"/></th>
 		<th><s:textfield name="searchObject.acreage" size="5"/></th>
 		<th><s:textfield name="searchObject.businessType" size="10"/></th>
 		<th><s:textfield name="searchObject.center" size="10"/></th>
@@ -114,7 +114,7 @@
     	<s:url action="sort" id="sortlat"><s:param name="orderCol" value="'latitude'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortlong"><s:param name="orderCol" value="'longitude'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortproptype"><s:param name="orderCol" value="'propertyType.id'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
-    	<s:url action="sort" id="sortavail"><s:param name="orderCol" value="'availableForLease'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+    	<s:url action="sort" id="sortavail"><s:param name="orderCol" value="'buildingSize'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortacreage"><s:param name="orderCol" value="'acreage'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortbtype"><s:param name="orderCol" value="'businessType'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortcenter"><s:param name="orderCol" value="'center'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
@@ -195,7 +195,7 @@
             <td><s:property value="latitude" default=""/></td>
             <td><s:property value="longitude" default=""/></td>
             <td><s:property value="propertyType.name"/></td>
-            <td><s:property value="availableForLease"/></td>
+            <td><s:property value="buildingSize"/></td>
             <td><s:property value="acreage"/></td>
             <td><s:property value="businessType"/></td>
             <td><s:property value="center"/></td>

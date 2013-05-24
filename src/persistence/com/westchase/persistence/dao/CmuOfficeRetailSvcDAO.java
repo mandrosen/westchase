@@ -21,7 +21,7 @@ public class CmuOfficeRetailSvcDAO extends BaseDAO<CmuOfficeRetailSvc> {
 		} else if (businessTypeId == 2) {
 			query = "select c from CmuOfficeRetailSvc c where c.cmuQuarter.id = :quarter and c.property.businessType like 'Retail%'";
 		} else if (businessTypeId == 3) {
-			query = "select c from CmuOfficeRetailSvc c where c.cmuQuarter.id = :quarter and c.property.businessType like 'Service%' or c.property.businessType like 'Ind%'";
+			query = "select c from CmuOfficeRetailSvc c where c.cmuQuarter.id = :quarter and (c.property.businessType like 'Service%' or c.property.businessType like 'Ind%')";
 		}
 		List<CmuOfficeRetailSvc> ors = new ArrayList<CmuOfficeRetailSvc>();
 		try {

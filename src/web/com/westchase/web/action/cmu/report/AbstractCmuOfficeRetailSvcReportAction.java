@@ -164,55 +164,24 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 							writeCell(wb, sheet, row, col++, leasingAgentPhone, style);
 //							writeCell(wb, sheet, row, col++, leasingAgentFax, style);
 							
-//							String sizeStr = "Unknown";
-//							Integer size = ors.getBuildingSize();
-							Double size = result.getSqFtForLease();
-							int sizeInt = 0;
-							if (size != null) {
-								sizeInt = size.intValue();
-								totalSize += sizeInt;
-//								sizeStr = size.toString();
-								writeCell(wb, sheet, row, col++, size, style);
-							} else {
-								writeCell(wb, sheet, row, col++, "", style);
-							}
-//							writeCell(wb, sheet, row, 7, sizeStr, style);
-							//writeCell(wb, sheet, row, col++, size, style);
+							// we are looking for buildingsize, but on the cmu, it is called
+							// sqftforlease (confusing)
+							Double buildingSize = result.getSqFtForLease();
+							writeCell(wb, sheet, row, col++, buildingSize, style);
 							
-							Double occ = result.getOccupancy();
-							if ((occ == null || occ.doubleValue() == 0) && ors.isSingleTenant()) {
-								occ = new Double(100);
-							}
-							if (occ != null) {
-								avgOcc += occ.doubleValue();
-								writeCellPct(wb, sheet, row, col++, occ, percentStyle);
-							} else {
-								writeCell(wb, sheet, row, col++, occ, style);
-							}
-//							writeCell(wb, sheet, row, col++, formatPercent(occ), style);
-							//writeCellPct(wb, sheet, row, col++, occ, style);
+							Double occupancyRate = result.getOccupancy();
+							writeCell(wb, sheet, row, col++, occupancyRate, style);
 							
-//							String largeStr = "Unknown";
-							Double largest = result.getLargestSpace();
-//							if (largest != null) {
-//								largeStr = largest.toString();
-//							}
-//							writeCell(wb, sheet, row, col++, largeStr, style);
-							writeCell(wb, sheet, row, col++, largest, style);
+							Double largestSpace = result.getLargestSpace();
+							writeCell(wb, sheet, row, col++, largestSpace, style);
 							
-							double occupied = 0;
-							Double forLease = result.getSqFtForLease();
-							if (forLease != null && sizeInt > 0) {
-								double forLeaseDouble = forLease.doubleValue();
-								occupied = sizeInt - forLeaseDouble;
-								writeCell(wb, sheet, row, col++, new Double(occupied), style);
-							} else if (ors.isSingleTenant()) {
-								writeCell(wb, sheet, row, col++, new Double(sizeInt), style);
+							// occupied sq ft - calculated
+							if (buildingSize != null && occupancyRate != null) {
+								double occupiedSqFt = buildingSize.doubleValue() * occupancyRate.doubleValue() / 100;
+								writeCell(wb, sheet, row, col++, new Double(occupiedSqFt), style);
 							} else {
-								writeCell(wb, sheet, row, col++, "", style);
+								writeCell(wb, sheet, row, col++, new Double(0), style);
 							}
-//							writeCell(wb, sheet, row, col++, String.valueOf(occupied), style);
-							//writeCell(wb, sheet, row, col++, new Double(occupied), style);
 							
 							writeCell(wb, sheet, row, col++, result.getPropertyMgr(), style);
 							writeCell(wb, sheet, row, col++, result.getPropertyMgrPhone(), style);
