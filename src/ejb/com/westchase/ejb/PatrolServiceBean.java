@@ -52,7 +52,7 @@ public class PatrolServiceBean implements PatrolService {
 	@Override
 	public List<Officer> listOfficers() {
 		final OfficerDAO dao = new OfficerDAO();
-		return dao.findAll(Order.asc("lastName"));
+		return dao.findAllOrdered();
 	}
 
 	@Override
@@ -284,9 +284,9 @@ public class PatrolServiceBean implements PatrolService {
 
 	// -- Reports -- //
 	@Override
-	public List<PatrolActivityReportDTO> runReport(Integer officerId, Date startDate, Date endDate) {
+	public List<PatrolActivityReportDTO> runReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList) {
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
-		return dao.runReport(officerId, startDate, endDate);
+		return dao.runReport(officerIdList, startDate, endDate, patrolTypeIdList);
 	}
 
 }

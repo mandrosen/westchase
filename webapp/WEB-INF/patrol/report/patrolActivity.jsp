@@ -33,7 +33,9 @@
 			<tr>
 				<th>Officer</th>
 				<td>
-					<s:select list="availableOfficers" name="officerId"  headerKey="-1" headerValue="-- Please Select --" listValue="fullNameReverse" listKey="id" />
+					<s:select name="officerIdList" headerKey="-1" headerValue="--" 
+					    list="availableOfficers" listValue="fullNameReverse" listKey="id" emptyOption="false" 
+					    multiple="true" size="10" />
 				</td>
 			</tr>
 			<tr>
@@ -48,6 +50,17 @@
 					<sx:datetimepicker name="endDate" displayFormat="MM/dd/yyyy"/>
 				</td>
 			</tr>
+			
+			
+			<tr>
+				<th>Patrol Type</th>
+				<td>
+					<s:select name="patrolTypeIdList" headerKey="-1" headerValue="--" 
+					    list="availablePatrolTypes" listValue="name" listKey="id" emptyOption="false" 
+					    multiple="true" size="10" />
+		    	</td>
+    		</tr>
+			
 		    <tr><td colspan="2"><s:submit value="Run" onclick="$('#typeparam').val('')" /></td></tr>
 		    <tr><td colspan="2"><input type="button" value="Export to Excel" onclick="exportreport('excel')" /></td></tr>
 	    </table>

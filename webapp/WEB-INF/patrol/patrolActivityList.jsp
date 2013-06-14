@@ -43,6 +43,15 @@
 					<sx:datetimepicker name="startDate" displayFormat="MM/dd/yyyy"/>
 				</td>
 			</tr>
+			
+			<tr>
+				<th>Patrol Type</th>
+				<td>
+					<s:select name="patrolTypeIdList" headerKey="-1" headerValue="--" 
+					    list="availablePatrolTypes" listValue="name" listKey="id" emptyOption="false" 
+					    multiple="true" size="10" />
+		    	</td>
+    		</tr>
 		</tbody>
 	</table>	
 	<s:submit />
@@ -72,12 +81,14 @@
 	    	<s:url action="sortActivity" id="sortid"><s:param name="orderCol" value="'id'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
 	    	<s:url action="sortActivity" id="sortofficer"><s:param name="orderCol" value="'officer.lastName'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
 	    	<s:url action="sortActivity" id="sortdate"><s:param name="orderCol" value="'startDateTime'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+	    	<s:url action="sortActivity" id="sortpatrol"><s:param name="orderCol" value="'patrolType.name'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
 
 	    
 	    
         	<th><s:a href="%{sortid}">Id</s:a></th>
         	<th><s:a href="%{sortofficer}">Officer</s:a></th>
         	<th><s:a href="%{sortdate}">Activity Date</s:a></th>
+        	<th><s:a href="%{sortpatrol}">Patrol Type</s:a></th>
 	    	<th></th>
 	    </tr>
 	</thead>
@@ -89,6 +100,7 @@
 	            <td><s:property value="officer.fullNameReverse"/></td>
 	
 	            <td><s:date name="startDateTime" format="MM/dd/yyyy" /></td>
+	            <td><s:property value="patrolType.name" /></td>
 	            <td>
 	           		<a href="<s:url action="editActivity-%{id}" />">Edit</a>
             	<a href="javascript:confirmremove(${pb.id})">Delete</a>

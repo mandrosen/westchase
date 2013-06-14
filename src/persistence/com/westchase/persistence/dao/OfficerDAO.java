@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
+import org.hibernate.criterion.Order;
 
 import com.westchase.persistence.criteria.OfficerSearchCriteria;
 import com.westchase.persistence.model.Officer;
@@ -14,6 +15,11 @@ public class OfficerDAO extends BaseDAO<Officer> {
 
 	public OfficerDAO() {
 		super();
+	}
+	
+	public List<Officer> findAllOrdered() {
+		List<Officer> officers = getSession().createCriteria(Officer.class).addOrder(Order.asc("lastName")).addOrder(Order.desc("firstName")).list();
+		return officers;
 	}
 	
 	private Query getQuery(OfficerSearchCriteria criteria, String select, String alias) {
@@ -37,6 +43,9 @@ public class OfficerDAO extends BaseDAO<Officer> {
 				query.append(" and ").append(alias).append(".badge = :badge ");
 				paramMap.put("badge", officer.getBadge());
 			}
+		}
+		if (StringUtils.isNotBlank(criteria.getOrderCol())) {
+			query.append(" order by ").append(alias).append(".").append(criteria.getOrderCol()).append(" ").append(criteria.getOrderDir());
 		}
 		Query q = getSession().createQuery(query.toString());
 		if (paramMap != null && !paramMap.isEmpty()) {

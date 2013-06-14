@@ -291,7 +291,11 @@ public abstract class AbstractReportAction extends AbstractWestchaseAction imple
 		try {
 			Cell cell = row.createCell(col);
 			cell.setCellStyle(style);
-			cell.setCellValue(value);
+			if (value == null) {
+				cell.setCellValue("");
+			} else {
+				cell.setCellValue(value);
+			}
 		} catch (Exception e) {
 			log.error("unable to write string " + value + " to cell", e);
 			throw e;

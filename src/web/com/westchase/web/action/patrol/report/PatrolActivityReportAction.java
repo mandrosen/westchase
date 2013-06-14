@@ -18,20 +18,35 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.westchase.ejb.PatrolService;
 import com.westchase.persistence.dto.patrol.PatrolActivityReportDTO;
 import com.westchase.persistence.model.Officer;
+import com.westchase.persistence.model.PatrolType;
 import com.westchase.utils.ejb.ServiceLocator;
 import com.westchase.web.action.report.AbstractReportAction;
 
 public class PatrolActivityReportAction extends AbstractReportAction {
 
-	private List<Officer> availableOfficers;
+	public static final String HEADER_MARKER = ">";
 	
-	private Integer officerId;
+	private List<Officer> availableOfficers;
+	private List<PatrolType> availablePatrolTypes;
+	
+	private List<Integer> officerIdList;
 	private String startDate;
 	private String endDate;
+	
+	private List<Integer> patrolTypeIdList;
+
 	private List<PatrolActivityReportDTO> results;
 
 	public PatrolActivityReportAction() {
 		super();
+	}
+	
+	public List<Integer> getPatrolTypeIdList() {
+		return patrolTypeIdList;
+	}
+
+	public void setPatrolTypeIdList(List<Integer> patrolTypeIdList) {
+		this.patrolTypeIdList = patrolTypeIdList;
 	}
 	
 	private Date getDate(String dateStr) {
@@ -50,6 +65,7 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 		PatrolService patrolServ = ServiceLocator.lookupPatrolService();
 		if (patrolServ != null) {
 			availableOfficers = patrolServ.listOfficers();
+			availablePatrolTypes = patrolServ.listPatrolTypes();
 		}
 	}
 	
@@ -65,7 +81,7 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 		if (patrolServ != null) {
 			prepareLists();
 			
-			results = patrolServ.runReport(officerId, getDate(startDate), getDate(endDate));
+			results = patrolServ.runReport(officerIdList, getDate(startDate), getDate(endDate), getPatrolTypeIdList());
 			if (EXCEL.equals(type)) {
 				return exportToExcel();
 			}
@@ -158,6 +174,8 @@ public class PatrolActivityReportAction extends AbstractReportAction {
             		"Miles", 
             		"Hike/Bike Patrol Hours", 
             		
+            		HEADER_MARKER + "PATROL TYPE",
+            		
             		"General Patrols",
             		"Bike Patrols",
             		"Apt Initiatives",
@@ -165,37 +183,60 @@ public class PatrolActivityReportAction extends AbstractReportAction {
             		"Events",
             		"Others",
             		
+            		HEADER_MARKER + "CRIME ARREST ACTIVITY",
+            		
             		"Felony",
             		"Class A/B Misdemeanor",
             		"Class C (No Ticket)",
             		"Non-Traffic/DRT",
+            		
+            		HEADER_MARKER + "WARRANTS",
+            		
             		"City",
             		"Felony",
             		"Misdemeanor",
             		"SETCIC",
+            		
+            		HEADER_MARKER + "DRT INVESTIGATIONS",
+            		
             		"Warnings",
             		"Abatements",
             		"Tickets",
             		"Offense Reports",
+            		
+            		HEADER_MARKER + "FIELD ACTIVITY",
+            		
             		"Parking",
             		"Charges Filed",
             		"Suspects In Jail",
             		"Holds",
             		"Traffic Stops",
+            		
+            		HEADER_MARKER + "TRAFFIC ENFORCEMENT",
+            		
             		"Moving",
             		"Non-Moving",
+            		
+            		HEADER_MARKER + "PATROL ACTIVITY",
+            		
             		"Primary Calls",
             		"Secondary Calls",
             		"On Views Flagged Down",
             		"Incident Reports",
             		"Accident Reports",
             		"Supplement Reports",
+            		
+            		HEADER_MARKER + "DIRECTED PATROL ACTIVITY",
+            		
             		"Crime Initiatives",
             		"Crime Initiatives In WC Vehicle",
             		"Admin Assignments",
             		"AM Checklist Completed",
             		"Business Checks Completed East",
             		"Business Checks Completed West",
+            		
+            		HEADER_MARKER + "COMMUNITY SERVICES",
+            		
             		"Apartment Liaison Meetings",
             		"Hotel Liaison Meetings",
             		"Retail Liaison Meetings",
@@ -204,18 +245,29 @@ public class PatrolActivityReportAction extends AbstractReportAction {
             		"Crime Prevention Pamphlets",
             		"Events",
             		"CPTED Inspections",
-            		"Crime Prevention Seminars",
-            		"TOTAL" };
+            		"Crime Prevention Seminars"};
             
 
 
 
     		CellStyle style = wb.createCellStyle();
     		style.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+//    		style.setFillPattern(CellStyle.BIG_SPOTS);
+    		style.setAlignment(CellStyle.ALIGN_CENTER);
     		Font font = wb.createFont();
     		font.setFontName(FONT_NAME);
     		font.setFontHeightInPoints(FONT_HEIGHT);
     		style.setFont(font);
+    		
+    		CellStyle headerStyle = wb.createCellStyle();
+//    		headerStyle.setFillBackgroundColor(IndexedColors.AQUA.getIndex());
+//    		headerStyle.setFillPattern(CellStyle.BIG_SPOTS);
+//    		headerStyle.setFillPattern((short) 1);
+    		Font headerFont = wb.createFont();
+    		headerFont.setFontName(FONT_NAME);
+    		headerFont.setFontHeightInPoints(FONT_HEIGHT);
+    		headerFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+    		headerStyle.setFont(headerFont);
             
     		// write headers along left column
 			int startRowNum = FIRST_DATA_ROW + 1;
@@ -223,7 +275,12 @@ public class PatrolActivityReportAction extends AbstractReportAction {
             for (int i = 0; i < headers.length; i++) {
 				Row row = sheet.createRow(rowNum);
 				
-				writeCell(wb, sheet, row, 0, headers[i], style);
+				String header = headers[i];
+				if (header.startsWith(HEADER_MARKER)) {
+					writeCell(wb, sheet, row, 0, header.substring(1), headerStyle);
+				} else {
+					writeCell(wb, sheet, row, 0, header, headerStyle);
+				}
 				
 				rowNum++;
             }
@@ -234,13 +291,15 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 				for (PatrolActivityReportDTO result : results) {
 					rowNum = 0;
 					
-					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getOfficer().getLastName(), style);
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getOfficer().getLastName().toUpperCase(), headerStyle);
 
-					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getDutyHours(), style);
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getDutyHours(), headerStyle);
 					
-					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getMiles(), style);
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getMiles(), headerStyle);
 					
-					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getHikePatrolHours(), style);
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getHikePatrolHours(), headerStyle);
+					
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, "", headerStyle);
 					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getGeneralPatrolCount(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getBikePatrolCount(), style);
@@ -249,37 +308,60 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getEventCount(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getOtherCount(), style);
 					
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, "", headerStyle);
+					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCrimeArrestsFelony(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCrimeArrestsClassAbMisdemeanor(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCrimeArrestsClassCTicket(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCrimeArrestsTrafficDrt(), style);
+					
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, "", headerStyle);
+					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getWarrantsCity(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getWarrantsFelony(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getWarrantsMisdemeanor(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getWarrantsSetcic(), style);
+					
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, "", headerStyle);
+					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getDrtInvestigationsWarnings(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getDrtInvestigationsAbatements(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getDrtInvestigationsTickets(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getDrtInvestigationsOffenseReports(), style);
+					
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, "", headerStyle);
+					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getFieldParking(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getFieldChargesFiled(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getFieldSuspectsInJail(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getFieldHolds(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getFieldTrafficStops(), style);
+					
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, "", headerStyle);
+					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getTrafficMoving(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getTrafficNonMoving(), style);
+					
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, "", headerStyle);
+					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getPrimaryCalls(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getSecondaryCalls(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getOnViewsFlaggedDown(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getIncidentReports(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getAccidentReports(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getSupplementReports(), style);
+					
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, "", headerStyle);
+					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCrimeInitiatives(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCrimeInitiativesInWcVehicle(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getAdminAssignments(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getAmChecklistCompleted(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getBusinessChecksCompletedEast(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getBusinessChecksCompletedWest(), style);
+					
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, "", headerStyle);
+					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCommunityApartmentLiaisonMeetings(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCommunityHotelLiaisonMeetings(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getCommunityRetailLiaisonMeetings(), style);
@@ -351,62 +433,95 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 			
 			// write totals
 			int totalRowStart = 0;
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalOfficers, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, convertMinutesToHoursMinutes(totalDutyHoursMins), style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalOfficers, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, convertMinutesToHoursMinutes(totalDutyHoursMins), headerStyle);
 			
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalMiles, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, convertMinutesToHoursMinutes(totalHikePatrolMins), style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalMiles, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, convertMinutesToHoursMinutes(totalHikePatrolMins), headerStyle);
 			
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalGeneralPatrolCount, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalBikePatrolCount, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAptInitCount, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalSpecialOpsCount, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalEventCount, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalOtherCount, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, "", headerStyle);
 			
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsFelony, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsClassAbMisdemeanor, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsClassCTicket, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsTrafficDrt, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsCity, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsFelony, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsMisdemeanor, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsSetcic, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsWarnings, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsAbatements, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsTickets, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsOffenseReports, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldParking, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldChargesFiled, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldSuspectsInJail, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldHolds, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldTrafficStops, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalTrafficMoving, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalTrafficNonMoving, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalPrimaryCalls, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalSecondaryCalls, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalOnViewsFlaggedDown, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalIncidentReports, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAccidentReports, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalSupplementReports, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeInitiatives, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeInitiativesInWcVehicle, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAdminAssignments, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAmChecklistCompleted, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalBusinessChecksCompletedEast, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalBusinessChecksCompletedWest, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityApartmentLiaisonMeetings, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityHotelLiaisonMeetings, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityRetailLiaisonMeetings, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityOfficeBuildingLiasonMeetings, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCitizenContacts, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCrimePreventionPamphlets, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityEvents, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCptedInspections, style);
-			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCrimePreventionSeminars, style);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalGeneralPatrolCount, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalBikePatrolCount, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAptInitCount, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalSpecialOpsCount, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalEventCount, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalOtherCount, headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, "", headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsFelony, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsClassAbMisdemeanor, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsClassCTicket, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeArrestsTrafficDrt, headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, "", headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsCity, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsFelony, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsMisdemeanor, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalWarrantsSetcic, headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, "", headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsWarnings, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsAbatements, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsTickets, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalDrtInvestigationsOffenseReports, headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, "", headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldParking, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldChargesFiled, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldSuspectsInJail, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldHolds, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFieldTrafficStops, headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, "", headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalTrafficMoving, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalTrafficNonMoving, headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, "", headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalPrimaryCalls, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalSecondaryCalls, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalOnViewsFlaggedDown, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalIncidentReports, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAccidentReports, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalSupplementReports, headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, "", headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeInitiatives, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCrimeInitiativesInWcVehicle, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAdminAssignments, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAmChecklistCompleted, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalBusinessChecksCompletedEast, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalBusinessChecksCompletedWest, headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, "", headerStyle);
+			
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityApartmentLiaisonMeetings, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityHotelLiaisonMeetings, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityRetailLiaisonMeetings, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityOfficeBuildingLiasonMeetings, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCitizenContacts, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCrimePreventionPamphlets, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityEvents, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCptedInspections, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalCommunityCrimePreventionSeminars, headerStyle);
 			
 			wb.write(bos);
 			bos.close();
+			
+			// TODO: merge header cells
+//			CellRangeAddress region = new CellRangeAddress(rowIdx, rowIdx, columnIdx, columnIdx+1);
+//			sheet.addMergedRegion(region);
+			
+			for (int i = 0; i < col; i++) {
+				sheet.autoSizeColumn(i);
+			}
             
 		} catch (Exception e) {
 			log.error("error with PatrolActivityReport", e);
@@ -609,12 +724,12 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 		this.results = results;
 	}
 
-	public Integer getOfficerId() {
-		return officerId;
+	public List<Integer> getOfficerIdList() {
+		return officerIdList;
 	}
 
-	public void setOfficerId(Integer officerId) {
-		this.officerId = officerId;
+	public void setOfficerIdList(List<Integer> officerIdList) {
+		this.officerIdList = officerIdList;
 	}
 
 	public String getStartDate() {
@@ -639,6 +754,14 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 
 	public void setAvailableOfficers(List<Officer> availableOfficers) {
 		this.availableOfficers = availableOfficers;
+	}
+
+	public List<PatrolType> getAvailablePatrolTypes() {
+		return availablePatrolTypes;
+	}
+
+	public void setAvailablePatrolTypes(List<PatrolType> availablePatrolTypes) {
+		this.availablePatrolTypes = availablePatrolTypes;
 	}
 
 }

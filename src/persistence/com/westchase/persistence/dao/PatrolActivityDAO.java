@@ -38,6 +38,9 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 				paramMap.put("officerId", pa.getOfficer().getId());
 			}
 		}
+		if (hasListValues(criteria.getPatrolTypeIdList())) {
+			query.append(" and p.patrolType.id in (:patrolTypeIdList) ");
+		}
 		if (StringUtils.isNotBlank(criteria.getOrderCol())) {
 			String orderBy = alias + "." + criteria.getOrderCol() + " " + criteria.getOrderDir();
 			if (!"officer.lastName".equals(criteria.getOrderCol())) {
@@ -50,6 +53,9 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
 				q.setParameter(entry.getKey(), entry.getValue());
 			}
+		}
+		if (hasListValues(criteria.getPatrolTypeIdList())) {
+			q.setParameterList("patrolTypeIdList", criteria.getPatrolTypeIdList());
 		}
 		return q;
 	}
@@ -80,7 +86,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		return count;
 	}
 
-	public List<PatrolActivityReportDTO> runReport(Integer officerId, Date startDate, Date endDate) {
+	public List<PatrolActivityReportDTO> runReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList) {
 		List<PatrolActivityReportDTO> results = null;
 		
 		Date now = new Date(); // date used for coalesce with null patrol times (hikeBike)
@@ -146,8 +152,8 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		
 		.append(") from PatrolActivity p where p.deleted = 0 ");
 		
-		if (officerId != null && officerId.intValue() > 0) {
-			query.append(" and p.officer.id = :officerId ");
+		if (hasListValues(officerIdList)) {
+			query.append(" and p.officer.id in (:officerIdList) ");
 		}
 		if (startDate != null) {
 			query.append(" and p.startDateTime >= :startDate ");
@@ -155,12 +161,17 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		if (endDate != null) {
 			query.append(" and p.startDateTime < :endDate ");
 		}
+		
+		if (hasListValues(patrolTypeIdList)) {
+			query.append(" and p.patrolType.id in (:patrolTypeIdList) ");
+		}
+		
 		query.append(" group by p.officer.id order by p.officer.lastName, p.officer.firstName ");
 		try {
 			Query q = getSession().createQuery(query.toString());
 			q.setParameter("now", now);
-			if (officerId != null && officerId.intValue() > 0) {
-				q.setParameter("officerId", officerId);
+			if (hasListValues(officerIdList)) {
+				q.setParameterList("officerIdList", officerIdList);
 			}
 			if (startDate != null) {
 				q.setParameter("startDate", startDate);
@@ -168,11 +179,26 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			if (endDate != null) {
 				q.setParameter("endDate", endDate);
 			}
+			if (hasListValues(patrolTypeIdList)) {
+				q.setParameterList("patrolTypeIdList", patrolTypeIdList);
+			}
 			results = q.list();
 		} catch (Exception e) {
 			log.error("", e);
 		}
 		return results;
+	}
+	
+	private boolean hasListValues(List<Integer> listValues) {
+		boolean hasListValues = false;
+		if (listValues != null && !listValues.isEmpty()) {
+			for (Integer listValue : listValues) {
+				if (listValue != null && listValue.intValue() > -1) {
+					hasListValues = true;
+				}
+			}
+		}
+		return hasListValues;
 	}
 
 	public List<PatrolActivity> listOtherByOfficerAndDay(Long id, Integer officerId, Date activityDate) {

@@ -24,7 +24,7 @@ public class OfficerAction extends AbstractCMSAction<Officer, OfficerSearchCrite
 	private Integer officerId;
 	
 	private Officer currentOfficer;
-
+	
 	public OfficerAction() {
 		super();
 	}
@@ -38,6 +38,20 @@ public class OfficerAction extends AbstractCMSAction<Officer, OfficerSearchCrite
 			}
 		}
 	}
+
+	public String sort() {
+    	setSearchObject((Officer) getRequest().getSession(true).getAttribute(getLastSearchAttributeName()));
+    	if (StringUtils.isBlank(getCurrentOrderCol())) {
+    		setOrderDir("asc");
+    	} else if (getCurrentOrderCol().equals(getOrderCol())) {
+    		setOrderDir("desc");
+    	} else {
+    		setOrderDir("asc");
+    	}
+		setPage(0);
+    	refresh();
+    	return SUCCESS;
+    }
 
 	@Override
 	public String goToPage(int page) {
@@ -74,8 +88,14 @@ public class OfficerAction extends AbstractCMSAction<Officer, OfficerSearchCrite
     	criteria.setSearchObject(getSearchObject());
     	criteria.setPage(getPage());
     	criteria.setNumberOfResults(getNumberOfResults());
-    	criteria.setOrderCol(getOrderCol());
     	criteria.setOrderDir(getOrderDir());
+    	
+        if (StringUtils.isNotBlank(getOrderCol())) {
+        	criteria.setOrderCol(getOrderCol());
+        	setCurrentOrderCol(getOrderCol());
+        } else {
+        	criteria.setOrderCol(getCurrentOrderCol());
+        }
 
         
         // store for 'back to list' functionality

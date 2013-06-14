@@ -59,6 +59,8 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	private String hikeTimeStart3;
 	private String hikeDateEnd3;
 	private String hikeTimeEnd3;
+	
+	private List<Integer> patrolTypeIdList;
 
 	public PatrolActivityAction() {
 		super();
@@ -331,6 +333,9 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	public void refresh() {
 		PatrolActivitySearchCriteria criteria = new PatrolActivitySearchCriteria();
         criteria.setSearchObject(getSearchObject());
+        
+        criteria.setPatrolTypeIdList(patrolTypeIdList);
+        
         criteria.setPage(getPage());
         criteria.setNumberOfResults(getNumberOfResults());
         if (StringUtils.isNotBlank(getOrderCol())) {
@@ -706,5 +711,13 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 				addActionError("Start miles can not be greater than end miles");
 			}
 		}
+	}
+
+	public List<Integer> getPatrolTypeIdList() {
+		return patrolTypeIdList;
+	}
+
+	public void setPatrolTypeIdList(List<Integer> patrolTypeIdList) {
+		this.patrolTypeIdList = patrolTypeIdList;
 	}
 }

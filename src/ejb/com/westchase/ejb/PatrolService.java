@@ -85,6 +85,6 @@ public interface PatrolService {
 	Long saveOrUpdateCitizen(Citizen citizen) throws Exception;
 
 	// -- Reports -- //
-	List<PatrolActivityReportDTO> runReport(Integer officerId, Date startDate, Date endDate);
+	List<PatrolActivityReportDTO> runReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList);
 	
 }
