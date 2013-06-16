@@ -27,6 +27,8 @@ import com.westchase.persistence.dao.PatrolShopDAO;
 import com.westchase.persistence.dao.PatrolTypeDAO;
 import com.westchase.persistence.dao.PropertyDAO;
 import com.westchase.persistence.dto.cms.PropertyDTO;
+import com.westchase.persistence.dto.patrol.OfficerCountDTO;
+import com.westchase.persistence.dto.patrol.OfficerListCountListDTO;
 import com.westchase.persistence.dto.patrol.PatrolActivityReportDTO;
 import com.westchase.persistence.model.Citizen;
 import com.westchase.persistence.model.Officer;
@@ -287,6 +289,34 @@ public class PatrolServiceBean implements PatrolService {
 	public List<PatrolActivityReportDTO> runReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList) {
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
 		return dao.runReport(officerIdList, startDate, endDate, patrolTypeIdList);
+	}
+
+	@Override
+	public OfficerListCountListDTO<PatrolDetailType, OfficerCountDTO<PatrolDetailType>> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate) {
+		OfficerListCountListDTO<PatrolDetailType, OfficerCountDTO<PatrolDetailType>> dto = 
+				new OfficerListCountListDTO<PatrolDetailType, OfficerCountDTO<PatrolDetailType>>();
+		final PatrolActivityDAO dao = new PatrolActivityDAO();
+		
+		dto.setOfficerList(listOfficers());
+		dto.setItemList(listDetailTypes());
+		
+		dto.setOfficerCounts(dao.countDetailTypeByOfficer(officerIdList, startDate, endDate));
+		
+		return dto;
+	}
+
+	@Override
+	public OfficerListCountListDTO<PatrolDetailCategory, OfficerCountDTO<PatrolDetailCategory>> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate) {
+		OfficerListCountListDTO<PatrolDetailCategory, OfficerCountDTO<PatrolDetailCategory>> dto = 
+				new OfficerListCountListDTO<PatrolDetailCategory, OfficerCountDTO<PatrolDetailCategory>>();
+		final PatrolActivityDAO dao = new PatrolActivityDAO();
+		
+		dto.setOfficerList(listOfficers());
+		dto.setItemList(listDetailCategories());
+		
+		dto.setOfficerCounts(dao.countDetailCategoryByOfficer(officerIdList, startDate, endDate));
+		
+		return dto;
 	}
 
 }

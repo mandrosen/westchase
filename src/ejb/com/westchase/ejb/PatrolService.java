@@ -9,6 +9,8 @@ import com.westchase.persistence.criteria.CitizenSearchCriteria;
 import com.westchase.persistence.criteria.OfficerSearchCriteria;
 import com.westchase.persistence.criteria.PatrolActivitySearchCriteria;
 import com.westchase.persistence.dto.cms.PropertyDTO;
+import com.westchase.persistence.dto.patrol.OfficerCountDTO;
+import com.westchase.persistence.dto.patrol.OfficerListCountListDTO;
 import com.westchase.persistence.dto.patrol.PatrolActivityReportDTO;
 import com.westchase.persistence.model.Citizen;
 import com.westchase.persistence.model.Officer;
@@ -86,5 +88,9 @@ public interface PatrolService {
 
 	// -- Reports -- //
 	List<PatrolActivityReportDTO> runReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList);
+	
+	OfficerListCountListDTO<PatrolDetailType, OfficerCountDTO<PatrolDetailType>> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate);
+
+	OfficerListCountListDTO<PatrolDetailCategory, OfficerCountDTO<PatrolDetailCategory>> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate);
 	
 }

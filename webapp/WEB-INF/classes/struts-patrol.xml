@@ -185,6 +185,20 @@
             <interceptor-ref name="basicStack"/>
         </action>
         
+        
+        <action name="officerDetailReportInput" class="com.westchase.web.action.patrol.report.PatrolOfficerDetailReportAction" method="input">
+            <result>/WEB-INF/patrol/report/patrolOfficerDetail.jsp</result>
+        </action>
+        <action name="officerDetailReport" class="com.westchase.web.action.patrol.report.PatrolOfficerDetailReportAction">
+            <result>/WEB-INF/patrol/report/patrolOfficerDetail.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>  
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
     </package>
 
 </struts>

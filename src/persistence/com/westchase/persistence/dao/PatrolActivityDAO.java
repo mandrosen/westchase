@@ -9,8 +9,11 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 
 import com.westchase.persistence.criteria.PatrolActivitySearchCriteria;
+import com.westchase.persistence.dto.patrol.OfficerCountDTO;
 import com.westchase.persistence.dto.patrol.PatrolActivityReportDTO;
 import com.westchase.persistence.model.PatrolActivity;
+import com.westchase.persistence.model.PatrolDetailCategory;
+import com.westchase.persistence.model.PatrolDetailType;
 
 public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 
@@ -218,6 +221,81 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			log.error("", e);
 		}
 		return patrolActivityList;
+	}
+
+	public Map<String, OfficerCountDTO<PatrolDetailType>> countDetailTypeByOfficer(List<Integer> officerIdList, Date startDate, Date endDate) {
+		Map<String, OfficerCountDTO<PatrolDetailType>> counts = new HashMap<String, OfficerCountDTO<PatrolDetailType>>();
+		String query = "select new com.westchase.persistence.dto.patrol.OfficerCountDTO(pad.patrolActivity.officer, pdt, count(pad.id)) " +
+				" from PatrolDetailType pdt join pdt.patrolActivityDetails pad where 1 = 1 ";
+		if (officerIdList != null && !officerIdList.isEmpty()) {
+			query += " and pad.patrolActivity.officer.id in :officerIdList";
+		}
+		if (startDate != null) {
+			query += " and pad.receivedTime >= :startDate ";
+		}
+		if (endDate != null) {
+			query += " and pad.receivedTime < :endDate ";
+		}
+		query += " group by pad.patrolActivity.officer.id, pdt.id";
+		try {
+			Query q = getSession().createQuery(query);
+			if (officerIdList != null && !officerIdList.isEmpty()) {
+				q.setParameterList("officerIdList", officerIdList);
+			}
+			if (startDate != null) {
+				q.setParameter("startDate", startDate);
+			}
+			if (endDate != null) {
+				q.setParameter("endDate", endDate);
+			}
+			List<OfficerCountDTO<PatrolDetailType>> countList = q.list();
+			if (countList != null && !countList.isEmpty()) {
+				for (OfficerCountDTO<PatrolDetailType> count : countList) {
+					counts.put(count.getOfficer().getId() + ":" + count.getType().getId(), count);
+				}
+			}
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return counts;
+	}
+
+	public Map<String, OfficerCountDTO<PatrolDetailCategory>> countDetailCategoryByOfficer(List<Integer> officerIdList, Date startDate, Date endDate) {
+		Map<String, OfficerCountDTO<PatrolDetailCategory>> counts = new HashMap<String, OfficerCountDTO<PatrolDetailCategory>>();
+		String query = "select new com.westchase.persistence.dto.patrol.OfficerCountDTO(pad.patrolActivity.officer, pdc, count(pad.id)) " +
+				" from patroldetailcategory pdc join pdc.patrolActivityDetails pad where 1 = 1 ";
+		if (officerIdList != null && !officerIdList.isEmpty()) {
+			query += " and pad.patrolActivity.officer.id in :officerIdList";
+		}
+		if (startDate != null) {
+			query += " and pad.receivedTime >= :startDate ";
+		}
+		if (endDate != null) {
+			query += " and pad.receivedTime < :endDate ";
+		}
+		query += " group by pad.patrolActivity.officer.id, pdc.id";
+		try {
+			Query q = getSession().createQuery(query);
+			if (officerIdList != null && !officerIdList.isEmpty()) {
+				q.setParameterList("officerIdList", officerIdList);
+			}
+			if (startDate != null) {
+				q.setParameter("startDate", startDate);
+			}
+			if (endDate != null) {
+				q.setParameter("endDate", endDate);
+			}
+			
+			List<OfficerCountDTO<PatrolDetailCategory>> countList = q.list();
+			if (countList != null && !countList.isEmpty()) {
+				for (OfficerCountDTO<PatrolDetailCategory> count : countList) {
+					counts.put(count.getOfficer().getId() + ":" + count.getType().getId(), count);
+				}
+			}
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return counts;
 	}
 
 //	public Date getMaxEndDateForOfficer(Integer officerId) {

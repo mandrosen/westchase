@@ -100,6 +100,7 @@
 								<li><a href="<s:url action="listOfficer" namespace="/patrol" />">Officers</a></li>
 								<li><a href="<s:url action="listCitizen" namespace="/patrol" />">Citizens</a></li>
 								<li><a href="<s:url action="activityReportInput" namespace="/patrol" />">Report</a></li>
+								<li><a href="<s:url action="officerDetailReportInput" namespace="/patrol" />">Detail Report</a></li>
 							</ul>
 						</div>
 						<div class="hcad">
