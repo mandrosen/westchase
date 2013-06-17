@@ -6,14 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 
 import com.westchase.persistence.criteria.PatrolActivitySearchCriteria;
 import com.westchase.persistence.dto.patrol.OfficerCountDTO;
 import com.westchase.persistence.dto.patrol.PatrolActivityReportDTO;
 import com.westchase.persistence.model.PatrolActivity;
-import com.westchase.persistence.model.PatrolDetailCategory;
-import com.westchase.persistence.model.PatrolDetailType;
 
 public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 
@@ -222,24 +221,58 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		}
 		return patrolActivityList;
 	}
+	
 
-	public Map<String, OfficerCountDTO<PatrolDetailType>> countDetailTypeByOfficer(List<Integer> officerIdList, Date startDate, Date endDate) {
-		Map<String, OfficerCountDTO<PatrolDetailType>> counts = new HashMap<String, OfficerCountDTO<PatrolDetailType>>();
-		String query = "select new com.westchase.persistence.dto.patrol.OfficerCountDTO(pad.patrolActivity.officer, pdt, count(pad.id)) " +
-				" from PatrolDetailType pdt join pdt.patrolActivityDetails pad where 1 = 1 ";
-		if (officerIdList != null && !officerIdList.isEmpty()) {
-			query += " and pad.patrolActivity.officer.id in :officerIdList";
+	private Map<String, OfficerCountDTO> getOfficerCountMap(String item, String itemJoinColumn, List<Integer> officerIdList, Date startDate, Date endDate) {
+		Map<String, OfficerCountDTO> counts = new HashMap<String, OfficerCountDTO>();
+		String query = "select " + 
+				" t1.officer_id, " + 
+				" concat(o.last_name, ' ', o.first_name) as officer_name, " + 
+				" t1.type_id, " + 
+				" t1.type_name, " + 
+				" t1.officer_type_total, " + 
+				" t1.officer_total, " + 
+				" t1.type_total  " + 
+				"from ( " + 
+				"select pa.officer_id, " + 
+				" item.id as type_id, " + 
+				" item.name as type_name, " + 
+				" count(pad.id) officer_type_total, " + 
+				" (select count(pad.id) " + 
+				" from " + item + " item inner join patrol_activity_detail pad on pad." + itemJoinColumn + " = item.id " + 
+				" inner join patrol_activity pa1 on pad.patrol_activity_id = pa1.id " + 
+				" where pa1.officer_id = pa.officer_id) as officer_total, " + 
+				" (select count(pad.id) " + 
+				" from " + item + " item1 left outer join patrol_activity_detail pad on pad." + itemJoinColumn + " = item1.id " + 
+				" where item1.id = item.id " + 
+				" ) as type_total " + 
+				"from patrol_activity_detail pad " + 
+				" inner join patrol_activity pa on pad.patrol_activity_id = pa.id " + 
+				" inner join " + item + " item on pad." + itemJoinColumn + " = item.id " +
+				"where 1 = 1 ";
+		if (hasListValues(officerIdList)) {
+			query += " and pa.officer_id in :officerIdList";
 		}
 		if (startDate != null) {
-			query += " and pad.receivedTime >= :startDate ";
+			query += " and pad.received_time >= :startDate ";
 		}
 		if (endDate != null) {
-			query += " and pad.receivedTime < :endDate ";
+			query += " and pad.received_time < :endDate ";
 		}
-		query += " group by pad.patrolActivity.officer.id, pdt.id";
+		query += "group by pa.officer_id, item.id) t1 " + 
+				" inner join officer o on t1.officer_id = o.id";
 		try {
-			Query q = getSession().createQuery(query);
-			if (officerIdList != null && !officerIdList.isEmpty()) {
+			// TODO: get transformer to work
+//			Query q = getSession().createSQLQuery(query).setResultTransformer(Transformers.aliasToBean(OfficerCountDTO.class));
+			Query q = getSession().createSQLQuery(query)
+					.addScalar("officer_id", Hibernate.INTEGER)
+					.addScalar("officer_name", Hibernate.STRING)
+					.addScalar("type_id", Hibernate.INTEGER)
+					.addScalar("type_name", Hibernate.STRING)
+					.addScalar("officer_type_total", Hibernate.LONG)
+					.addScalar("officer_total", Hibernate.LONG)
+					.addScalar("type_total", Hibernate.LONG);
+			if (hasListValues(officerIdList)) {
 				q.setParameterList("officerIdList", officerIdList);
 			}
 			if (startDate != null) {
@@ -248,10 +281,30 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			if (endDate != null) {
 				q.setParameter("endDate", endDate);
 			}
-			List<OfficerCountDTO<PatrolDetailType>> countList = q.list();
+//			List<OfficerCountDTO> countList = q.list();
+//			if (countList != null && !countList.isEmpty()) {
+//				for (OfficerCountDTO count : countList) {
+//					counts.put(count.getOfficerId() + ":" + count.getItemId(), count);
+//				}
+//			}
+			List<Object[]> countList = q.list();
 			if (countList != null && !countList.isEmpty()) {
-				for (OfficerCountDTO<PatrolDetailType> count : countList) {
-					counts.put(count.getOfficer().getId() + ":" + count.getType().getId(), count);
+				for (Object[] count : countList) {
+					Integer officerId = (Integer) count[0];
+					String officerName = (String) count[1];
+					Integer itemId = (Integer) count[2];
+					String itemName = (String) count[3];
+					Long officerItemTotal = (Long) count[4];
+					Long officerTotal = (Long) count[5];
+					Long itemTotal = (Long) count[6];
+					if (officerId != null && itemId != null) {
+						counts.put(officerId + ":" + itemId, new OfficerCountDTO(officerId, officerName, itemId, itemName, officerItemTotal, officerTotal, itemTotal));
+						
+						// add the total for this item (officer id = 0)
+						if (itemTotal != null && itemTotal.longValue() > 0) {
+							counts.put("0:" + itemId, new OfficerCountDTO(itemTotal));
+						}
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -260,53 +313,128 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		return counts;
 	}
 
-	public Map<String, OfficerCountDTO<PatrolDetailCategory>> countDetailCategoryByOfficer(List<Integer> officerIdList, Date startDate, Date endDate) {
-		Map<String, OfficerCountDTO<PatrolDetailCategory>> counts = new HashMap<String, OfficerCountDTO<PatrolDetailCategory>>();
-		String query = "select new com.westchase.persistence.dto.patrol.OfficerCountDTO(pad.patrolActivity.officer, pdc, count(pad.id)) " +
-				" from patroldetailcategory pdc join pdc.patrolActivityDetails pad where 1 = 1 ";
-		if (officerIdList != null && !officerIdList.isEmpty()) {
-			query += " and pad.patrolActivity.officer.id in :officerIdList";
-		}
-		if (startDate != null) {
-			query += " and pad.receivedTime >= :startDate ";
-		}
-		if (endDate != null) {
-			query += " and pad.receivedTime < :endDate ";
-		}
-		query += " group by pad.patrolActivity.officer.id, pdc.id";
-		try {
-			Query q = getSession().createQuery(query);
-			if (officerIdList != null && !officerIdList.isEmpty()) {
-				q.setParameterList("officerIdList", officerIdList);
-			}
-			if (startDate != null) {
-				q.setParameter("startDate", startDate);
-			}
-			if (endDate != null) {
-				q.setParameter("endDate", endDate);
-			}
-			
-			List<OfficerCountDTO<PatrolDetailCategory>> countList = q.list();
-			if (countList != null && !countList.isEmpty()) {
-				for (OfficerCountDTO<PatrolDetailCategory> count : countList) {
-					counts.put(count.getOfficer().getId() + ":" + count.getType().getId(), count);
-				}
-			}
-		} catch (Exception e) {
-			log.error("", e);
-		}
-		return counts;
-	}
-
-//	public Date getMaxEndDateForOfficer(Integer officerId) {
-//		Date maxEndDate = null;
-//		String query = "select max(p.endDateTime) from PatrolActivity p where p.officer.id = :officerId";
+	public Map<String, OfficerCountDTO> countDetailTypeByOfficer(List<Integer> officerIdList, Date startDate, Date endDate) {
+		return getOfficerCountMap("patrol_detail_type", "patrol_detail_type_id", officerIdList, startDate, endDate);
+//		Map<String, OfficerCountDTO> counts = new HashMap<String, OfficerCountDTO>();
+//		String query = "select new com.westchase.persistence.dto.patrol.OfficerCountDTO(" + 
+//				" t1.officer_id, " + 
+//				" concat(o.last_name, ' ', o.first_name) as officer_name, " + 
+//				" t1.type_id, " + 
+//				" t1.type_name, " + 
+//				" t1.officer_type_total, " + 
+//				" t1.officer_total, " + 
+//				" t1.type_total) " + 
+//				"from ( " + 
+//				"select pa.officer_id, " + 
+//				" pdt.id as type_id, " + 
+//				" pdt.name as type_name, " + 
+//				" count(pad.id) officer_type_total, " + 
+//				" (select count(pad.id) " + 
+//				" from patrol_detail_type pdt inner join patrol_activity_detail pad on pad.patrol_detail_type_id = pdt.id " + 
+//				" inner join patrol_activity pa1 on pad.patrol_activity_id = pa1.id " + 
+//				" where pa1.officer_id = pa.officer_id) as officer_total, " + 
+//				" (select count(pad.id) " + 
+//				" from patrol_detail_type pdt1 left outer join patrol_activity_detail pad on pad.patrol_detail_type_id = pdt1.id " + 
+//				" where pdt1.id = pdt.id " + 
+//				" ) as type_total " + 
+//				"from patrol_activity_detail pad " + 
+//				" inner join patrol_activity pa on pad.patrol_activity_id = pa.id " + 
+//				" inner join patrol_detail_type pdt on pad.patrol_detail_type_id = pdt.id " +
+//				"where 1 = 1 ";
+//		if (officerIdList != null && !officerIdList.isEmpty()) {
+//			query += " and pa.officer_id in :officerIdList";
+//		}
+//		if (startDate != null) {
+//			query += " and pad.received_time >= :startDate ";
+//		}
+//		if (endDate != null) {
+//			query += " and pad.received_time < :endDate ";
+//		}
+//		query += "group by pa.officer_id, pdt.id) t1 " + 
+//				" inner join officer o on t1.officer_id = o.id";
 //		try {
-//			maxEndDate = (Date) getSession().createQuery(query).setParameter("officerId", officerId).uniqueResult();
+//			Query q = getSession().createSQLQuery(query);
+//			if (officerIdList != null && !officerIdList.isEmpty()) {
+//				q.setParameterList("officerIdList", officerIdList);
+//			}
+//			if (startDate != null) {
+//				q.setParameter("startDate", startDate);
+//			}
+//			if (endDate != null) {
+//				q.setParameter("endDate", endDate);
+//			}
+//			List<OfficerCountDTO> countList = q.list();
+//			if (countList != null && !countList.isEmpty()) {
+//				for (OfficerCountDTO count : countList) {
+//					counts.put(count.getOfficerId() + ":" + count.getItemId(), count);
+//				}
+//			}
 //		} catch (Exception e) {
 //			log.error("", e);
 //		}
-//		return maxEndDate;
-//	}
+//		return counts;
+	}
+	
+	public Map<String, OfficerCountDTO> countDetailCategoryByOfficer(List<Integer> officerIdList, Date startDate, Date endDate) {
+		return getOfficerCountMap("patrol_detail_category", "patrol_detail_category_id", officerIdList, startDate, endDate);
+//		Map<String, OfficerCountDTO> counts = new HashMap<String, OfficerCountDTO>();
+//		String query = "select new com.westchase.persistence.dto.patrol.OfficerCountDTO(" + 
+//				" t1.officer_id, " + 
+//				" concat(o.last_name, ' ', o.first_name) as officer_name, " + 
+//				" t1.type_id, " + 
+//				" t1.type_name, " + 
+//				" t1.officer_type_total, " + 
+//				" t1.officer_total, " + 
+//				" t1.type_total) " + 
+//				"from ( " + 
+//				"select pa.officer_id, " + 
+//				" pdc.id as type_id, " + 
+//				" pdc.name as type_name, " + 
+//				" count(pad.id) officer_type_total, " + 
+//				" (select count(pad.id) " + 
+//				" from patrol_detail_category pdc inner join patrol_activity_detail pad on pad.patrol_detail_type_id = pdc.id " + 
+//				" inner join patrol_activity pa1 on pad.patrol_activity_id = pa1.id " + 
+//				" where pa1.officer_id = pa.officer_id) as officer_total, " + 
+//				" (select count(pad.id) " + 
+//				" from patrol_detail_category pdc1 left outer join patrol_activity_detail pad on pad.patrol_detail_type_id = pdc1.id " + 
+//				" where pdc1.id = pdc.id " + 
+//				" ) as type_total " + 
+//				"from patrol_activity_detail pad " + 
+//				" inner join patrol_activity pa on pad.patrol_activity_id = pa.id " + 
+//				" inner join patrol_detail_category pdc on pad.patrol_detail_type_id = pdc.id " +
+//				"where 1 = 1 ";
+//		if (officerIdList != null && !officerIdList.isEmpty()) {
+//			query += " and pa.officer_id in :officerIdList";
+//		}
+//		if (startDate != null) {
+//			query += " and pad.received_time >= :startDate ";
+//		}
+//		if (endDate != null) {
+//			query += " and pad.received_time < :endDate ";
+//		}
+//		query += "group by pa.officer_id, pdt.id) t1 " + 
+//				" inner join officer o on t1.officer_id = o.id";
+//		try {
+//			Query q = getSession().createSQLQuery(query);
+//			if (officerIdList != null && !officerIdList.isEmpty()) {
+//				q.setParameterList("officerIdList", officerIdList);
+//			}
+//			if (startDate != null) {
+//				q.setParameter("startDate", startDate);
+//			}
+//			if (endDate != null) {
+//				q.setParameter("endDate", endDate);
+//			}
+//			List<OfficerCountDTO> countList = q.list();
+//			if (countList != null && !countList.isEmpty()) {
+//				for (OfficerCountDTO count : countList) {
+//					counts.put(count.getOfficerId() + ":" + count.getItemId(), count);
+//				}
+//			}
+//		} catch (Exception e) {
+//			log.error("", e);
+//		}
+//		return counts;
+	}
 
 }

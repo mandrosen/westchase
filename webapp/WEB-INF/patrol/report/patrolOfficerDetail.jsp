@@ -1,6 +1,7 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="sx" uri="/struts-dojo-tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -16,10 +17,18 @@
 		document.getElementById('typeparam').value=typ;
 		document.getElementById('frm').submit();
 	}
+	$(function() {
+		$("#results_table tr:odd").addClass("odd");
+	})
 	</script>
     
 	<style type="text/css">
-
+		.odd {
+		   background: #ccc;
+		}
+		#results_table td { 
+			white-space: nowrap;
+		}
 	</style>
 </head>
 
@@ -55,8 +64,7 @@
 			<tr>
 				<th>Report Type</th>
 				<td>
-					<label><input type="radio" name="reportType" value="0" /> Call Codes</label>
-					<label><input type="radio" name="reportType" value="1" /> Categories (CFS ...)</label>
+					<s:radio name="reportType" list="#{'0':'Call Codes','1':'Category (CFS...)'}" value="0" />
 		    	</td>
     		</tr>
 			
@@ -75,6 +83,26 @@
 				<th>TOTAL</th>
 			</tr>
 		</thead>
+		<tfoot>
+			<tr>
+				<th>TOTAL</th>
+				<c:set var="totalTotal" value="0" />
+				<c:forEach items="${results.itemList}" var="item">
+					<c:set var="totalItemKey" value="0:${item.id}" />
+					<c:set var="totalValue" value="${results.officerCounts[totalItemKey]}" />
+					<th>
+						<c:choose>
+							<c:when test="${totalValue.itemTotal > 0}">
+								<c:out value="${totalValue.itemTotal}" />
+								<c:set var="totalTotal" value="${totalTotal + totalValue.itemTotal}" />
+							</c:when>
+							<c:otherwise>0</c:otherwise>
+						</c:choose>
+					</th>
+				</c:forEach>
+				<th><c:out value="${totalTotal}" />
+			</tr>
+		</tfoot>
 		<tbody>
 			<c:forEach items="${results.officerList}" var="officer">
 				<c:set var="officerTotal" value="0" />
@@ -83,13 +111,18 @@
 					<c:forEach items="${results.itemList}" var="item">
 						<c:set var="officerItemKey" value="${officer.id}:${item.id}" />
 						
-						
 						<c:set var="resValue" value="${results.officerCounts[officerItemKey]}" />
 
-						<td><c:out value="${resValue.count}" /></td>
-						<c:set var="officerTotal" value="${officerTotal + resValue.count}" />
+						<td>
+							<c:out value="${resValue.officerItemTotal}" />
+							<c:if test="${resValue.officerItemTotal > 0}">
+								<c:set var="officerTotal" value="${resValue.officerTotal}" />
+								<span class="pct-val" title="% of officer total <c:out value='${resValue.officerItemTotal}' /> / <c:out value='${resValue.officerTotal}' />">(<fmt:formatNumber type="percent" maxFractionDigits="1" value="${resValue.officerItemTotal/resValue.officerTotal}" />)</span>
+								<span class="pct-val" title="% of item total <c:out value='${resValue.officerItemTotal}' /> / <c:out value='${resValue.itemTotal}' />">(<fmt:formatNumber type="percent" maxFractionDigits="1" value="${resValue.officerItemTotal/resValue.itemTotal}" />)</span>
+							</c:if>
+						</td>
 					</c:forEach>
-				    <td><c:out value="${officerTotal}" /></td>
+				    <th><c:out value="${officerTotal}" /></th>
 				</tr>
 			</c:forEach>
 		</tbody>

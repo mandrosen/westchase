@@ -19,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "patrol_detail_category")
-public class PatrolDetailCategory implements java.io.Serializable {
+public class PatrolDetailCategory implements IdNamed, java.io.Serializable {
 
 	private Integer id;
 	private String name;

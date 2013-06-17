@@ -27,7 +27,6 @@ import com.westchase.persistence.dao.PatrolShopDAO;
 import com.westchase.persistence.dao.PatrolTypeDAO;
 import com.westchase.persistence.dao.PropertyDAO;
 import com.westchase.persistence.dto.cms.PropertyDTO;
-import com.westchase.persistence.dto.patrol.OfficerCountDTO;
 import com.westchase.persistence.dto.patrol.OfficerListCountListDTO;
 import com.westchase.persistence.dto.patrol.PatrolActivityReportDTO;
 import com.westchase.persistence.model.Citizen;
@@ -55,6 +54,11 @@ public class PatrolServiceBean implements PatrolService {
 	public List<Officer> listOfficers() {
 		final OfficerDAO dao = new OfficerDAO();
 		return dao.findAllOrdered();
+	}
+
+	private List<Officer> listOfficers(List<Integer> officerIdList) {
+		final OfficerDAO dao = new OfficerDAO();
+		return dao.findOrdered(officerIdList);
 	}
 
 	@Override
@@ -292,9 +296,9 @@ public class PatrolServiceBean implements PatrolService {
 	}
 
 	@Override
-	public OfficerListCountListDTO<PatrolDetailType, OfficerCountDTO<PatrolDetailType>> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate) {
-		OfficerListCountListDTO<PatrolDetailType, OfficerCountDTO<PatrolDetailType>> dto = 
-				new OfficerListCountListDTO<PatrolDetailType, OfficerCountDTO<PatrolDetailType>>();
+	public OfficerListCountListDTO<PatrolDetailType> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate) {
+		OfficerListCountListDTO<PatrolDetailType> dto = 
+				new OfficerListCountListDTO<PatrolDetailType>();
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
 		
 		dto.setOfficerList(listOfficers());
@@ -306,12 +310,12 @@ public class PatrolServiceBean implements PatrolService {
 	}
 
 	@Override
-	public OfficerListCountListDTO<PatrolDetailCategory, OfficerCountDTO<PatrolDetailCategory>> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate) {
-		OfficerListCountListDTO<PatrolDetailCategory, OfficerCountDTO<PatrolDetailCategory>> dto = 
-				new OfficerListCountListDTO<PatrolDetailCategory, OfficerCountDTO<PatrolDetailCategory>>();
+	public OfficerListCountListDTO<PatrolDetailCategory> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate) {
+		OfficerListCountListDTO<PatrolDetailCategory> dto = 
+				new OfficerListCountListDTO<PatrolDetailCategory>();
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
 		
-		dto.setOfficerList(listOfficers());
+		dto.setOfficerList(listOfficers(officerIdList));
 		dto.setItemList(listDetailCategories());
 		
 		dto.setOfficerCounts(dao.countDetailCategoryByOfficer(officerIdList, startDate, endDate));

@@ -20,7 +20,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "patrol_detail_type")
-public class PatrolDetailType implements java.io.Serializable {
+public class PatrolDetailType implements IdNamed, java.io.Serializable {
 
 	private Integer id;
 	private String name;

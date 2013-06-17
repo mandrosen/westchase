@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import com.westchase.persistence.criteria.OfficerSearchCriteria;
 import com.westchase.persistence.model.Officer;
@@ -19,6 +20,15 @@ public class OfficerDAO extends BaseDAO<Officer> {
 	
 	public List<Officer> findAllOrdered() {
 		List<Officer> officers = getSession().createCriteria(Officer.class).addOrder(Order.asc("lastName")).addOrder(Order.desc("firstName")).list();
+		return officers;
+	}
+
+	public List<Officer> findOrdered(List<Integer> officerIdList) {
+		List<Officer> officers = getSession()
+				.createCriteria(Officer.class)
+				.add(Restrictions.in("id", officerIdList))
+				.addOrder(Order.asc("lastName"))
+				.addOrder(Order.desc("firstName")).list();
 		return officers;
 	}
 	

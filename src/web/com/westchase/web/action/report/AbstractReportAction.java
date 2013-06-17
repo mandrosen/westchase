@@ -316,14 +316,21 @@ public abstract class AbstractReportAction extends AbstractWestchaseAction imple
 	
 	protected void writeCell(Workbook wb, Sheet sheet, Row row, int col, Long value, CellStyle style) throws Exception {
 		try {
-			Cell cell = row.createCell(col);
-			cell.setCellStyle(style);
-			if (value == null) {
-				cell.setCellValue(0);
-			} else {
-				cell.setCellValue(value);
+			Cell cell = null;
+			try {
+				cell = row.createCell(col);
+			} catch (Exception e) {
+				System.out.println("\n\n\n\n error writing " + value + " to cell [" + row + " ," + col + "]\n\n\n\n");
 			}
-			cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+			if (cell != null) {
+				cell.setCellStyle(style);
+				if (value == null) {
+					cell.setCellValue(0);
+				} else {
+					cell.setCellValue(value);
+				}
+				cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+			}
 		} catch (Exception e) {
 			log.error("unable to write long " + value + " to cell", e);
 			throw e;
