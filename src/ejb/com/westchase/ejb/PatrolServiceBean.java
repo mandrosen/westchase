@@ -301,7 +301,7 @@ public class PatrolServiceBean implements PatrolService {
 				new OfficerListCountListDTO<PatrolDetailType>();
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
 		
-		dto.setOfficerList(listOfficers());
+		dto.setOfficerList(listOfficers(officerIdList));
 		dto.setItemList(listDetailTypes());
 		
 		dto.setOfficerCounts(dao.countDetailTypeByOfficer(officerIdList, startDate, endDate));
