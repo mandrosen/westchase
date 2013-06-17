@@ -190,18 +190,6 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		}
 		return results;
 	}
-	
-	private boolean hasListValues(List<Integer> listValues) {
-		boolean hasListValues = false;
-		if (listValues != null && !listValues.isEmpty()) {
-			for (Integer listValue : listValues) {
-				if (listValue != null && listValue.intValue() > -1) {
-					hasListValues = true;
-				}
-			}
-		}
-		return hasListValues;
-	}
 
 	public List<PatrolActivity> listOtherByOfficerAndDay(Long id, Integer officerId, Date activityDate) {
 		List<PatrolActivity> patrolActivityList = null;

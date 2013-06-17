@@ -24,6 +24,9 @@ public class OfficerDAO extends BaseDAO<Officer> {
 	}
 
 	public List<Officer> findOrdered(List<Integer> officerIdList) {
+		if (!hasListValues(officerIdList)) {
+			return findAllOrdered();
+		}
 		List<Officer> officers = getSession()
 				.createCriteria(Officer.class)
 				.add(Restrictions.in("id", officerIdList))
