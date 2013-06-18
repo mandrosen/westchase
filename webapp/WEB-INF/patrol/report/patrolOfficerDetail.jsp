@@ -64,7 +64,7 @@
 			<tr>
 				<th>Report Type</th>
 				<td>
-					<s:radio name="reportType" list="#{'0':'Call Codes','1':'Category (CFS...)'}" value="0" />
+					<s:radio name="reportType" list="#{'0':'Call Codes','1':'Category (CFS...)'}" value="%{reportType}" />
 		    	</td>
     		</tr>
 			

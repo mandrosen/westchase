@@ -157,9 +157,9 @@ public class PatrolOfficerDetailReportAction extends AbstractReportAction {
 								String pctOfficerTotalStr = formatPct(pctOfficerTotal);
 								String pctItemTotalStr = formatPct(pctItemTotal);
 								
-								String cellVal = officerItemTotal + " (" + pctOfficerTotalStr + ") (" + pctItemTotalStr + ")";
+								String cellCommentVal = "(" + pctOfficerTotalStr + " of officer total) (" + pctItemTotalStr + " of item total)";
 								
-								writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, cellVal, style);
+								writeCellWithComment(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, officerItemTotal, cellCommentVal, style);
 							}
 						} else {
 							rowNum++;

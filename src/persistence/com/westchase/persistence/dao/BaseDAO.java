@@ -179,6 +179,7 @@ public class BaseDAO<E> implements GenericDAO<E> {
 			for (Integer listValue : listValues) {
 				if (listValue != null && listValue.intValue() > -1) {
 					hasListValues = true;
+					break;
 				}
 			}
 		}

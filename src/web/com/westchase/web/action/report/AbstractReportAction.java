@@ -21,8 +21,13 @@ import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.MultiPartEmail;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.Comment;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -345,6 +350,32 @@ public abstract class AbstractReportAction extends AbstractWestchaseAction imple
 			cell.setCellType(Cell.CELL_TYPE_NUMERIC);
 		} catch (Exception e) {
 			log.error("unable to write double " + value + " to cell", e);
+			throw e;
+		}
+	}
+
+	protected void writeCellWithComment(Workbook wb, Sheet sheet, Row row, int col, Long value, String cellCommentVal, CellStyle style) throws Exception {
+		try {
+			Cell cell = row.createCell(col);
+			cell.setCellStyle(style);
+			cell.setCellValue(value);
+			cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+
+			// TODO Auto-generated method stub
+	        Drawing drawing = sheet.createDrawingPatriarch();
+	        
+	        CreationHelper factory = wb.getCreationHelper();
+
+	        ClientAnchor anchor = factory.createClientAnchor();
+
+	        Comment comment = drawing.createCellComment(anchor);
+	        RichTextString str1 = factory.createRichTextString(cellCommentVal);
+	        comment.setString(str1);
+//	        comment.setAuthor("Apache POI");
+	        cell.setCellComment(comment);
+			
+		} catch (Exception e) {
+			log.error("unable to write double " + value + " and comment " + cellCommentVal + " to cell", e);
 			throw e;
 		}
 	}
