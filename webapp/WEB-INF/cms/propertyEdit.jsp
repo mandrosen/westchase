@@ -106,7 +106,7 @@
 	<s:checkbox label="Will Divide" name="currentProperty.willDivide"/>
 	<s:textfield label="Year Built" name="currentProperty.yearBuilt" size="5" maxlength="5"/>
     
-    <s:textfield label="Deleted" name="currentProperty.deleted"/>
+    <%-- <s:textfield label="Deleted" name="currentProperty.deleted"/> --%>
     
 	<s:textfield label="Notes" name="currentProperty.notes"/>
 	
