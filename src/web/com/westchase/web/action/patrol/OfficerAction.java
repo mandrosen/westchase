@@ -9,6 +9,7 @@ import com.westchase.ejb.PatrolService;
 import com.westchase.persistence.criteria.OfficerSearchCriteria;
 import com.westchase.persistence.model.Employee;
 import com.westchase.persistence.model.Officer;
+import com.westchase.persistence.model.PatrolType;
 import com.westchase.utils.FormatUtils;
 import com.westchase.utils.ejb.ServiceLocator;
 import com.westchase.web.action.cms.AbstractCMSAction;
@@ -24,6 +25,8 @@ public class OfficerAction extends AbstractCMSAction<Officer, OfficerSearchCrite
 	private Integer officerId;
 	
 	private Officer currentOfficer;
+
+	private List<PatrolType> availablePatrolTypes;
 	
 	public OfficerAction() {
 		super();
@@ -36,6 +39,14 @@ public class OfficerAction extends AbstractCMSAction<Officer, OfficerSearchCrite
 			if (officerId != null) {
 				currentOfficer = patrolServ.getOfficer(officerId);
 			}
+		}
+		prepareLists();
+	}
+
+	private void prepareLists() {
+		PatrolService patrolServ = ServiceLocator.lookupPatrolService();
+		if (patrolServ != null) {
+			availablePatrolTypes = patrolServ.listPatrolTypes();
 		}
 	}
 
@@ -188,5 +199,13 @@ public class OfficerAction extends AbstractCMSAction<Officer, OfficerSearchCrite
 //			addFieldError("currentCitizen.lastName","Last Name is required");
 			addActionError("Last name is reqired");
 		}
+	}
+
+	public List<PatrolType> getAvailablePatrolTypes() {
+		return availablePatrolTypes;
+	}
+
+	public void setAvailablePatrolTypes(List<PatrolType> availablePatrolTypes) {
+		this.availablePatrolTypes = availablePatrolTypes;
 	}
 }
