@@ -119,7 +119,7 @@ public class CmuLease implements java.io.Serializable {
 		this.sqFt = sqFt;
 	}
 
-	@Column(name = "owners_rep", nullable = false)
+	@Column(name = "owners_rep")
 	public String getOwnersRep() {
 		return this.ownersRep;
 	}
@@ -128,7 +128,7 @@ public class CmuLease implements java.io.Serializable {
 		this.ownersRep = ownersRep;
 	}
 
-	@Column(name = "tenants_rep", nullable = false)
+	@Column(name = "tenants_rep")
 	public String getTenantsRep() {
 		return this.tenantsRep;
 	}
