@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.westchase.persistence.dto.cmu.CmuOfficeRetailSvcDTO;
+import com.westchase.persistence.model.CmuApartment;
 import com.westchase.persistence.model.CmuLease;
 import com.westchase.persistence.model.CmuOfficeRetailSvc;
 
@@ -48,6 +49,17 @@ public class CmuOfficeRetailSvcDAO extends BaseDAO<CmuOfficeRetailSvc> {
 			log.error("", e);
 		}
 		return dto;
+	}
+
+	public CmuOfficeRetailSvc getByPropertyQuarter(Integer propertyId, Integer quarterId) {
+		CmuOfficeRetailSvc cmuOrs = null;
+		String query = "select c from CmuOfficeRetailSvc c where c.property.id = :propertyId and c.cmuQuarter.id = :quarter";
+		try {
+			cmuOrs = (CmuOfficeRetailSvc) getSession().createQuery(query).setParameter("propertyId", propertyId).setParameter("quarter", quarterId).setMaxResults(1).uniqueResult();
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return cmuOrs;
 	}
 	
 }

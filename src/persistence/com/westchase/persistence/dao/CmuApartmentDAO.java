@@ -23,4 +23,15 @@ public class CmuApartmentDAO extends BaseDAO<CmuApartment> {
 		return cmuApts;
 	}
 
+	public CmuApartment getByPropertyQuarter(Integer propertyId, Integer quarterId) {
+		CmuApartment cmuApt = null;
+		String query = "select c from CmuApartment c where c.property.id = :propertyId and c.cmuQuarter.id = :quarter";
+		try {
+			cmuApt = (CmuApartment) getSession().createQuery(query).setParameter("propertyId", propertyId).setParameter("quarter", quarterId).setMaxResults(1).uniqueResult();
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return cmuApt;
+	}
+
 }

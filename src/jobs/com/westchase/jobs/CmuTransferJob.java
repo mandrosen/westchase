@@ -113,12 +113,16 @@ public class CmuTransferJob implements Schedulable {
 	}
 	
 	private void transferLeases() {
+		boolean deleted = false;
 		try {
 			CmuLease[] inputs = stub.getNewLeases();
 			List<Long> ids = new ArrayList<Long>();
 			if (inputs != null && inputs.length > 0) {
 				for (CmuLease input : inputs) {
 					com.westchase.persistence.model.CmuLease cmuLease = CmuObjectHelper.createCmuLease(input);
+					if (!deleted) {
+						deleted = cmuServ.deleteAllLeases(cmuLease.getProperty().getId(), cmuLease.getCmuQuarter().getId());
+					}
 					long savedId = cmuServ.saveCmuLease(cmuLease);
 					if (savedId > 0) {
 						ids.add(new Long(input.getId()));

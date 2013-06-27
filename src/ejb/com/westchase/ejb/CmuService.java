@@ -18,6 +18,13 @@ import com.westchase.persistence.model.CmuTransactionType;
  */
 @Remote
 public interface CmuService {
+	
+
+	boolean deleteAllLeases(Integer propertyId, Integer quarterId);
+	boolean deleteCmuApartment(Integer propertyId, Integer quarterId);
+	boolean deleteCmuDevsite(Integer propertyId, Integer quarterId);
+	boolean deleteCmuHotel(Integer propertyId, Integer quarterId);
+	boolean deleteCmuOfficeRetailSvc(Integer propertyId, Integer quarterId);
 
 	long saveCmuApartment(CmuApartment cmuApt);
 	long saveCmuDevsite(CmuDevsite cmuDevsite);

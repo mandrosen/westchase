@@ -30,6 +30,51 @@ import com.westchase.persistence.model.CmuTransactionType;
 @Remote(CmuService.class)
 public class CmuServiceBean implements CmuService {
 
+
+	@Override
+	public boolean deleteAllLeases(Integer propertyId, Integer quarterId) {
+		CmuLeaseDAO dao = new CmuLeaseDAO();
+		List<CmuLease> leaseList = dao.listAll(propertyId, quarterId);
+		if (leaseList != null && !leaseList.isEmpty()) {
+			for (CmuLease cmuLease : leaseList) {
+				dao.delete(cmuLease);
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean deleteCmuApartment(Integer propertyId, Integer quarterId) {
+		CmuApartmentDAO dao = new CmuApartmentDAO();
+		CmuApartment ca = dao.getByPropertyQuarter(propertyId, quarterId);
+		dao.delete(ca);
+		return true;
+	}
+
+	@Override
+	public boolean deleteCmuDevsite(Integer propertyId, Integer quarterId) {
+		CmuDevsiteDAO dao = new CmuDevsiteDAO();
+		CmuDevsite cd = dao.getByPropertyQuarter(propertyId, quarterId);
+		dao.delete(cd);
+		return true;
+	}
+
+	@Override
+	public boolean deleteCmuHotel(Integer propertyId, Integer quarterId) {
+		CmuHotelDAO dao = new CmuHotelDAO();
+		CmuHotel ch = dao.getByPropertyQuarter(propertyId, quarterId);
+		dao.delete(ch);
+		return true;
+	}
+
+	@Override
+	public boolean deleteCmuOfficeRetailSvc(Integer propertyId, Integer quarterId) {
+		CmuOfficeRetailSvcDAO dao = new CmuOfficeRetailSvcDAO();
+		CmuOfficeRetailSvc cors = dao.getByPropertyQuarter(propertyId, quarterId);
+		dao.delete(cors);
+		return true;
+	}
+
 	@Override
 	public long saveCmuApartment(CmuApartment cmuApt) {
 		CmuApartmentDAO dao = new CmuApartmentDAO();

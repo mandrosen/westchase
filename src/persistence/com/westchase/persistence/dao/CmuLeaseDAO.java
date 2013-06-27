@@ -6,6 +6,7 @@ import java.util.List;
 import com.westchase.persistence.dto.cmu.report.LeaseStatsDTO;
 import com.westchase.persistence.dto.cmu.report.LeaseStatsType;
 import com.westchase.persistence.model.CmuLease;
+import com.westchase.persistence.model.CmuOfficeRetailSvc;
 
 /**
  * @author marc
@@ -19,6 +20,18 @@ public class CmuLeaseDAO extends BaseDAO<CmuLease> {
 		String query = "select c from CmuLease c where c.cmuQuarter.id = :quarter order by c.property.businessType, c.property.buildingName";
 		try {
 			leases = getSession().createQuery(query).setParameter("quarter", quarterId).list();
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return leases;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<CmuLease> listAll(Integer propertyId, Integer quarterId) {
+		List<CmuLease> leases = new ArrayList<CmuLease>();
+		String query = "select c from CmuLease c where c.property.id = :propertyId and c.cmuQuarter.id = :quarter";
+		try {
+			leases = getSession().createQuery(query).setParameter("propertyId", propertyId).setParameter("quarter", quarterId).list();
 		} catch (Exception e) {
 			log.error("", e);
 		}
