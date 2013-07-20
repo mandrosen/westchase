@@ -91,7 +91,7 @@ public abstract class AbstractReportAction extends AbstractWestchaseAction imple
 		
         setExcelStream(new ByteArrayInputStream(bos.toByteArray())); 
 
-		response.setContentType("application/vnd.ms-excel");
+		//response.setContentType("application/vnd.ms-excel");
 //		response.setContentType("application/excel");
 		response.setHeader("Content-disposition", "attachment; filename=" + getReportFileName() + FILE_EXTENSION);
 
