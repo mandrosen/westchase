@@ -75,7 +75,7 @@
 			<td>
 		<select name="receivedDate">
 			<c:forEach items="${availableDates}" var="d">
-				<option value="<fmt:formatDate pattern='YYYY-mm-dd' value='${d}' />"><fmt:formatDate pattern='YYYYmmdd' value='${d}' /></option>
+				<option value="<fmt:formatDate pattern='yyyy-mm-dd' value='${d}' />"><fmt:formatDate pattern='yyyymmdd' value='${d}' /></option>
 			</c:forEach>
 		</select>
 			</td>
@@ -90,7 +90,7 @@
 			<td>
 		<select name="arrivedDate">
 			<c:forEach items="${availableDates}" var="d">
-				<option value="<fmt:formatDate pattern='YYYY-mm-dd' value='${d}' />"><fmt:formatDate pattern='YYYYmmdd' value='${d}' /></option>
+				<option value="<fmt:formatDate pattern='yyyy-mm-dd' value='${d}' />"><fmt:formatDate pattern='yyyymmdd' value='${d}' /></option>
 			</c:forEach>
 		</select>
 			</td>
@@ -104,7 +104,7 @@
 			<td>
 		<select name="clearedDate">
 			<c:forEach items="${availableDates}" var="d">
-				<option value="<fmt:formatDate pattern='YYYY-mm-dd' value='${d}' />"><fmt:formatDate pattern='YYYYmmdd' value='${d}' /></option>
+				<option value="<fmt:formatDate pattern='yyyy-mm-dd' value='${d}' />"><fmt:formatDate pattern='yyyymmdd' value='${d}' /></option>
 			</c:forEach>
 		</select>
 			</td>
@@ -131,7 +131,7 @@
 		<s:textarea label="Comments" name="currentPatrolActivityDetail.comments" rows="5" cols="75" required="true"></s:textarea>
 			
 		<s:submit value="Save" />
-		<!-- 
+		<%-- 
 		<s:optiontransferselect 
 			label="Citizens"
 			name="leftSideCitizens"
@@ -155,7 +155,7 @@
 			allowSelectAll="false" />
 			
 		<s:submit value="Save" />
-		-->
+		--%>
 		    
 	</s:form>
 	
