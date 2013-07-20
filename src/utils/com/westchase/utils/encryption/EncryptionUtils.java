@@ -32,7 +32,7 @@ import org.bouncycastle.util.encoders.Hex;
  */
 public class EncryptionUtils {
 
-	private final static char[] PASSPHRASE_ARY = "ttt*&ghti*u*wcdb00ladidabe11auio6".toCharArray();
+	private final static char[] PASSPHRASE_ARY = "xxxx".toCharArray();
 
 	/**
 	 * decrypt the passed in message stream
@@ -180,62 +180,6 @@ public class EncryptionUtils {
 		return new String(decrypted);
 	}
 	
-	public static void main(String[] args) throws Exception {
-//		Security.addProvider(new BouncyCastleProvider());
-//
-////		String passPhrase = "Dick Beck";
-////		char[] passArray = passPhrase.toCharArray();
-//
-//		byte[] original = "Hello world".getBytes();
-//		System.out.println("Starting PGP test");
-//		byte[] encrypted = encrypt(original, PASSPHRASE_ARY, "iway", PGPEncryptedDataGenerator.CAST5, true);
-//
-//		System.out.println("\nencrypted data = '" + new String(encrypted) + "'");
-//		byte[] decrypted = decrypt(encrypted, PASSPHRASE_ARY);
-//
-//		System.out.println("\ndecrypted data = '" + new String(decrypted) + "'");
-//
-////		encrypted = encrypt(original, PASSPHRASE_ARY, "iway", PGPEncryptedDataGenerator.AES_256, false);
-//		encrypted = encrypt(original, PASSPHRASE_ARY, "iway", PGPEncryptedDataGenerator.AES_128, false);
-//
-//		System.out.println("\nencrypted data = '" + new String(org.bouncycastle.util.encoders.Hex.encode(encrypted))
-//				+ "'");
-//		decrypted = decrypt(encrypted, PASSPHRASE_ARY);
-//
-//		System.out.println("\ndecrypted data = '" + new String(decrypted) + "'");
-//		String enc = encryptString("marc");
-//		
-//		System.out.println(enc);
-		
-//		String dec = decryptString("2d2d2d2d2d424547494e20504750204d4553534147452d2d2d2d2d0d0a56657273696f6e3a20424350472076312e34330d0a0d0a6a41304542774d434638307a344335352b2f6467795361575232787a52754f53355264326162316d7759524f59464e75644177674d44423471612b4564504a320d0a324439613836586e78673d3d0d0a3d4943644a0d0a2d2d2d2d2d454e4420504750204d4553534147452d2d2d2d2d0d0a");
-		//String dec = decryptString("2d2d2d2d2d424547494e20504750204d4553534147452d2d2d2d2d0d0a56657273696f6e3a20424350472076312e34330d0a0d0a6a41304542774d436d37367548536f58565868677953623676344b36766f6c5a6579554450452f6d772b5177723549536f41365a44677a50626e5161356449360d0a49696c416564633778773d3d0d0a3d706156490d0a2d2d2d2d2d454e4420504750204d4553534147452d2d2d2d2d0d0a");
-
-		//System.out.println(dec);
-		
-		/*String enc = encryptString("wctest02");
-		System.out.println(enc); 
-		enc = encryptString("wctest03");
-		System.out.println(enc); 
-		enc = encryptString("wctest04");
-		System.out.println(enc); 
-		enc = encryptString("wctest05");
-		System.out.println(enc);
-		enc = encryptString("wctest06");
-		System.out.println(enc);
-		enc = encryptString("wctest07");
-		System.out.println(enc);
-		enc = encryptString("wctest08");
-		System.out.println(enc);
-		enc = encryptString("wctest09");
-		System.out.println(enc);
-		enc = encryptString("wctest10");
-		System.out.println(enc);
-		enc = encryptString("wctest11");
-		System.out.println(enc);*/
-		String enc = encryptString("*W*D*Guest*");
-		System.out.println(enc);
-		//String dec = decryptString("2d2d2d2d2d424547494e20504750204d4553534147452d2d2d2d2d0d0a56657273696f6e3a20424350472076312e34330d0a0d0a6a41304542774d436d6f412f6f336956594d6467795371576d4530566d30424a783330515856536c4235514757742f515572536a74454c7042484242392b37390d0a492f5677504138677431486643306b3d0d0a3d3948626e0d0a2d2d2d2d2d454e4420504750204d4553534147452d2d2d2d2d0d0a");
-		//System.out.println(dec);
-		
+	public static void main(String[] args) throws Exception {		
 	}
 }
