@@ -37,10 +37,6 @@
 <thead>
 	<tr>
 		<th><s:textfield name="searchObject.id" size="4"/></th>
-		<th>
-			<s:select name="searchObject.patrolType.id" headerKey="-1" headerValue="--" 
-					    list="availablePatrolTypes" listValue="name" listKey="id" emptyOption="false" />
-		</th>
 		<th><s:textfield name="searchObject.firstName" size="10"/></th>
 		<th><s:textfield name="searchObject.lastName" size="10"/></th>
 		<th><s:textfield name="searchObject.cellPhone" size="10"/></th>
@@ -48,13 +44,11 @@
 	</tr>
     <tr>
     	<s:url action="sortOfficer" id="sortid"><s:param name="orderCol" value="'id'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
-    	<s:url action="sortOfficer" id="sortpatroltype"><s:param name="orderCol" value="'patrolType.name'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sortOfficer" id="sortfirstname"><s:param name="orderCol" value="'firstName'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sortOfficer" id="sortlastname"><s:param name="orderCol" value="'lastName'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
       	<s:url action="sortOfficer" id="sortcellphone"><s:param name="orderCol" value="'cellPhone'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     
         <th><s:a href="%{sortid}">Id</s:a></th>
-        <th><s:a href="%{sortpatroltype}">Patrol Type</s:a></th>
         <th><s:a href="%{sortfirstname}">First Name</s:a></th>
         <th><s:a href="%{sortlastname}">Last Name</s:a></th>
         <th><s:a href="%{sortcellphone}">Cell Phone</s:a></th>

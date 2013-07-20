@@ -8,7 +8,7 @@
 
 <html>
 <head>
-    <title>Patrol Activity Report</title>
+    <title>Patrol Detail Report</title>
     
     <sx:head />
     

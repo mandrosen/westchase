@@ -1,5 +1,6 @@
 package com.westchase.persistence.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +9,10 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 
 import com.westchase.persistence.criteria.PatrolActivitySearchCriteria;
+import com.westchase.persistence.dto.patrol.PatrolDetailTypeDayTimeCountDTO;
 import com.westchase.persistence.dto.patrol.OfficerCountDTO;
 import com.westchase.persistence.dto.patrol.PatrolActivityReportDTO;
 import com.westchase.persistence.model.PatrolActivity;
@@ -326,6 +329,105 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 	
 	public Map<String, OfficerCountDTO> countDetailCategoryByOfficer(List<Integer> officerIdList, Date startDate, Date endDate) {
 		return getOfficerCountMap("patrol_detail_category", "patrol_detail_category_id", officerIdList, startDate, endDate);
+	}
+
+	public List<Date> listAvailableDatesForDetail(Long patrolActivityId) {
+		List<Date> dateList = new ArrayList<Date>();
+		String query = "select date(pa.startDateTime), date(pa.endDateTime) from PatrolActivity pa where pa.id = :patrolActivityId";
+		try {
+			Object[] dateObjs = (Object[]) getSession().createQuery(query).setParameter("patrolActivityId", patrolActivityId).setMaxResults(1).uniqueResult();
+			if (dateObjs != null && dateObjs.length == 2) {
+				Date startDate = (Date) dateObjs[0];
+				Date endDate = (Date) dateObjs[1];
+				dateList.add(startDate);
+				if (endDate.after(startDate)) {
+					dateList.add(endDate);
+				}
+			}
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return dateList;
+	}
+	
+	public List<PatrolDetailTypeDayTimeCountDTO> countDetailTypeByDayTime(Date startDate, Date endDate, 
+			boolean includeDay, boolean includeTime, List<Integer> patrolDetailTypeIdList, List<Integer> dayIdList) {
+		List<PatrolDetailTypeDayTimeCountDTO> counts = new ArrayList<PatrolDetailTypeDayTimeCountDTO>();
+		String query = "select pdt.name as type_name ";
+		if (includeDay) {
+			query += ", dayname(pad.received_date_time) as day_name ";
+		}
+		if (includeTime) {
+			query += ", hour(pad.received_date_time) as hour_of_day ";
+		}
+		query += ", count(1) as type_total " +
+				" from patrol_activity_detail pad inner join patrol_detail_type pdt on pad.patrol_detail_type_id = pdt.id " +
+				" where pad.received_date_time is not null ";
+		if (startDate != null) {
+			query += " and pad.received_date_time >= :startDate ";
+		}
+		if (endDate != null) {
+			query += " and pad.received_date_time < :endDate ";
+		}
+		if (hasListValues(patrolDetailTypeIdList)) {
+			query += " and pdt.id in (:patrolDetailTypeIdList) ";
+		}
+		if (hasListValues(dayIdList)) {
+			query += " and dayofweek(pad.received_date_time) in (:dayIdList) ";
+		}
+		
+		query += " group by pdt.id ";
+		if (includeDay) {
+			query += ", dayofweek(pad.received_date_time) ";
+		}
+		if (includeTime) {
+			query += ", hour(pad.received_date_time) ";
+		}
+		query += " order by type_name";
+		if (includeDay) {
+			query += ", dayofweek(pad.received_date_time) ";
+		}
+		if (includeTime) {
+			query += ", hour_of_day ";
+		}
+		try {
+			SQLQuery q = getSession().createSQLQuery(query)
+					.addScalar("type_name", Hibernate.STRING);
+			if (includeDay) {
+				q.addScalar("day_name", Hibernate.STRING);
+			}
+			if (includeTime) {
+				q.addScalar("hour_of_day", Hibernate.INTEGER);
+			}
+			q.addScalar("type_total", Hibernate.LONG);
+
+			if (hasListValues(patrolDetailTypeIdList)) {
+				q.setParameterList("patrolDetailTypeIdList", patrolDetailTypeIdList);
+			}
+			if (hasListValues(dayIdList)) {
+				q.setParameterList("dayIdList", dayIdList);
+			}
+			List<Object[]> countList = q.list();
+			if (countList != null && !countList.isEmpty()) {
+				for (Object[] count : countList) {
+					int col = 0;
+					String typeName = (String) count[col++];
+					String dayName = null;
+					Integer hourOfDay = null;
+					if (includeDay) {
+						dayName = (String) count[col++];
+					}
+					if (includeTime) {
+						hourOfDay = (Integer) count[col++];
+					}
+					Long typeTotal = (Long) count[col++];
+					counts.add(new PatrolDetailTypeDayTimeCountDTO(typeName, dayName, hourOfDay, typeTotal));
+				}
+			}
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return counts;
 	}
 
 }

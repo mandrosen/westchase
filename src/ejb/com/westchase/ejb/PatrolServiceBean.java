@@ -29,6 +29,7 @@ import com.westchase.persistence.dao.PropertyDAO;
 import com.westchase.persistence.dto.cms.PropertyDTO;
 import com.westchase.persistence.dto.patrol.OfficerListCountListDTO;
 import com.westchase.persistence.dto.patrol.PatrolActivityReportDTO;
+import com.westchase.persistence.dto.patrol.PatrolDetailTypeDayTimeCountDTO;
 import com.westchase.persistence.model.Citizen;
 import com.westchase.persistence.model.Officer;
 import com.westchase.persistence.model.PatrolActivity;
@@ -221,6 +222,12 @@ public class PatrolServiceBean implements PatrolService {
 		dao.delete(patrolActivityDetailId);
 	}
 
+	@Override
+	public List<Date> listAvailableDates(Long patrolActivityId) {
+		final PatrolActivityDAO dao = new PatrolActivityDAO();
+		return dao.listAvailableDatesForDetail(patrolActivityId);
+	}
+
 	// -- Officer -- //
 	@Override
 	public Officer getOfficer(Integer officerId) {
@@ -321,6 +328,13 @@ public class PatrolServiceBean implements PatrolService {
 		dto.setOfficerCounts(dao.countDetailCategoryByOfficer(officerIdList, startDate, endDate));
 		
 		return dto;
+	}
+
+	@Override
+	public List<PatrolDetailTypeDayTimeCountDTO> runDetailByDayTimeReport(Date startDate, Date endDate,
+			boolean includeDay, boolean includeTime, List<Integer> patrolDetailTypeIdList, List<Integer> dayIdList) {
+		final PatrolActivityDAO dao = new PatrolActivityDAO();
+		return dao.countDetailTypeByDayTime(startDate, endDate, includeDay, includeTime, patrolDetailTypeIdList, dayIdList);
 	}
 
 }

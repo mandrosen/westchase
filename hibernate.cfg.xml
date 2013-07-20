@@ -12,37 +12,53 @@
   -->
   <property name="hibernate.dialect">com.westchase.hibernate.dialect.MySQLDialect</property>
   
+<property name="hibernate.cache.use_second_level_cache">true</property>
+<property name="hibernate.cache.use_query_cache">true</property>
+<property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
+
 <mapping class="com.westchase.persistence.model.Audit" />
 <mapping class="com.westchase.persistence.model.AuditCompany" />
 <mapping class="com.westchase.persistence.model.AuditPhoneBook" />
 <mapping class="com.westchase.persistence.model.AuditProperty" />
 <mapping class="com.westchase.persistence.model.Category" />
-
+<mapping class="com.westchase.persistence.model.Citizen" />
 <mapping class="com.westchase.persistence.model.CmuApartment" />
 <mapping class="com.westchase.persistence.model.CmuDevsite" />
 <mapping class="com.westchase.persistence.model.CmuHotel" />
-
 <mapping class="com.westchase.persistence.model.CmuLease" />
 <mapping class="com.westchase.persistence.model.CmuOfficeRetailSvc" />
-
 <mapping class="com.westchase.persistence.model.CmuQuarter" />
 <mapping class="com.westchase.persistence.model.CmuTransactionType" />
 <mapping class="com.westchase.persistence.model.Company" />
 <mapping class="com.westchase.persistence.model.CompanyMapno" />
+<mapping class="com.westchase.persistence.model.CompanyType" />
 <mapping class="com.westchase.persistence.model.EmailTemplate" />
 <mapping class="com.westchase.persistence.model.Employee" />
+<mapping class="com.westchase.persistence.model.FlagSize" />
 <mapping class="com.westchase.persistence.model.Hcad" />
 <mapping class="com.westchase.persistence.model.HpdNewsRelease" />
+<mapping class="com.westchase.persistence.model.IdNamed" />
 <mapping class="com.westchase.persistence.model.Mapno" />
 <mapping class="com.westchase.persistence.model.MapnoId" />
 <mapping class="com.westchase.persistence.model.Message" />
 <mapping class="com.westchase.persistence.model.Naics" />
+<mapping class="com.westchase.persistence.model.Officer" />
+<mapping class="com.westchase.persistence.model.PatrolActivity" />
+<mapping class="com.westchase.persistence.model.PatrolActivityDetail" />
+<mapping class="com.westchase.persistence.model.PatrolActivityDetailCitizen" />
+<mapping class="com.westchase.persistence.model.PatrolDetailCategory" />
+<mapping class="com.westchase.persistence.model.PatrolDetailType" />
+<mapping class="com.westchase.persistence.model.PatrolPhone" />
+<mapping class="com.westchase.persistence.model.PatrolShop" />
+<mapping class="com.westchase.persistence.model.PatrolType" />
 <mapping class="com.westchase.persistence.model.PhoneBook" />
 <mapping class="com.westchase.persistence.model.PhoneBookCategory" />
+<mapping class="com.westchase.persistence.model.PhoneBookMonumentSignNumber" />
 <mapping class="com.westchase.persistence.model.PhoneBookProperty" />
 <mapping class="com.westchase.persistence.model.PhoneBookRelation" />
 <mapping class="com.westchase.persistence.model.PhoneBookRelationType" />
 <mapping class="com.westchase.persistence.model.Property" />
+<mapping class="com.westchase.persistence.model.PropertyType" />
 <mapping class="com.westchase.persistence.model.Role" />
 <mapping class="com.westchase.persistence.model.SentEmail" />
 <mapping class="com.westchase.persistence.model.State" />

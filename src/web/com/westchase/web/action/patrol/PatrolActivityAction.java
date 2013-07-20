@@ -17,6 +17,7 @@ import com.westchase.persistence.model.PatrolActivityDetail;
 import com.westchase.persistence.model.PatrolPhone;
 import com.westchase.persistence.model.PatrolShop;
 import com.westchase.persistence.model.PatrolType;
+import com.westchase.utils.DateUtils;
 import com.westchase.utils.ejb.ServiceLocator;
 import com.westchase.web.action.cms.AbstractCMSAction;
 
@@ -145,43 +146,43 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 		}
 	}
 	
-	private String formatTime(String time) {
-		String timeStr = "12:00";
-		if (StringUtils.isNotBlank(time) && time.length() == 4) {
-			timeStr = time.substring(0, 2) + ":" + time.substring(2, 4);
-		}
-		return timeStr;
-	}
-
-	private Date getDateTime(final String date, final String time) {
-		Date d = null;
-		if (StringUtils.isNotBlank(date) && StringUtils.isNotBlank(time)) {
-			String datePart = StringUtils.substringBefore(date, "T");
-			//String timePart = StringUtils.substringBeforeLast(StringUtils.substringAfter(time, "T"), "-");
-			String timePart = formatTime(time);
-			SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-			try {
-				d = dateTimeFormat.parse(datePart + "T" + timePart + ":00");
-			} catch (Exception e) {
-				log.error("", e);
-			}
-		}
-		return d;
-	}
+//	private String formatTime(String time) {
+//		String timeStr = "12:00";
+//		if (StringUtils.isNotBlank(time) && time.length() == 4) {
+//			timeStr = time.substring(0, 2) + ":" + time.substring(2, 4);
+//		}
+//		return timeStr;
+//	}
+//
+//	private Date getDateTime(final String date, final String time) {
+//		Date d = null;
+//		if (StringUtils.isNotBlank(date) && StringUtils.isNotBlank(time)) {
+//			String datePart = StringUtils.substringBefore(date, "T");
+//			//String timePart = StringUtils.substringBeforeLast(StringUtils.substringAfter(time, "T"), "-");
+//			String timePart = formatTime(time);
+//			SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+//			try {
+//				d = dateTimeFormat.parse(datePart + "T" + timePart + ":00");
+//			} catch (Exception e) {
+//				log.error("", e);
+//			}
+//		}
+//		return d;
+//	}
 
 	private void setDateAndTimeForSave() {
 		if (currentPatrolActivity != null) {
-			currentPatrolActivity.setStartDateTime(getDateTime(startDate, startTime));
-			currentPatrolActivity.setEndDateTime(getDateTime(endDate, endTime));
+			currentPatrolActivity.setStartDateTime(DateUtils.getDateTime(startDate, startTime));
+			currentPatrolActivity.setEndDateTime(DateUtils.getDateTime(endDate, endTime));
 
-			currentPatrolActivity.setHikePatrolledDateTimeStart1(getDateTime(hikeDateStart1, hikeTimeStart1));
-			currentPatrolActivity.setHikePatrolledDateTimeEnd1(getDateTime(hikeDateEnd1, hikeTimeEnd1));
+			currentPatrolActivity.setHikePatrolledDateTimeStart1(DateUtils.getDateTime(hikeDateStart1, hikeTimeStart1));
+			currentPatrolActivity.setHikePatrolledDateTimeEnd1(DateUtils.getDateTime(hikeDateEnd1, hikeTimeEnd1));
 
-			currentPatrolActivity.setHikePatrolledDateTimeStart2(getDateTime(hikeDateStart2, hikeTimeStart2));
-			currentPatrolActivity.setHikePatrolledDateTimeEnd2(getDateTime(hikeDateEnd2, hikeTimeEnd2));
+			currentPatrolActivity.setHikePatrolledDateTimeStart2(DateUtils.getDateTime(hikeDateStart2, hikeTimeStart2));
+			currentPatrolActivity.setHikePatrolledDateTimeEnd2(DateUtils.getDateTime(hikeDateEnd2, hikeTimeEnd2));
 
-			currentPatrolActivity.setHikePatrolledDateTimeStart3(getDateTime(hikeDateStart3, hikeTimeStart3));
-			currentPatrolActivity.setHikePatrolledDateTimeEnd3(getDateTime(hikeDateEnd3, hikeTimeEnd3));
+			currentPatrolActivity.setHikePatrolledDateTimeStart3(DateUtils.getDateTime(hikeDateStart3, hikeTimeStart3));
+			currentPatrolActivity.setHikePatrolledDateTimeEnd3(DateUtils.getDateTime(hikeDateEnd3, hikeTimeEnd3));
 
 		}
 	}

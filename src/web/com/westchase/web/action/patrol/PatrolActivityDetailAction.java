@@ -1,6 +1,7 @@
 package com.westchase.web.action.patrol;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +14,7 @@ import com.westchase.persistence.model.PatrolActivity;
 import com.westchase.persistence.model.PatrolActivityDetail;
 import com.westchase.persistence.model.PatrolDetailCategory;
 import com.westchase.persistence.model.PatrolDetailType;
+import com.westchase.utils.DateUtils;
 import com.westchase.utils.ejb.ServiceLocator;
 import com.westchase.web.action.AbstractWestchaseAction;
 
@@ -31,6 +33,12 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 	
 	private List<Long> selectedCitizens;
 	
+	private List<Date> availableDates;
+	
+	private String receivedDate;
+	private String arrivedDate;
+	private String clearedDate;
+	
 	private String receivedTime;
 	private String arrivedTime;
 	private String clearedTime;
@@ -39,21 +47,24 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 		super();
 	}
 	
-	private void setTimeForSave() {
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmm");
+	private void setDateAndTimeForSave() {
+//		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmm");
 		if (currentPatrolActivityDetail != null) {
 			try {
-				currentPatrolActivityDetail.setReceivedTime(timeFormat.parse(receivedTime));
+//				currentPatrolActivityDetail.setReceivedTime(timeFormat.parse(receivedTime));
+				currentPatrolActivityDetail.setReceivedDateTime(DateUtils.getDateTime(receivedDate, receivedTime));
 			} catch (Exception e) {
 				log.error("bad received time", e);
 			}
 			try {
-				currentPatrolActivityDetail.setArrivedTime(timeFormat.parse(arrivedTime));
+//				currentPatrolActivityDetail.setArrivedTime(timeFormat.parse(arrivedTime));
+				currentPatrolActivityDetail.setArrivedDateTime(DateUtils.getDateTime(arrivedDate, arrivedTime));
 			} catch (Exception e) {
 				log.error("bad arrived time", e);
 			}
 			try {
-				currentPatrolActivityDetail.setClearedTime(timeFormat.parse(clearedTime));
+//				currentPatrolActivityDetail.setClearedTime(timeFormat.parse(clearedTime));
+				currentPatrolActivityDetail.setClearedDateTime(DateUtils.getDateTime(clearedDate, clearedTime));
 			} catch (Exception e) {
 				log.error("bad cleared time", e);
 			}
@@ -61,16 +72,20 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 	}
 	
 	private void setupTime() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HHmm");
 		if (currentPatrolActivityDetail != null) {
-			if (currentPatrolActivityDetail.getReceivedTime() != null) {
-				setReceivedTime(timeFormat.format(currentPatrolActivityDetail.getReceivedTime()));
+			if (currentPatrolActivityDetail.getReceivedDateTime() != null) {
+				setReceivedDate(dateFormat.format(currentPatrolActivityDetail.getReceivedDateTime()));
+				setReceivedTime(timeFormat.format(currentPatrolActivityDetail.getReceivedDateTime()));
 			}
-			if (currentPatrolActivityDetail.getReceivedTime() != null) {
-				setArrivedTime(timeFormat.format(currentPatrolActivityDetail.getArrivedTime()));
+			if (currentPatrolActivityDetail.getReceivedDateTime() != null) {
+				setArrivedDate(dateFormat.format(currentPatrolActivityDetail.getArrivedDateTime()));
+				setArrivedTime(timeFormat.format(currentPatrolActivityDetail.getArrivedDateTime()));
 			}
-			if (currentPatrolActivityDetail.getReceivedTime() != null) {
-				setClearedTime(timeFormat.format(currentPatrolActivityDetail.getClearedTime()));
+			if (currentPatrolActivityDetail.getReceivedDateTime() != null) {
+				setClearedDate(dateFormat.format(currentPatrolActivityDetail.getClearedDateTime()));
+				setClearedTime(timeFormat.format(currentPatrolActivityDetail.getClearedDateTime()));
 			}
 		}
 	}
@@ -94,6 +109,8 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 				availableCitizens = patrolServ.listCitizens();
 			}
 			
+			availableDates = patrolServ.listAvailableDates(getPatrolActivityId());
+			
 			availableDetailCategories = patrolServ.listDetailCategories();
 			availableDetailTypes = patrolServ.listDetailTypes();
 			availableProperties = patrolServ.listProperties();
@@ -105,22 +122,34 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 	}
 	
 	public String save() {
+		String error = null;
 		Long savedId = null;
 		if (currentPatrolActivityDetail != null) {
-			setTimeForSave();
-			try {
-				PatrolService patrolServ = ServiceLocator.lookupPatrolService();
-				if (patrolServ != null) {
-					savedId = patrolServ.saveOrUpdateActivityDetail(currentPatrolActivityDetail, selectedCitizens);
+
+        	setDateAndTimeForSave();
+        	String dateTimeError = validateDateTime();
+        	if (StringUtils.isNotBlank(dateTimeError)) {
+        		error = dateTimeError;
+        	} else {
+				try {
+					PatrolService patrolServ = ServiceLocator.lookupPatrolService();
+					if (patrolServ != null) {
+						savedId = patrolServ.saveOrUpdateActivityDetail(currentPatrolActivityDetail, selectedCitizens);
+					}
+				} catch (Exception e) {
+					log.error("", e);
 				}
-			} catch (Exception e) {
-				log.error("", e);
-			}
+        	}
 		}
+        if (StringUtils.isNotBlank(error)) {
+        	addActionError(error);
+        	return INPUT;
+        }
 		if (savedId != null && savedId.longValue() > 0) {
 			addActionMessage("Saved record #" + savedId);
 		} else {
-			addActionMessage("Unable to save object");
+//			addActionMessage("Unable to save object");
+			addActionError("Unable to save object");
 			return INPUT;
 		}
 		if (currentPatrolActivityDetail != null && currentPatrolActivityDetail.getPatrolActivity() != null) {
@@ -185,6 +214,14 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 		this.availableCitizens = availableCitizens;
 	}
 
+	public List<Date> getAvailableDates() {
+		return availableDates;
+	}
+
+	public void setAvailableDates(List<Date> availableDates) {
+		this.availableDates = availableDates;
+	}
+
 	public List<Citizen> getCurrentCitizens() {
 		return currentCitizens;
 	}
@@ -199,6 +236,30 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 
 	public void setSelectedCitizens(List<Long> selectedCitizens) {
 		this.selectedCitizens = selectedCitizens;
+	}
+
+	public String getReceivedDate() {
+		return receivedDate;
+	}
+
+	public void setReceivedDate(String receivedDate) {
+		this.receivedDate = receivedDate;
+	}
+
+	public String getArrivedDate() {
+		return arrivedDate;
+	}
+
+	public void setArrivedDate(String arrivedDate) {
+		this.arrivedDate = arrivedDate;
+	}
+
+	public String getClearedDate() {
+		return clearedDate;
+	}
+
+	public void setClearedDate(String clearedDate) {
+		this.clearedDate = clearedDate;
 	}
 
 	public String getReceivedTime() {
@@ -233,6 +294,18 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 	 */
 	@Override
 	public void validate() {
+		if (StringUtils.isBlank(receivedDate)) {
+//			addFieldError("receivedDate","Received date is required");
+			addActionError("Received date is required");
+		}
+		if (StringUtils.isBlank(arrivedDate)) {
+//			addFieldError("arrivedDate","Arrived date is required");
+			addActionError("Arrived date is required");
+		}
+		if (StringUtils.isBlank(clearedDate)) {
+//			addFieldError("clearedDate","Cleared date is required");
+			addActionError("Cleared date is required");
+		}
 		if (StringUtils.isBlank(receivedTime)) {
 //			addFieldError("receivedTime","Received time is required");
 			addActionError("Received time is required");
@@ -257,5 +330,28 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 //			addFieldError("currentPatrolActivityDetail.patrolDetailType.id", "Type is required");
 			addActionError("Type is required");
 		}
+	}
+	
+	private String validateDateTime() {
+		StringBuffer error = new StringBuffer();
+		if (currentPatrolActivityDetail.getReceivedDateTime() == null) {
+			error.append("Received date and time are required.");
+		}
+		if (currentPatrolActivityDetail.getArrivedDateTime() == null) {
+			error.append("Arrived date and time are required.");
+		}
+		if (currentPatrolActivityDetail.getClearedDateTime() == null) {
+			error.append("Cleard date and time are required.");
+		}
+		if (error.length() > 0) {
+			return error.toString();
+		}
+		if (currentPatrolActivityDetail.getArrivedDateTime().before(currentPatrolActivityDetail.getReceivedDateTime())) {
+			error.append("Received date and time must occur before arrived date and time.");
+		}
+		if (currentPatrolActivityDetail.getClearedDateTime().before(currentPatrolActivityDetail.getArrivedDateTime())) {
+			error.append("Arrived date and time must occur before clear date and time.");
+		}
+		return error.toString();
 	}
 }

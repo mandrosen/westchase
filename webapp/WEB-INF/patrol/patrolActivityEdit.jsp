@@ -12,13 +12,12 @@
     <sx:head />
     
     <!--  // these need to point to 172... for westchase office. TODO add to config file -->
-    <!-- 
+ 	<!--
     <script type="text/javascript" src="http://localhost/scripts/patrolActivity.js"></script>
     <link rel="stylesheet" type="text/css" href="http://localhost/styles/patrolActivity.css" />
-     -->
+    -->
     <script type="text/javascript" src="http://172.25.16.64/scripts/patrolActivity.js"></script>
     <link rel="stylesheet" type="text/css" href="http://172.25.16.64/styles/patrolActivity.css" />
-   
 </head>
 
 <body>
@@ -397,9 +396,9 @@
 					<td><a href="<s:url action="editActivityDetail-%{id}" namespace="/patrol" />"><s:property value="incidentId"/></a></td>
 					<td><s:property value="patrolDetailType.name"/></td>
 		            <td><s:property value="patrolDetailCategory.name"/></td>
-		            <td><s:date name="receivedTime" format="HH:mm" /></td>
-		            <td><s:date name="arrivedTime" format="HH:mm" /></td>
-		            <td><s:date name="clearedTime" format="HH:mm" /></td>
+		            <td><s:date name="receivedDateTime" format="HH:mm" /></td>
+		            <td><s:date name="arrivedDateTime" format="HH:mm" /></td>
+		            <td><s:date name="clearedDateTime" format="HH:mm" /></td>
 				</tr>
 			</s:iterator>
 		</tbody>

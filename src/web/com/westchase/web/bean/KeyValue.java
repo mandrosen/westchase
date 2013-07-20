@@ -18,6 +18,9 @@ public class KeyValue implements Serializable {
 	public String getKey() {
 		return key;
 	}
+	public Integer getKeyAsInteger() {
+		return Integer.valueOf(getKey());
+	}
 	public String getValue() {
 		return value;
 	}

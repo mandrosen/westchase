@@ -153,6 +153,12 @@
     		</fileset>
     	</copy>
     	
+    	<copy todir="${deploy.jboss.dir}">
+    		<fileset dir="${basedir}/db">
+    			<include name="mysql-ds.xml" />
+    		</fileset>
+    	</copy>
+    	
     	
     	<copy todir="${deploy.jboss.dir}">
     		<fileset dir="${deploy.dir}"/>

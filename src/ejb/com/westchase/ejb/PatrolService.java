@@ -11,6 +11,7 @@ import com.westchase.persistence.criteria.PatrolActivitySearchCriteria;
 import com.westchase.persistence.dto.cms.PropertyDTO;
 import com.westchase.persistence.dto.patrol.OfficerListCountListDTO;
 import com.westchase.persistence.dto.patrol.PatrolActivityReportDTO;
+import com.westchase.persistence.dto.patrol.PatrolDetailTypeDayTimeCountDTO;
 import com.westchase.persistence.model.Citizen;
 import com.westchase.persistence.model.Officer;
 import com.westchase.persistence.model.PatrolActivity;
@@ -66,6 +67,8 @@ public interface PatrolService {
 	List<Citizen> listNonSelectedCitizens(Long patrolActivityDetailId);
 
 	void deleteActivityDetail(Long patrolActivityDetailId);
+	
+	List<Date> listAvailableDates(Long patrolActivityId);
 
 	// -- Officer -- //
 	Officer getOfficer(Integer officerId);
@@ -91,5 +94,9 @@ public interface PatrolService {
 	OfficerListCountListDTO<PatrolDetailType> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate);
 
 	OfficerListCountListDTO<PatrolDetailCategory> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate);
+
+	List<PatrolDetailTypeDayTimeCountDTO> runDetailByDayTimeReport(Date startDate, Date endDate,
+			boolean includeDay, boolean includeTime, List<Integer> patrolDetailTypeIdList, List<Integer> dayIdList);
+
 	
 }

@@ -1,6 +1,7 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="sx" uri="/struts-dojo-tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -12,6 +13,9 @@
     <sx:head />
     
     <!--  // these need to point to 172... for westchase office. TODO add to config file -->
+    <!-- 
+    <script type="text/javascript" src="http://localhost/scripts/patrolActivityDetail.js"></script>
+    -->
     <script type="text/javascript" src="http://172.25.16.64/scripts/patrolActivityDetail.js"></script>
 </head>
 
@@ -66,15 +70,45 @@
 		    headerKey="-1" headerValue="--" listValue="name" listKey="id" emptyOption="false" 
 		    required="true" />
 		
-		<!-- 
-		<sx:datetimepicker label="Received" type="time" name="currentPatrolActivityDetail.receivedTime" displayFormat="HH:mm" />
+		<tr>
+			<td class="tdLabel">Received Date</td>
+			<td>
+		<select name="receivedDate">
+			<c:forEach items="${availableDates}" var="d">
+				<option value="<fmt:formatDate pattern='YYYY-mm-dd' value='${d}' />"><fmt:formatDate pattern='YYYYmmdd' value='${d}' /></option>
+			</c:forEach>
+		</select>
+			</td>
+		</tr>
 		
-		<sx:datetimepicker label="Arrived" type="time" name="currentPatrolActivityDetail.arrivedTime" displayFormat="HH:mm" />
-		
-		<sx:datetimepicker label="Cleared" type="time" name="currentPatrolActivityDetail.clearedTime" displayFormat="HH:mm" />
-		-->
 		<s:textfield label="Received (HHMM)" name="receivedTime" size="5" maxlength="5" />
+		
+		
+		
+		<tr>
+			<td class="tdLabel">Arrived Date</td>
+			<td>
+		<select name="arrivedDate">
+			<c:forEach items="${availableDates}" var="d">
+				<option value="<fmt:formatDate pattern='YYYY-mm-dd' value='${d}' />"><fmt:formatDate pattern='YYYYmmdd' value='${d}' /></option>
+			</c:forEach>
+		</select>
+			</td>
+		</tr>
 		<s:textfield label="Arrived (HHMM)" name="arrivedTime" size="5" maxlength="5" />
+		
+		
+		
+		<tr>
+			<td class="tdLabel">Cleared Date</td>
+			<td>
+		<select name="clearedDate">
+			<c:forEach items="${availableDates}" var="d">
+				<option value="<fmt:formatDate pattern='YYYY-mm-dd' value='${d}' />"><fmt:formatDate pattern='YYYYmmdd' value='${d}' /></option>
+			</c:forEach>
+		</select>
+			</td>
+		</tr>
 		<s:textfield label="Cleared (HHMM)" name="clearedTime" size="5" maxlength="5" />
 		
 		<s:select label="Officer Role" list="#{'Primary':'Primary', 'Secondary':'Secondary'}" name="currentPatrolActivityDetail.officerRole"
@@ -97,7 +131,7 @@
 		<s:textarea label="Comments" name="currentPatrolActivityDetail.comments" rows="5" cols="75" required="true"></s:textarea>
 			
 		<s:submit value="Save" />
-		
+		<!-- 
 		<s:optiontransferselect 
 			label="Citizens"
 			name="leftSideCitizens"
@@ -121,6 +155,7 @@
 			allowSelectAll="false" />
 			
 		<s:submit value="Save" />
+		-->
 		    
 	</s:form>
 	

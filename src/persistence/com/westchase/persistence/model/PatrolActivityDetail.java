@@ -30,9 +30,9 @@ public class PatrolActivityDetail implements java.io.Serializable {
 	private PatrolDetailCategory patrolDetailCategory;
 	private PatrolActivity patrolActivity;
 	private PatrolDetailType patrolDetailType;
-	private Date receivedTime;
-	private Date arrivedTime;
-	private Date clearedTime;
+	private Date receivedDateTime;
+	private Date arrivedDateTime;
+	private Date clearedDateTime;
 	private String officerRole;
 	private String disposition;
 	private String incidentId;
@@ -52,16 +52,16 @@ public class PatrolActivityDetail implements java.io.Serializable {
 	}
 
 	public PatrolActivityDetail(Property property, PatrolDetailCategory patrolDetailCategory,
-			PatrolActivity patrolActivity, PatrolDetailType patrolDetailType, Date receivedTime, Date arrivedTime,
-			Date clearedTime, String officerRole, String disposition, String incidentId, String locationDesc,
+			PatrolActivity patrolActivity, PatrolDetailType patrolDetailType, Date receivedDateTime, Date arrivedDateTime,
+			Date clearedDateTime, String officerRole, String disposition, String incidentId, String locationDesc,
 			String comments, Set<PatrolActivityDetailCitizen> patrolActivityDetailCitizens) {
 		this.property = property;
 		this.patrolDetailCategory = patrolDetailCategory;
 		this.patrolActivity = patrolActivity;
 		this.patrolDetailType = patrolDetailType;
-		this.receivedTime = receivedTime;
-		this.arrivedTime = arrivedTime;
-		this.clearedTime = clearedTime;
+		this.receivedDateTime = receivedDateTime;
+		this.arrivedDateTime = arrivedDateTime;
+		this.clearedDateTime = clearedDateTime;
 		this.officerRole = officerRole;
 		this.disposition = disposition;
 		this.incidentId = incidentId;
@@ -121,34 +121,34 @@ public class PatrolActivityDetail implements java.io.Serializable {
 		this.patrolDetailType = patrolDetailType;
 	}
 
-	@Temporal(TemporalType.TIME)
-	@Column(name = "received_time", length = 8)
-	public Date getReceivedTime() {
-		return this.receivedTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "received_date_time")
+	public Date getReceivedDateTime() {
+		return this.receivedDateTime;
 	}
 
-	public void setReceivedTime(Date receivedTime) {
-		this.receivedTime = receivedTime;
+	public void setReceivedDateTime(Date receivedDateTime) {
+		this.receivedDateTime = receivedDateTime;
 	}
 
-	@Temporal(TemporalType.TIME)
-	@Column(name = "arrived_time", length = 8)
-	public Date getArrivedTime() {
-		return this.arrivedTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "arrived_date_time")
+	public Date getArrivedDateTime() {
+		return this.arrivedDateTime;
 	}
 
-	public void setArrivedTime(Date arrivedTime) {
-		this.arrivedTime = arrivedTime;
+	public void setArrivedDateTime(Date arrivedDateTime) {
+		this.arrivedDateTime = arrivedDateTime;
 	}
 
-	@Temporal(TemporalType.TIME)
-	@Column(name = "cleared_time", length = 8)
-	public Date getClearedTime() {
-		return this.clearedTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "cleared_date_time")
+	public Date getClearedDateTime() {
+		return this.clearedDateTime;
 	}
 
-	public void setClearedTime(Date clearedTime) {
-		this.clearedTime = clearedTime;
+	public void setClearedDateTime(Date clearedDateTime) {
+		this.clearedDateTime = clearedDateTime;
 	}
 
 	@Column(name = "officer_role", length = 9)
