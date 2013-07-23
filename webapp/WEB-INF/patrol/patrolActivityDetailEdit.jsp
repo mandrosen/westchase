@@ -75,7 +75,7 @@
 			<td>
 		<select name="receivedDate">
 			<c:forEach items="${availableDates}" var="d">
-				<option value="<fmt:formatDate pattern='yyyy-MM-dd' value='${d}' />"><fmt:formatDate pattern='yyyyMMdd' value='${d}' /></option>
+				<option value="<fmt:formatDate pattern='yyyy-MM-dd' value='${d}' />"><fmt:formatDate pattern='ddMMyyyy' value='${d}' /></option>
 			</c:forEach>
 		</select>
 			</td>
@@ -90,7 +90,7 @@
 			<td>
 		<select name="arrivedDate">
 			<c:forEach items="${availableDates}" var="d">
-				<option value="<fmt:formatDate pattern='yyyy-MM-dd' value='${d}' />"><fmt:formatDate pattern='yyyyMMdd' value='${d}' /></option>
+				<option value="<fmt:formatDate pattern='yyyy-MM-dd' value='${d}' />"><fmt:formatDate pattern='ddMMyyyy' value='${d}' /></option>
 			</c:forEach>
 		</select>
 			</td>
@@ -104,7 +104,7 @@
 			<td>
 		<select name="clearedDate">
 			<c:forEach items="${availableDates}" var="d">
-				<option value="<fmt:formatDate pattern='yyyy-MM-dd' value='${d}' />"><fmt:formatDate pattern='yyyyMMdd' value='${d}' /></option>
+				<option value="<fmt:formatDate pattern='yyyy-MM-dd' value='${d}' />"><fmt:formatDate pattern='ddMMyyyy' value='${d}' /></option>
 			</c:forEach>
 		</select>
 			</td>
