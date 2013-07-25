@@ -332,9 +332,10 @@ public class PatrolServiceBean implements PatrolService {
 
 	@Override
 	public List<PatrolDetailTypeDayTimeCountDTO> runDetailByDayTimeReport(Date startDate, Date endDate,
-			boolean includeDay, boolean includeTime, List<Integer> patrolDetailTypeIdList, List<Integer> dayIdList) {
+			boolean includeProperty, boolean includeDay, boolean includeTime, 
+			List<Integer> patrolDetailTypeIdList, List<Integer> propertyIdList, List<Integer> dayIdList) {
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
-		return dao.countDetailTypeByDayTime(startDate, endDate, includeDay, includeTime, patrolDetailTypeIdList, dayIdList);
+		return dao.countDetailTypeByDayTime(startDate, endDate, includeProperty, includeDay, includeTime, patrolDetailTypeIdList, propertyIdList, dayIdList);
 	}
 
 }

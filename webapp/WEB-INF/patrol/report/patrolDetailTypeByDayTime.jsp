@@ -19,6 +19,10 @@
 	}
 	$(function() {
 		$("#results_table tr:odd").addClass("odd");
+
+	<s:if test="%{!includeProperty}">
+		$("#property-opts").hide();
+	</s:if>
 	<s:if test="%{!includeDay}">
 		$("#day-opts").hide();
 	</s:if>
@@ -30,6 +34,16 @@
 			$("#day-opts").hide();
 		}
 	}
+	function showHidePropertyOpts() {
+		if ($("#include-property").is(":checked")) {
+			$("#property-opts").show();
+		} else {
+			$("#property-opts").hide();
+		}
+	}
+	function toggleResult(id) {
+		$("#res" + id).toggle();
+	}
 	</script>
     
 	<style type="text/css">
@@ -38,6 +52,26 @@
 		}
 		#results_table td { 
 			white-space: nowrap;
+		}
+		a.type-name {
+			cursor: pointer;
+			text-decoration: underline;
+		}
+		.result-id-block {
+			position: absolute;
+			display: none;
+			background-color: #fff;
+			padding: 5px;
+			border: 2px solid #000;
+		}
+		.result-id-list {
+			margin: 0;
+			padding: 0;
+		}
+		.result-id-item {
+			list-style-type: none;
+			margin: 0;
+			padding: 5px;
 		}
 	</style>
 </head>
@@ -71,6 +105,21 @@
 			</tr>
 			<tr>
 				<td colspan="2">
+					<label>Include Property <s:checkbox name="includeProperty" id="include-property" fieldValue="true" onchange="showHidePropertyOpts()" /></label>
+				</td>
+			</tr>
+			<tr id="property-opts">
+				<th>Propeties</th>
+				<td>
+					<s:select name="propertyIdList" headerKey="-1" headerValue="--" 
+					    list="availableProperties" 
+					    listValue="summaryStringForPublicSafety" listKey="id" 
+					    emptyOption="false" 
+					    multiple="true" size="10" />
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
 					<label>Include Day <s:checkbox name="includeDay" id="include-day" fieldValue="true" onchange="showHideDayOpts()" /></label>
 				</td>
 			</tr>
@@ -97,15 +146,26 @@
 		<thead>
 		    <tr>
 				<th>Call Code</th>
+				<s:if test="%{includeProperty}"><th>Property</th></s:if>
 				<s:if test="%{includeDay}"><th>Day Name</th></s:if>
 				<s:if test="%{includeTime}"><th>Hour of Day</th></s:if>
 				<th>TOTAL</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${results}" var="result">
+			<c:forEach items="${results}" var="result" varStatus="stat">
 				<tr>
-					<td><c:out value="${result.typeName}" /></td>
+					<td>
+						<a onclick="toggleResult(${stat.index})" class="type-name"><c:out value="${result.typeName}" /></a>
+						<div id="res${stat.index}" class="result-id-block">
+							<ul class="result-id-list">
+								<c:forEach items="${result.detailIdList}" var="detailId">
+									<li class="result-id-item"><a href="/westchase/patrol/editActivityDetail-<c:out value='${detailId}' />" target="detailedit"><c:out value="${detailId}" /></a></li>
+								</c:forEach>
+							</ul>
+						</div>
+					</td>
+					<s:if test="%{includeProperty}"><td>[<c:out value="${result.propertyId}" />] <c:out value="${result.propertyName}" /></td></s:if>
 					<s:if test="%{includeDay}"><td><c:out value="${result.dayName}" /></td></s:if>
 					<s:if test="%{includeTime}"><td><c:out value="${result.hourOfDay}" /></td></s:if>
 					<td><c:out value="${result.typeTotal}" /></td>

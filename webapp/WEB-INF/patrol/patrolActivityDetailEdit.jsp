@@ -31,6 +31,7 @@
 	</c:choose>
 	
 	<p><a href="/westchase/patrol/editActivity-${patrolActivityId}">Back to Patrol Activity</a></p>
+	<p><a href="/westchase/patrol/editActivity-${patrolActivityId}#patrol-detail-list">Back to Patrol Activity Detail List</a></p>
 	<p><a href="/westchase/patrol/listActivity?useLast=1">Back to Current Patrol Activity List</a></p>
 	
 	<p>

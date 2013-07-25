@@ -96,7 +96,7 @@ public interface PatrolService {
 	OfficerListCountListDTO<PatrolDetailCategory> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate);
 
 	List<PatrolDetailTypeDayTimeCountDTO> runDetailByDayTimeReport(Date startDate, Date endDate,
-			boolean includeDay, boolean includeTime, List<Integer> patrolDetailTypeIdList, List<Integer> dayIdList);
+			boolean includeProperty, boolean includeDay, boolean includeTime, List<Integer> patrolDetailTypeIdList, List<Integer> propertyIdList, List<Integer> dayIdList);
 
 	
 }

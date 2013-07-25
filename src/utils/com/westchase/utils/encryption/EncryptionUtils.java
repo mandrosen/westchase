@@ -32,7 +32,7 @@ import org.bouncycastle.util.encoders.Hex;
  */
 public class EncryptionUtils {
 
-	private final static char[] PASSPHRASE_ARY = "xxxx".toCharArray();
+	private final static char[] PASSPHRASE_ARY = "ttt*&ghti*u*wcdb00ladidabe11auio6".toCharArray();
 
 	/**
 	 * decrypt the passed in message stream

@@ -350,10 +350,14 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		return dateList;
 	}
 	
-	public List<PatrolDetailTypeDayTimeCountDTO> countDetailTypeByDayTime(Date startDate, Date endDate, 
-			boolean includeDay, boolean includeTime, List<Integer> patrolDetailTypeIdList, List<Integer> dayIdList) {
+	public List<PatrolDetailTypeDayTimeCountDTO> countDetailTypeByDayTime(Date startDate, Date endDate,
+			boolean includeProperty, boolean includeDay, boolean includeTime, 
+			List<Integer> patrolDetailTypeIdList, List<Integer> propertyIdList, List<Integer> dayIdList) {
 		List<PatrolDetailTypeDayTimeCountDTO> counts = new ArrayList<PatrolDetailTypeDayTimeCountDTO>();
-		String query = "select pdt.name as type_name ";
+		String query = "select group_concat(pad.id) as id_list, pdt.name as type_name ";
+		if (includeProperty) {
+			query += ", p.id as mapno, p.buildingName as building_name ";
+		}
 		if (includeDay) {
 			query += ", dayname(pad.received_date_time) as day_name ";
 		}
@@ -361,8 +365,11 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			query += ", hour(pad.received_date_time) as hour_of_day ";
 		}
 		query += ", count(1) as type_total " +
-				" from patrol_activity_detail pad inner join patrol_detail_type pdt on pad.patrol_detail_type_id = pdt.id " +
-				" where pad.received_date_time is not null ";
+				" from patrol_activity_detail pad inner join patrol_detail_type pdt on pad.patrol_detail_type_id = pdt.id ";
+		if (includeProperty) {
+			query += " inner join property p on pad.location_property_id = p.id ";
+		}
+		query += " where pad.received_date_time is not null ";
 		if (startDate != null) {
 			query += " and pad.received_date_time >= :startDate ";
 		}
@@ -372,11 +379,17 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		if (hasListValues(patrolDetailTypeIdList)) {
 			query += " and pdt.id in (:patrolDetailTypeIdList) ";
 		}
+		if (hasListValues(propertyIdList)) {
+			query += " and p.id in (:propertyIdList) ";
+		}
 		if (hasListValues(dayIdList)) {
 			query += " and dayofweek(pad.received_date_time) in (:dayIdList) ";
 		}
 		
 		query += " group by pdt.id ";
+		if (includeProperty) {
+			query += ", p.id ";
+		}
 		if (includeDay) {
 			query += ", dayofweek(pad.received_date_time) ";
 		}
@@ -390,9 +403,15 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		if (includeTime) {
 			query += ", hour_of_day ";
 		}
+		System.out.println(query);
 		try {
 			SQLQuery q = getSession().createSQLQuery(query)
+					.addScalar("id_list", Hibernate.STRING)
 					.addScalar("type_name", Hibernate.STRING);
+			if (includeProperty) {
+				q.addScalar("mapno", Hibernate.INTEGER);
+				q.addScalar("building_name", Hibernate.STRING);
+			}
 			if (includeDay) {
 				q.addScalar("day_name", Hibernate.STRING);
 			}
@@ -404,16 +423,34 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			if (hasListValues(patrolDetailTypeIdList)) {
 				q.setParameterList("patrolDetailTypeIdList", patrolDetailTypeIdList);
 			}
+			if (hasListValues(propertyIdList)) {
+				q.setParameterList("propertyIdList", propertyIdList);
+			}
 			if (hasListValues(dayIdList)) {
 				q.setParameterList("dayIdList", dayIdList);
 			}
+			
+			if (startDate != null) {
+				q.setParameter("startDate", startDate);
+			}
+			if (endDate != null) {
+				q.setParameter("endDate", endDate);
+			}
+			
 			List<Object[]> countList = q.list();
 			if (countList != null && !countList.isEmpty()) {
 				for (Object[] count : countList) {
+					Integer propertyId = null;
+					String propertyName = null;
 					int col = 0;
+					String idList = (String) count[col++];
 					String typeName = (String) count[col++];
 					String dayName = null;
 					Integer hourOfDay = null;
+					if (includeProperty) {
+						propertyId = (Integer) count[col++];
+						propertyName = (String) count[col++];
+					}
 					if (includeDay) {
 						dayName = (String) count[col++];
 					}
@@ -421,7 +458,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 						hourOfDay = (Integer) count[col++];
 					}
 					Long typeTotal = (Long) count[col++];
-					counts.add(new PatrolDetailTypeDayTimeCountDTO(typeName, dayName, hourOfDay, typeTotal));
+					counts.add(new PatrolDetailTypeDayTimeCountDTO(idList, typeName, propertyId, propertyName, dayName, hourOfDay, typeTotal));
 				}
 			}
 		} catch (Exception e) {

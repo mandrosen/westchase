@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -13,6 +14,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.westchase.ejb.PatrolService;
+import com.westchase.persistence.dto.cms.PropertyDTO;
 import com.westchase.persistence.dto.patrol.PatrolDetailTypeDayTimeCountDTO;
 import com.westchase.persistence.model.PatrolDetailType;
 import com.westchase.utils.DateUtils;
@@ -22,15 +24,19 @@ import com.westchase.web.bean.KeyValue;
 
 public class PatrolDetailTypeByDayTimeReportAction extends AbstractReportAction {
 
+	private List<PropertyDTO> availableProperties;
 	private List<PatrolDetailType> availableDetailTypes;
 	private List<KeyValue> availableDays;
 
+	private List<Integer> propertyIdList;
 	private List<Integer> patrolDetailTypeIdList;
 	private List<Integer> dayIdList;
 	private String startDate;
 	private String endDate;
 	
 	private int reportType;
+	
+	private boolean includeProperty = false;
 	
 	private boolean includeDay = true;
 	
@@ -46,6 +52,7 @@ public class PatrolDetailTypeByDayTimeReportAction extends AbstractReportAction 
 		PatrolService patrolServ = ServiceLocator.lookupPatrolService();
 		if (patrolServ != null) {
 			availableDetailTypes = patrolServ.listDetailTypes();
+			availableProperties = patrolServ.listProperties();
 		}
 		availableDays = new ArrayList<KeyValue>();
 		availableDays.add(new KeyValue("1", "Sunday"));
@@ -70,8 +77,8 @@ public class PatrolDetailTypeByDayTimeReportAction extends AbstractReportAction 
 			prepareLists();
 			
 			results = patrolServ.runDetailByDayTimeReport(DateUtils.getDateFromWeb(startDate), 
-					DateUtils.getDateFromWeb(endDate), includeDay, includeTime,
-					patrolDetailTypeIdList, dayIdList);
+					DateUtils.getDateFromWeb(endDate), includeProperty, includeDay, includeTime,
+					patrolDetailTypeIdList, propertyIdList, dayIdList);
 			if (EXCEL.equals(type)) {
 				return exportToExcel();
 			}
@@ -114,6 +121,9 @@ public class PatrolDetailTypeByDayTimeReportAction extends AbstractReportAction 
     		Row headerRow = sheet.createRow(HEADER_ROW);
     		int col = 0;
     		writeCell(wb, sheet, headerRow, col++, "Type Name", headerStyle);
+    		if (includeProperty) {
+        		writeCell(wb, sheet, headerRow, col++, "Property", headerStyle);
+    		}
     		if (includeDay) {
         		writeCell(wb, sheet, headerRow, col++, "Day Name", headerStyle);
     		}
@@ -129,6 +139,10 @@ public class PatrolDetailTypeByDayTimeReportAction extends AbstractReportAction 
 					col = 0;
 					
 					writeCell(wb, sheet, row, col++, result.getTypeName(), style);
+		    		if (includeProperty) {
+		    			String propertyStr = "[" + StringUtils.leftPad(String.valueOf(result.getPropertyId()), 3, "0") + "] " + result.getPropertyName();
+		        		writeCell(wb, sheet, row, col++, propertyStr, headerStyle);
+		    		}
 		    		if (includeDay) {
 		    			writeCell(wb, sheet, row, col++, result.getDayName(), style);
 		    		}
@@ -259,6 +273,30 @@ public class PatrolDetailTypeByDayTimeReportAction extends AbstractReportAction 
 
 	public void setDayIdList(List<Integer> dayIdList) {
 		this.dayIdList = dayIdList;
+	}
+
+	public List<PropertyDTO> getAvailableProperties() {
+		return availableProperties;
+	}
+
+	public void setAvailableProperties(List<PropertyDTO> availableProperties) {
+		this.availableProperties = availableProperties;
+	}
+
+	public List<Integer> getPropertyIdList() {
+		return propertyIdList;
+	}
+
+	public void setPropertyIdList(List<Integer> propertyIdList) {
+		this.propertyIdList = propertyIdList;
+	}
+
+	public boolean isIncludeProperty() {
+		return includeProperty;
+	}
+
+	public void setIncludeProperty(boolean includeProperty) {
+		this.includeProperty = includeProperty;
 	}
 
 }

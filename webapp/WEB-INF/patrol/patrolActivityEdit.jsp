@@ -34,6 +34,9 @@
 <p><a href="/westchase/patrol/listActivity?useLast=1">Back to Current List</a></p>
 <p><a href="<s:url action="listActivity"/>">Back to List</a></p>
 <p><a href="<s:url action="editActivity-" includeParams="none"/>">Create new Patrol Activity</a></p>
+<c:if test="${not empty currentPatrolActivity.id}">
+    <p><a href="/westchase/patrol/editActivityDetail.action?patrolActivityId=<c:out value='${currentPatrolActivity.id}' />">Add new Detail</a></p>
+</c:if>
 
 <s:if test="hasActionErrors()">
    <div class="message-section error">
@@ -375,7 +378,7 @@
 	<s:submit value="Save" />
 </s:form>
 
-<div class="patrol-details">
+<div class="patrol-details" id="patrol-detail-list">
 	<h3>Patrol Details</h3>
 	<table>
 		<thead>
