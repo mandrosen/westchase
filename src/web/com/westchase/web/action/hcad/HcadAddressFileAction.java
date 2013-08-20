@@ -3,14 +3,12 @@ package com.westchase.web.action.hcad;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -21,13 +19,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.westchase.file.AddressFileReader;
 import com.westchase.file.beans.AddressRecord;
-import com.westchase.web.action.AbstractWestchaseAction;
 
-public class HcadAddressFileAction extends AbstractWestchaseAction {
-
-	private InputStream excelStream;
-	private String fileName;
-	private int contentLength;
+public class HcadAddressFileAction extends AbstractHcadFileAction {
 	
 	private File addressFile;
 	private File exemptionFile;
@@ -41,7 +34,7 @@ public class HcadAddressFileAction extends AbstractWestchaseAction {
 	}
 	
 	public String generate() {
-		List<AddressRecord> addressRecordList = AddressFileReader.readAddressFile(getAddressFile(), getExemptionFile());
+		List<AddressRecord> addressRecordList = new AddressFileReader().readAddressFile(getAddressFile(), getExemptionFile());
 		ByteArrayOutputStream bos = createWorkbook(addressRecordList);
 		setExcelStream(new ByteArrayInputStream(bos.toByteArray()));
 		setFileName("hcad_addresses_" + new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) + ".xlsx");
@@ -63,50 +56,6 @@ public class HcadAddressFileAction extends AbstractWestchaseAction {
 
 	public void setExemptionFile(File exemptionFile) {
 		this.exemptionFile = exemptionFile;
-	}
-
-	public InputStream getExcelStream() {
-		return excelStream;
-	}
-
-	public void setExcelStream(InputStream excelStream) {
-		this.excelStream = excelStream;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	public int getContentLength() {
-		return contentLength;
-	}
-
-	public void setContentLength(int contentLength) {
-		this.contentLength = contentLength;
-	}
-
-	protected void writeCell(Sheet sheet, CellStyle style, Row row, int col, String value) {
-		try {
-			Cell cell = row.createCell(col);
-			cell.setCellStyle(style);
-			if (StringUtils.isNotBlank(value)) {
-				cell.setCellValue(value);
-			} else {
-				cell.setCellValue(StringUtils.EMPTY);
-			}
-		} catch (Exception e) {
-			log.error("unable to write " + value + " to cell", e);
-		}
-	}
-	protected void writeHeaders(Sheet sheet, CellStyle style, int rowNum, String[] headers) {
-		Row row = sheet.createRow(rowNum);
-		for (int i = 0; i < headers.length; i++) {
-			writeCell(sheet, style, row, i, headers[i]);
-		}
 	}
 	
 	protected ByteArrayOutputStream createWorkbook(List<AddressRecord> addressRecordList) {

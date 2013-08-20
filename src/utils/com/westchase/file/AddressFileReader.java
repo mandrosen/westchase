@@ -13,8 +13,6 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import com.westchase.file.beans.AddressRecord;
 
@@ -22,26 +20,26 @@ import com.westchase.file.beans.AddressRecord;
  * @author marc
  *
  */
-public class AddressFileReader {
-	
-	protected static final Log log = LogFactory.getLog(AddressFileReader.class);
+public class AddressFileReader extends AbstractHcadFileReader {
 	
 	private static final String MASTER_INDICATOR = "1";
 	
-	private static Set<String> getExemptionAccountSet(List<String> exemptionLineList) {
-		if (exemptionLineList == null || exemptionLineList.size() == 1) return null;
+	private Set<String> exempts = new HashSet<String>();
+	
+	private boolean readExemptionFile(List<String> exemptionLineList) {
+		if (exemptionLineList == null || exemptionLineList.size() == 1) return false;
 		
 		// drop the first line because it contains the headers
 		List<String> lineList = exemptionLineList.subList(1, exemptionLineList.size());
 		
-		Set<String> exemptionAccountSet = new HashSet<String>();
 		for (String line : lineList) {
-			exemptionAccountSet.add(StringUtils.substring(line, 0, 13));
+			exempts.add(StringUtils.substring(line, 0, 13));
 		}
-		return exemptionAccountSet;
+		
+		return true;
 	}
 	
-	private static List<AddressRecord> getAddressRecordList(List<String> addressLineList) {
+	private List<AddressRecord> getAddressRecordList(List<String> addressLineList) {
 		if (addressLineList == null || addressLineList.size() == 1) return null;
 		
 		// drop the first line because it contains the headers
@@ -98,11 +96,11 @@ public class AddressFileReader {
 		return addressRecordList;
 	}
 	
-	private static List<AddressRecord> removeDuplicatesAndExempts(List<AddressRecord> addressRecordList, Set<String> exemptAccountSet) {
+	private List<AddressRecord> removeDuplicatesAndExempts(List<AddressRecord> addressRecordList) {
 		if (CollectionUtils.isEmpty(addressRecordList)) return null;
 		Map<String, AddressRecord> addressRecordMap = new HashMap<String, AddressRecord>();
 		for (AddressRecord addressRecord : addressRecordList) {
-			if (exemptAccountSet.contains(addressRecord.getAccountNumber())) continue;
+			if (exempts.contains(addressRecord.getAccountNumber())) continue;
 			String key = getKey(addressRecord);
 			if (!addressRecordMap.containsKey(key)) {
 				addressRecordMap.put(key, addressRecord);
@@ -113,17 +111,17 @@ public class AddressFileReader {
 		return values;
 	}
 	
-	private static String getKey(AddressRecord addressRecord) {
+	private String getKey(AddressRecord addressRecord) {
 		String address = StringUtils.trim(StringUtils.lowerCase(addressRecord.getAddress1()));
 		return address;
 	}
 
-	public static List<AddressRecord> readAddressFile(File addressFile, File exemptionFile) {
+	public List<AddressRecord> readAddressFile(File addressFile, File exemptionFile) {
 		List<AddressRecord> addressRecordList = null;
 		try {
-			Set<String> exemptionAccountSet = getExemptionAccountSet(IOUtils.readLines(new FileInputStream(exemptionFile)));
+			readExemptionFile(IOUtils.readLines(new FileInputStream(exemptionFile)));
 			addressRecordList = getAddressRecordList(IOUtils.readLines(new FileInputStream(addressFile)));
-			addressRecordList = removeDuplicatesAndExempts(addressRecordList, exemptionAccountSet);
+			addressRecordList = removeDuplicatesAndExempts(addressRecordList);
 			Collections.sort(addressRecordList);
 		} catch (Exception e) {
 			log.error("", e);

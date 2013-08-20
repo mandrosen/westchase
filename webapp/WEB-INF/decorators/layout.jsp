@@ -109,6 +109,7 @@
 							<h4><span>HCAD</span></h4>
 							<ul>
 								<li><a href="<s:url action="addressFile/init" namespace="/hcad" />">Address File</a></li>
+								<li><a href="<s:url action="taxFile/init" namespace="/hcad" />">Tax File</a></li>
 							</ul>
 						</div>
 						<% if (request.isUserInRole("admin")) { %>
