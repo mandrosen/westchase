@@ -19,7 +19,6 @@
 	<s:file name="addressFile" label="Address File" />
 	<s:file name="exemptionFile" label="Exemption File" />
 	<s:textfield name="assessmentRate" label="Assessment Rate" />
-	<s:checkbox name="orderByName" label="Order by Name" />
     <s:submit value="Generate" />
 </s:form>
 

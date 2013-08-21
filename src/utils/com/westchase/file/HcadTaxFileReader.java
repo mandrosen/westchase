@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +15,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.westchase.file.beans.TaxRecord;
-import com.westchase.file.beans.TaxRecordByNameComparator;
 
 public class HcadTaxFileReader extends AbstractHcadFileReader {
 	
@@ -161,15 +159,15 @@ public class HcadTaxFileReader extends AbstractHcadFileReader {
 		return true;
 	}
 
-	public List<TaxRecord> readTaxFile(File taxFile, File addressFile, File exemptionFile, double assessmentRate, boolean orderByName) {
+	public List<TaxRecord> readTaxFile(File taxFile, File addressFile, File exemptionFile, double assessmentRate) {
 		List<TaxRecord> taxRecordList = null;
 		try {
 			readAddressFile(IOUtils.readLines(new FileInputStream(addressFile)));
 			readExemptionFile(IOUtils.readLines(new FileInputStream(exemptionFile)));
 			taxRecordList = getTaxRecordList(IOUtils.readLines(new FileInputStream(taxFile)), assessmentRate);
-			if (orderByName) {
-				Collections.sort(taxRecordList, TaxRecordByNameComparator.getInstance());
-			}
+//			if (orderByName) {
+//				Collections.sort(taxRecordList, TaxRecordByNameComparator.getInstance());
+//			}
 		} catch (Exception e) {
 			log.error("", e);
 		}
