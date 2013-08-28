@@ -222,14 +222,16 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 				" concat(o.last_name, ' ', o.first_name) as officer_name, " + 
 				" t1.type_id, " + 
 				" t1.type_name, " + 
-				" t1.officer_type_total, " + 
+				" t1.officer_type_total, " +
+				" t1.officer_detail_ids, " + 
 				" t1.officer_total, " + 
-				" t1.type_total  " + 
+				" t1.type_total " +
 				"from ( " + 
 				"select pa.officer_id, " + 
 				" item.id as type_id, " + 
 				" item.name as type_name, " + 
 				" count(pad.id) officer_type_total, " + 
+	            " group_concat(pad.id) officer_detail_ids, " + 
 				" (select count(pad1.id) " + 
 				" from " + item + " item1 inner join patrol_activity_detail pad1 on pad1." + itemJoinColumn + " = item1.id " + 
 				" inner join patrol_activity pa1 on pad1.patrol_activity_id = pa1.id " + 
@@ -286,6 +288,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 					.addScalar("type_id", Hibernate.INTEGER)
 					.addScalar("type_name", Hibernate.STRING)
 					.addScalar("officer_type_total", Hibernate.LONG)
+					.addScalar("officer_detail_ids", Hibernate.STRING)
 					.addScalar("officer_total", Hibernate.LONG)
 					.addScalar("type_total", Hibernate.LONG);
 			if (hasListValues(officerIdList)) {
@@ -305,10 +308,11 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 					Integer itemId = (Integer) count[2];
 					String itemName = (String) count[3];
 					Long officerItemTotal = (Long) count[4];
-					Long officerTotal = (Long) count[5];
-					Long itemTotal = (Long) count[6];
+					String officerItemIds = (String) count[5];
+					Long officerTotal = (Long) count[6];
+					Long itemTotal = (Long) count[7];
 					if (officerId != null && itemId != null) {
-						counts.put(officerId + ":" + itemId, new OfficerCountDTO(officerId, officerName, itemId, itemName, officerItemTotal, officerTotal, itemTotal));
+						counts.put(officerId + ":" + itemId, new OfficerCountDTO(officerId, officerName, itemId, itemName, officerItemTotal, officerItemIds, officerTotal, itemTotal));
 						
 						// add the total for this item (officer id = 0)
 						if (itemTotal != null && itemTotal.longValue() > 0) {

@@ -17,6 +17,9 @@
 		document.getElementById('typeparam').value=typ;
 		document.getElementById('frm').submit();
 	}
+	function toggleResult(id) {
+		$("#res" + id).toggle();
+	}
 	$(function() {
 		$("#results_table tr:odd").addClass("odd");
 	})
@@ -28,6 +31,26 @@
 		}
 		#results_table td { 
 			white-space: nowrap;
+		}
+		a.officer-item-total {
+			cursor: pointer;
+			text-decoration: underline;
+		}
+		.result-id-block {
+			position: absolute;
+			display: none;
+			background-color: #fff;
+			padding: 5px;
+			border: 2px solid #000;
+		}
+		.result-id-list {
+			margin: 0;
+			padding: 0;
+		}
+		.result-id-item {
+			list-style-type: none;
+			margin: 0;
+			padding: 5px;
 		}
 	</style>
 </head>
@@ -104,17 +127,25 @@
 			</tr>
 		</tfoot>
 		<tbody>
-			<c:forEach items="${results.officerList}" var="officer">
+			<c:forEach items="${results.officerList}" var="officer" varStatus="stat1">
 				<c:set var="officerTotal" value="0" />
 				<tr>
 				    <td><c:out value="${officer.fullNameReverse}" /></td>
-					<c:forEach items="${results.itemList}" var="item">
+					<c:forEach items="${results.itemList}" var="item" varStatus="stat2">
 						<c:set var="officerItemKey" value="${officer.id}:${item.id}" />
 						
 						<c:set var="resValue" value="${results.officerCounts[officerItemKey]}" />
 
-						<td>
-							<c:out value="${resValue.officerItemTotal}" />
+						<td>							
+							<a onclick="toggleResult(${stat1.index} + '-' + ${stat2.index})" class="officer-item-total"><c:out value="${resValue.officerItemTotal}" /></a>
+							<div id="res${stat1.index}-${stat2.index}" class="result-id-block">
+								<ul class="result-id-list">
+									<c:forEach items="${resValue.officerItemIdList}" var="detailId">
+										<li class="result-id-item"><a href="/westchase/patrol/editActivityDetail-<c:out value='${detailId}' />" target="detailedit"><c:out value="${detailId}" /></a></li>
+									</c:forEach>
+								</ul>
+							</div>
+							
 							<c:if test="${resValue.officerItemTotal > 0}">
 								<c:set var="officerTotal" value="${resValue.officerTotal}" />
 								<span class="pct-val" title="% of officer total <c:out value='${resValue.officerItemTotal}' /> / <c:out value='${resValue.officerTotal}' />">(<fmt:formatNumber type="percent" maxFractionDigits="1" value="${resValue.officerItemTotal/resValue.officerTotal}" />)</span>

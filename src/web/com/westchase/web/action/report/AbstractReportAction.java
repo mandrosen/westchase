@@ -55,6 +55,8 @@ public abstract class AbstractReportAction extends AbstractWestchaseAction imple
 	
 	protected final static short FONT_HEIGHT = 11;
 	protected final static String FONT_NAME = "Arial";
+	
+	protected final static int COLUMN_WIDTH_MULT = 50;
 
 	protected final static String FILE_EXTENSION = ".xlsx";
 	
@@ -237,13 +239,20 @@ public abstract class AbstractReportAction extends AbstractWestchaseAction imple
 	protected void writeHeaders(Workbook wb, Sheet sheet, String[] headers) {
 		writeHeaders(wb, sheet, headers, 0);
 	}
-
 	protected void writeHeaders(Workbook wb, Sheet sheet, String[] headers, int moveDown) {
+		writeHeaders(wb, sheet, headers, moveDown, false);
+	}
+
+	protected void writeHeaders(Workbook wb, Sheet sheet, String[] headers, int moveDown, boolean borders) {
 		// Setting Background colour for Cells
 //		WritableCellFormat cellFormat = new WritableCellFormat();
 //		cellFormat.setBackground(Colour.WHITE);
 		CellStyle style = wb.createCellStyle();
 		style.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+		style.setWrapText(true);
+		if (borders) {
+			setBorders(style);
+		}
 
 		// Setting Colour & Font for the Text
 //		WritableFont font = new WritableFont(WritableFont.ARIAL, 11, WritableFont.BOLD);
@@ -435,22 +444,27 @@ public abstract class AbstractReportAction extends AbstractWestchaseAction imple
 	    style.setBorderTop(CellStyle.BORDER_THIN);
 	    style.setTopBorderColor(IndexedColors.BLACK.getIndex());
 	}
-
 	protected void fixColumns(Sheet sheet, int cols) {
+		fixColumns(sheet, cols, true);
+	}
+
+	protected void fixColumns(Sheet sheet, int cols, boolean merge) {
 		for (int i = 0; i < cols; i++) {
 			//		sheet.setColumnWidth(i, 25);
 			sheet.autoSizeColumn(i);
 		}
 	
 
-		// merge the title cell across all columns
-		// assumes title in cell 0!
-		sheet.addMergedRegion(new CellRangeAddress(
-				TITLE_ROW, //first row (0-based)
-				TITLE_ROW, //last row  (0-based)
-				0, //first column (0-based)
-				cols - 1  //last column  (0-based)
-	    ));
+		if (merge) {
+			// merge the title cell across all columns
+			// assumes title in cell 0!
+			sheet.addMergedRegion(new CellRangeAddress(
+					TITLE_ROW, //first row (0-based)
+					TITLE_ROW, //last row  (0-based)
+					0, //first column (0-based)
+					cols - 1  //last column  (0-based)
+		    ));
+		}
 	}
 
 	public boolean isWestchaseOnly() {

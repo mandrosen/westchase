@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,7 +17,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.westchase.persistence.dto.cmu.LeasingAgentDTO;
 import com.westchase.persistence.model.CmuOfficeRetailSvc;
-import com.westchase.persistence.model.CmuQuarter;
 import com.westchase.persistence.model.Property;
 import com.westchase.utils.ejb.ServiceLocator;
 
@@ -62,25 +62,28 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 //			WritableWorkbook wb = Workbook.createWorkbook(bos);
 //			WritableSheet sheet = wb.createSheet("cmu report", 0);
 			Workbook wb = new XSSFWorkbook();
+
+    	    CreationHelper createHelper = wb.getCreationHelper();
+    	    
 //		    FileOutputStream fileOut = new FileOutputStream("workbook.xlsx");
 //		    wb.write(bos);
 //		    fileOut.close();
 		    Sheet sheet = wb.createSheet("cmu report");
 			
-			CmuQuarter quarter = null;
-			if (results != null && !results.isEmpty()) {
-				quarter = results.get(0).getCmuQuarter();
-			}
-			String title = "Westchase District CMU " + name + " Report Action";
-			if (quarter != null) {
-				title += ": Quarter #" + quarter.getQuarterNum() + " " + quarter.getYear();
-			}
-			writeTitle(wb, sheet, title);
+//			CmuQuarter quarter = null;
+//			if (results != null && !results.isEmpty()) {
+//				quarter = results.get(0).getCmuQuarter();
+//			}
+//			String title = "Westchase District CMU " + name + " Report Action";
+//			if (quarter != null) {
+//				title += ": Quarter #" + quarter.getQuarterNum() + " " + quarter.getYear();
+//			}
+//			writeTitle(wb, sheet, title);
 			
 
             String[] headers = { "Map #", "Building Name", "Address", "Leasing Agent", "Contact Company", "Email", "Phone", "Size (sq. ft.)", "Occupancy Rate", "Largest Space", "Occupied Sq. Ft", "Building Manager", "Phone" }; 
             // Write the Header to the excel file
-            writeHeaders(wb, sheet, headers);
+            writeHeaders(wb, sheet, headers, -2, true);
 
 //    		WritableCellFormat cellFormat = new WritableCellFormat();
 //    		cellFormat.setBackground(Colour.WHITE);
@@ -100,11 +103,18 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
     		setBorders(style);
     		
             CellStyle percentStyle = wb.createCellStyle();
-    		style.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+            percentStyle.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
             percentStyle.setAlignment(CellStyle.ALIGN_RIGHT);
             percentStyle.setFont(font);
-            percentStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
+            percentStyle.setDataFormat(createHelper.createDataFormat().getFormat("0%"));
             setBorders(percentStyle);
+            
+    		CellStyle numberCommaStyle = wb.createCellStyle();
+    		numberCommaStyle.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+    		numberCommaStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+    		numberCommaStyle.setFont(font);
+    		numberCommaStyle.setDataFormat(createHelper.createDataFormat().getFormat("0,000"));
+            setBorders(numberCommaStyle);
 
     		CellStyle numberStyle = wb.createCellStyle();
     		numberStyle.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
@@ -118,7 +128,8 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 				int totalOrs = 0;
 				int totalSize = 0;
 				double avgOcc = 0;
-				int rowNum = FIRST_DATA_ROW;
+				int totalOcc = 0;
+				int rowNum = 1;
 				StringBuffer problemProperties = new StringBuffer();
 				for (CmuOfficeRetailSvc result : results) {
 					Property ors = result.getProperty();
@@ -166,19 +177,29 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 							
 							// we are looking for buildingsize, but on the cmu, it is called
 							// sqftforlease (confusing)
+							
 							Double buildingSize = result.getSqFtForLease();
-							writeCell(wb, sheet, row, col++, buildingSize, style);
+							writeCell(wb, sheet, row, col++, buildingSize, numberCommaStyle);
+							if (buildingSize != null) {
+								totalSize += buildingSize.intValue();
+							}
 							
 							Double occupancyRate = result.getOccupancy();
-							writeCell(wb, sheet, row, col++, occupancyRate, style);
+							if (occupancyRate != null) {
+								avgOcc += occupancyRate.doubleValue();
+								writeCell(wb, sheet, row, col++, occupancyRate.doubleValue() / 100, percentStyle);
+							} else {
+								writeCell(wb, sheet, row, col++, 0, percentStyle);
+							}
 							
 							Double largestSpace = result.getLargestSpace();
-							writeCell(wb, sheet, row, col++, largestSpace, style);
+							writeCell(wb, sheet, row, col++, largestSpace, numberCommaStyle);
 							
 							// occupied sq ft - calculated
 							if (buildingSize != null && occupancyRate != null) {
 								double occupiedSqFt = buildingSize.doubleValue() * occupancyRate.doubleValue() / 100;
-								writeCell(wb, sheet, row, col++, new Double(occupiedSqFt), style);
+								totalOcc += occupiedSqFt;
+								writeCell(wb, sheet, row, col++, new Double(occupiedSqFt), numberCommaStyle);
 							} else {
 								writeCell(wb, sheet, row, col++, new Double(0), style);
 							}
@@ -204,20 +225,35 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 	    		boldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
 				
 				if (totalOrs > 0) {
-//		    		WritableCellFormat boldFormat = new WritableCellFormat();
-//		    		boldFormat.setBackground(Colour.WHITE);
-//		    		WritableFont boldFont = new WritableFont(WritableFont.ARIAL, 11);
-//		    		boldFont.setBoldStyle(WritableFont.BOLD);
-//		    		boldFormat.setFont(boldFont);
 		    		CellStyle boldStyle = wb.createCellStyle();
-		    		style.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+		    		boldStyle.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
 		    		boldStyle.setFont(boldFont);
+		    		boldStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		    		boldStyle.setDataFormat(createHelper.createDataFormat().getFormat("0,000"));
+		    		
+		    		CellStyle totalBoldStyle = wb.createCellStyle();
+		    		totalBoldStyle.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+		    		totalBoldStyle.setFont(boldFont);
+		    		totalBoldStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		    		totalBoldStyle.setWrapText(true);
+
+		    		CellStyle totalPctStyle = wb.createCellStyle();
+		    		totalPctStyle.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+		    		totalPctStyle.setFont(boldFont);
+		    		totalPctStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		    		totalPctStyle.setDataFormat(createHelper.createDataFormat().getFormat("0%"));
+		    		
+		    		CellStyle regBoldStyle = wb.createCellStyle();
+		    		regBoldStyle.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+		    		regBoldStyle.setFont(boldFont);
+		    		regBoldStyle.setWrapText(true);
 
 		    		Row row = sheet.createRow(rowNum);
-		    		writeCell(wb, sheet, row, 0, String.valueOf(totalOrs), boldStyle);
-		    		writeCell(wb, sheet, row, 1, "TOTALS", boldStyle);
-		    		writeCell(wb, sheet, row, 7, String.valueOf(totalSize), boldStyle);
-		    		writeCell(wb, sheet, row, 8, formatPercent(new Double(avgOcc / totalOrs)), boldStyle);
+		    		writeCell(wb, sheet, row, 0, totalOrs, totalBoldStyle);
+		    		writeCell(wb, sheet, row, 1, "TOTALS", totalBoldStyle);
+		    		writeCell(wb, sheet, row, 7, totalSize, boldStyle);
+		    		writeCell(wb, sheet, row, 8, new Double(avgOcc / totalOrs / 100), totalPctStyle);
+		    		writeCell(wb, sheet, row, 10, totalOcc, boldStyle);
 				}
 				
 				if (StringUtils.isNotBlank(problemProperties.toString())) {
@@ -269,7 +305,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 
 	@Override
 	protected void fixColumns(Sheet sheet, int cols) {
-		super.fixColumns(sheet, cols);
+		super.fixColumns(sheet, cols, false);
 		// change column width of mapno:
 		sheet.setColumnWidth(0, 256 * 10);
 	}

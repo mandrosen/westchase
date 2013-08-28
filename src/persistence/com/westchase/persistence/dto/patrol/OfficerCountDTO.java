@@ -1,6 +1,8 @@
 package com.westchase.persistence.dto.patrol;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 public class OfficerCountDTO implements Serializable {
 	
@@ -14,6 +16,8 @@ public class OfficerCountDTO implements Serializable {
 	
 	private Long officerItemTotal;
 	
+	private List<String> officerItemIdList;
+	
 	private Long officerTotal;
 	
 	private Long itemTotal;
@@ -23,15 +27,20 @@ public class OfficerCountDTO implements Serializable {
 	}
 
 	public OfficerCountDTO(Integer officerId, String officerName, Integer itemId, String itemName,
-			Long officerItemTotal, Long officerTotal, Long itemTotal) {
+			Long officerItemTotal, String officerItemIds, Long officerTotal, Long itemTotal) {
 		this();
 		setOfficerId(officerId);
 		setOfficerName(officerName);
 		setItemId(itemId);
 		setItemName(itemName);
 		setOfficerItemTotal(officerItemTotal);
+		setOfficerItemIdList(officerItemIds);
 		setOfficerTotal(officerTotal);
 		setItemTotal(itemTotal);
+	}
+	
+	private void setOfficerItemIdList(String officerItemIds) {
+		setOfficerItemIdList(Arrays.asList(officerItemIds.split("\\s*,\\s*")));
 	}
 
 	public OfficerCountDTO(Long itemTotal) {
@@ -93,6 +102,14 @@ public class OfficerCountDTO implements Serializable {
 
 	public void setItemTotal(Long itemTotal) {
 		this.itemTotal = itemTotal;
+	}
+
+	public List<String> getOfficerItemIdList() {
+		return officerItemIdList;
+	}
+
+	public void setOfficerItemIdList(List<String> officerItemIdList) {
+		this.officerItemIdList = officerItemIdList;
 	}
 
 	

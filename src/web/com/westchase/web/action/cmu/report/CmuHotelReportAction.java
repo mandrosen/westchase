@@ -8,6 +8,7 @@ import javax.naming.InitialContext;
 
 import org.apache.commons.lang.WordUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
@@ -17,7 +18,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.westchase.ejb.CmuReportService;
 import com.westchase.persistence.model.CmuHotel;
-import com.westchase.persistence.model.CmuQuarter;
 import com.westchase.persistence.model.Property;
 
 /**
@@ -58,46 +58,53 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 //			WritableWorkbook wb = Workbook.createWorkbook(bos);
 //			WritableSheet sheet = wb.createSheet("cmu report", 0);
 			Workbook wb = new XSSFWorkbook();
+
+    	    CreationHelper createHelper = wb.getCreationHelper();
+    	    
 //		    FileOutputStream fileOut = new FileOutputStream("workbook.xlsx");
 //		    wb.write(bos);
 //		    fileOut.close();
 		    Sheet sheet = wb.createSheet("cmu report");
 			
-			CmuQuarter quarter = null;
-			if (results != null && !results.isEmpty()) {
-				quarter = results.get(0).getCmuQuarter();
-			}
-			String title = "Westchase District CMU Hotels Report Action";
-			if (quarter != null) {
-				title += ": Quarter #" + quarter.getQuarterNum() + " " + quarter.getYear();
-			}
-			writeTitle(wb, sheet, title);
+//			CmuQuarter quarter = null;
+//			if (results != null && !results.isEmpty()) {
+//				quarter = results.get(0).getCmuQuarter();
+//			}
+//			String title = "Westchase District CMU Hotels Report Action";
+//			if (quarter != null) {
+//				title += ": Quarter #" + quarter.getQuarterNum() + " " + quarter.getYear();
+//			}
+//			writeTitle(wb, sheet, title);
 			
 
-            String[] headers = { "Name & Address", "# of Rooms", "Occupancy Rate", "General Manager" }; 
+            String[] headers = { "Map#", "Name & Address", "Units", "Occupancy", "Vacant", "General Manager" }; 
             // Write the Header to the excel file
-            writeHeaders(wb, sheet, headers);
+            writeHeaders(wb, sheet, headers, -2, true);
 
-//    		WritableCellFormat cellFormat = new WritableCellFormat();
-//    		cellFormat.setBackground(Colour.WHITE);
-//    		cellFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
-//    		WritableFont font = new WritableFont(WritableFont.ARIAL, 11);
-//    		cellFormat.setFont(font);
-//    		cellFormat.setWrap(true);
-    		CellStyle style = wb.createCellStyle();
-    		style.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
     		Font font = wb.createFont();
     		font.setFontName(FONT_NAME);
     		font.setFontHeightInPoints(FONT_HEIGHT);
+            
+    		CellStyle style = wb.createCellStyle();
+    		style.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
     		style.setFont(font);
     		style.setWrapText(true);
+    		style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
     		setBorders(style);
+    		
+    		CellStyle centerStyle = wb.createCellStyle();
+    		centerStyle.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+    		centerStyle.setFont(font);
+    		centerStyle.setAlignment(CellStyle.ALIGN_CENTER);
+    		centerStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+    		setBorders(centerStyle);
     		
             CellStyle percentStyle = wb.createCellStyle();
     		style.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
-            percentStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+            percentStyle.setAlignment(CellStyle.ALIGN_CENTER);
             percentStyle.setFont(font);
             percentStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
+            percentStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
             setBorders(percentStyle);
             
 			if (results != null && !results.isEmpty()) {
@@ -105,7 +112,7 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 				int totalRooms = 0;
 //				int totalOccupied = 0;
 				double avgOcc = 0;
-				int rowNum = FIRST_DATA_ROW;
+				int rowNum = 1;
 				for (CmuHotel result : results) {
 					Property hotel = result.getProperty();
 					if (hotel != null && hotel.getId() != null && hotel.getId().intValue() > 0) {
@@ -113,11 +120,12 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 						Row row = sheet.createRow(rowNum);
 						int col = 0;
 						
+						writeCell(wb, sheet, row, col++, hotel.getId(), centerStyle);
+						
 						StringBuffer nameAddr = new StringBuffer();
 						nameAddr.append(hotel.getBuildingName()).append("\n")
 							.append(hotel.getGeoNumber()).append(" ").append(WordUtils.capitalizeFully(hotel.getGeoAddress())).append("\n")
-							.append(WordUtils.capitalizeFully(hotel.getGeoCity())).append(", ").append(hotel.getGeoState()).append(" ").append(hotel.getGeoZipCode()).append("\n")
-							.append("Map #").append(hotel.getId());
+							.append(WordUtils.capitalizeFully(hotel.getGeoCity())).append(", ").append(hotel.getGeoState()).append(" ").append(hotel.getGeoZipCode());
 						writeCell(wb, sheet, row, col++, nameAddr.toString(), style);
 						
 //						String numRoomsStr = "Unknown";
@@ -127,7 +135,7 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 							noUnitsInt = noUnits.intValue();
 							totalRooms += noUnitsInt;
 //							numRoomsStr = noUnits.toString();
-							writeCell(wb, sheet, row, col++, noUnits, style);
+							writeCell(wb, sheet, row, col++, noUnits, centerStyle);
 						} else {
 							writeCell(wb, sheet, row, col++, "", style);
 						}
@@ -139,8 +147,19 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 							avgOcc += occRate.doubleValue();
 							writeCellPct(wb, sheet, row, col++, occRate, percentStyle);
 						} else {
-							writeCell(wb, sheet, row, col++, "", style);
+							writeCell(wb, sheet, row, col++, "", centerStyle);
 						}
+						
+						// vacancy
+						// added 2013-08-27
+						if (noUnits != null && occRate != null) {
+							noUnitsInt = noUnits.intValue();
+							int vacancy = (int) (noUnitsInt - ((occRate.doubleValue() / 100) * noUnitsInt));
+							writeCell(wb, sheet, row, col++, vacancy, centerStyle);
+						} else {
+							writeCell(wb, sheet, row, col++, "", centerStyle);
+						}
+						
 //						writeCell(wb, sheet, row, col++, formatPercent(occRate), style);
 						//`writeCellPct(wb, sheet, row, col++, occRate, style);
 
@@ -165,30 +184,35 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 					}
 				}
 				if (totalHotels > 0) {
-//		    		WritableCellFormat boldFormat = new WritableCellFormat();
-//		    		boldFormat.setBackground(Colour.WHITE);
-//		    		WritableFont boldFont = new WritableFont(WritableFont.ARIAL, 11);
-//		    		boldFont.setBoldStyle(WritableFont.BOLD);
-//		    		boldFormat.setFont(boldFont);
 		    		CellStyle boldStyle = wb.createCellStyle();
-		    		style.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
+		    		boldStyle.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
 		    		Font boldFont = wb.createFont();
 		    		boldFont.setFontName(FONT_NAME);
 		    		boldFont.setFontHeightInPoints(FONT_HEIGHT);
 		    		boldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
 		    		boldStyle.setFont(boldFont);
+		    		boldStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		    		boldStyle.setDataFormat(createHelper.createDataFormat().getFormat("0,000"));
 
 		    		Row row = sheet.createRow(rowNum);
-					writeCell(wb, sheet, row, 0, "TOTAL: " + String.valueOf(totalHotels), boldStyle);
+					writeCell(wb, sheet, row, 1, "TOTAL: " + String.valueOf(totalHotels), boldStyle);
 					
-					writeCell(wb, sheet, row, 1, String.valueOf(totalRooms), boldStyle);
+					writeCell(wb, sheet, row, 2, totalRooms, boldStyle);
 //					writeCell(wb, sheet, row, 3, String.valueOf(totalOccupied), boldStyle);
 					
-					writeCell(wb, sheet, row, 2, formatPercent(new Double(avgOcc / totalHotels)), boldStyle);
+					writeCell(wb, sheet, row, 3, formatPercent(new Double(avgOcc / totalHotels)), boldStyle);
 				}				
 			}
 			
-			fixColumns(sheet, headers.length);
+//			fixColumns(sheet, headers.length);
+			
+			int col = 0;
+			sheet.setColumnWidth(col++, 30 * COLUMN_WIDTH_MULT);
+			sheet.setColumnWidth(col++, 250 * COLUMN_WIDTH_MULT);
+			sheet.setColumnWidth(col++, 70 * COLUMN_WIDTH_MULT);
+			sheet.setColumnWidth(col++, 70 * COLUMN_WIDTH_MULT);
+			sheet.setColumnWidth(col++, 70 * COLUMN_WIDTH_MULT);
+			sheet.setColumnWidth(col++, 250 * COLUMN_WIDTH_MULT);
 		
 //          wb.write();
 //          wb.close();
