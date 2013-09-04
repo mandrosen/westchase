@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class TaxRecord {
 
+	private boolean missingRecord = false;
 	private String accountNumber;
 	private String jurisdiction;
 	private String year;
@@ -17,6 +18,7 @@ public class TaxRecord {
 	private long taxableValue;
 	private BigDecimal assessments;
 	private String certified;
+	private Double totalFromHcad;
 	
 	public TaxRecord() {
 		super();
@@ -24,7 +26,7 @@ public class TaxRecord {
 
 	public TaxRecord(String accountNumber, String jurisdiction, String year, String owner, double acres,
 			String useCode, long landValue, long improvementValue, long totalValue, String wdExemptions,
-			long taxableValue, BigDecimal assessments, String certified) {
+			long taxableValue, BigDecimal assessments, String certified, Double totalFromHcad) {
 		super();
 		setAccountNumber(accountNumber);
 		setJurisdiction(jurisdiction);
@@ -39,6 +41,14 @@ public class TaxRecord {
 		setTaxableValue(taxableValue);
 		setAssessments(assessments);
 		setCertified(certified);
+		setTotalFromHcad(totalFromHcad);
+	}
+	
+	public TaxRecord(String accountNumber, Double totalFromHcad) {
+		super();
+		setAccountNumber(accountNumber);
+		setTotalFromHcad(totalFromHcad);
+		setMissingRecord(true);
 	}
 
 	public String getAccountNumber() {
@@ -143,6 +153,22 @@ public class TaxRecord {
 
 	public void setCertified(String certified) {
 		this.certified = certified;
+	}
+
+	public Double getTotalFromHcad() {
+		return totalFromHcad;
+	}
+
+	public void setTotalFromHcad(Double totalFromHcad) {
+		this.totalFromHcad = totalFromHcad;
+	}
+
+	public boolean isMissingRecord() {
+		return missingRecord;
+	}
+
+	public void setMissingRecord(boolean missingRecord) {
+		this.missingRecord = missingRecord;
 	}
 
 }

@@ -30,6 +30,7 @@ public class HcadTaxFileAction extends AbstractHcadFileAction {
 	private File taxFile;
 	private File addressFile;
 	private File exemptionFile;
+	private File totalFile;
 	
 	private double assessmentRate;
 	
@@ -42,7 +43,7 @@ public class HcadTaxFileAction extends AbstractHcadFileAction {
 	}
 	
 	public String generate() {
-		List<TaxRecord> taxRecordList = new HcadTaxFileReader().readTaxFile(getTaxFile(), getAddressFile(), getExemptionFile(), getAssessmentRate());
+		List<TaxRecord> taxRecordList = new HcadTaxFileReader().readTaxFile(getTaxFile(), getAddressFile(), getExemptionFile(), getAssessmentRate(), getTotalFile());
 		ByteArrayOutputStream bos = createWorkbook(taxRecordList);
 		setExcelStream(new ByteArrayInputStream(bos.toByteArray()));
 		setFileName("hcad_taxes_" + new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) + ".xlsx");
@@ -137,7 +138,7 @@ public class HcadTaxFileAction extends AbstractHcadFileAction {
 		assessmentValueStyle.setFont(font);
 		
 
-        String[] headers = { "Account Number", "Jur", "Year", "Owner", "Acres", "Use Code", "Land Value", "Improvements Value", "Total Value", "WD Exemptions", "Taxable Value", "Assessments @" + formatAssessmentRate() + "/100", "Certified" };
+        String[] headers = { "Account Number", "Jur", "Year", "Owner", "Acres", "Use Code", "Land Value", "Improvements Value", "Total Value", "WD Exemptions", "Taxable Value", "Assessments @" + formatAssessmentRate() + "/100", "Certified", "HCAD Text" };
         writeHeaders(sheet, headerStyle, 0, headers);
         
         int rowCount = 0;
@@ -146,6 +147,7 @@ public class HcadTaxFileAction extends AbstractHcadFileAction {
         long totalImpVal = 0;
         long totalTotalVal = 0;
         long totalTaxVal = 0;
+        double totalHcadTotalVal = 0;
         BigDecimal totalAssessmentVal = new BigDecimal(0);
         
         int rowNum = 1;
@@ -154,33 +156,50 @@ public class HcadTaxFileAction extends AbstractHcadFileAction {
 			
 			Row row = rowNum == 1 ? firstRow : sheet.createRow(rowNum);
 			int col = 0;
-			writeCell(sheet, accountNumberStyle, row, col++, formatAccountNumber(taxRecord.getAccountNumber()));
-			writeCell(sheet, centerStyle, row, col++, taxRecord.getJurisdiction());
-			writeCell(sheet, centerStyle, row, col++, taxRecord.getYear());
-			writeCell(sheet, style, row, col++, taxRecord.getOwner());
-			writeCell(sheet, acresNumberStyle, row, col++, taxRecord.getAcres());
-			writeCell(sheet, centerStyle, row, col++, taxRecord.getUseCode());
-			writeCell(sheet, landValueNumberStyle, row, col++, taxRecord.getLandValue());
-			if (taxRecord.getImprovementValue() == 0) {
-				writeCell(sheet, centerStyle, row, col++, "-");
-			} else {
-				writeCell(sheet, landValueNumberStyle, row, col++, taxRecord.getImprovementValue());
-			}
-			writeCell(sheet, landValueNumberStyle, row, col++, taxRecord.getTotalValue());
-			writeCell(sheet, style, row, col++, taxRecord.getWdExemptions());
-			writeCell(sheet, landValueNumberStyle, row, col++, taxRecord.getTaxableValue());
-			writeCell(sheet, assessmentValueStyle, row, col++, taxRecord.getAssessments().setScale(2, RoundingMode.HALF_UP).toString());
-			writeCell(sheet, centerStyle, row, col++, taxRecord.getCertified());
+			if (!taxRecord.isMissingRecord()) {
+				writeCell(sheet, accountNumberStyle, row, col++, formatAccountNumber(taxRecord.getAccountNumber()));
+				writeCell(sheet, centerStyle, row, col++, taxRecord.getJurisdiction());
+				writeCell(sheet, centerStyle, row, col++, taxRecord.getYear());
+				writeCell(sheet, style, row, col++, taxRecord.getOwner());
+				writeCell(sheet, acresNumberStyle, row, col++, taxRecord.getAcres());
+				writeCell(sheet, centerStyle, row, col++, taxRecord.getUseCode());
+				writeCell(sheet, landValueNumberStyle, row, col++, taxRecord.getLandValue());
+				if (taxRecord.getImprovementValue() == 0) {
+					writeCell(sheet, centerStyle, row, col++, "-");
+				} else {
+					writeCell(sheet, landValueNumberStyle, row, col++, taxRecord.getImprovementValue());
+				}
+				writeCell(sheet, landValueNumberStyle, row, col++, taxRecord.getTotalValue());
+				writeCell(sheet, style, row, col++, taxRecord.getWdExemptions());
+				writeCell(sheet, landValueNumberStyle, row, col++, taxRecord.getTaxableValue());
+				writeCell(sheet, assessmentValueStyle, row, col++, taxRecord.getAssessments().setScale(2, RoundingMode.HALF_UP).toString());
+				writeCell(sheet, centerStyle, row, col++, taxRecord.getCertified());
+	            if (taxRecord.getTotalFromHcad() != null) {
+	            	writeCell(sheet, assessmentValueStyle, row, col++, taxRecord.getTotalFromHcad());
+				}
 
 			
+				totalAcres += taxRecord.getAcres();
+				
+	            totalLandVal += taxRecord.getLandValue();
+	            totalImpVal += taxRecord.getImprovementValue();
+	            totalTotalVal += taxRecord.getTotalValue();
+	            totalTaxVal += taxRecord.getTaxableValue();
+	            totalAssessmentVal.add(taxRecord.getAssessments());
+            
+			} else {
+				writeCell(sheet, accountNumberStyle, row, col++, formatAccountNumber(taxRecord.getAccountNumber()));
+				col += 12;
+	            if (taxRecord.getTotalFromHcad() != null) {
+	            	writeCell(sheet, assessmentValueStyle, row, col++, taxRecord.getTotalFromHcad());
+				}
+			}
+            
+            if (taxRecord.getTotalFromHcad() != null) {
+            	totalHcadTotalVal += taxRecord.getTotalFromHcad().doubleValue();
+            }
+            
 			rowCount++;
-			totalAcres += taxRecord.getAcres();
-			
-            totalLandVal += taxRecord.getLandValue();
-            totalImpVal += taxRecord.getImprovementValue();
-            totalTotalVal += taxRecord.getTotalValue();
-            totalTaxVal += taxRecord.getTaxableValue();
-            totalAssessmentVal.add(taxRecord.getAssessments());
 			
 			rowNum++;
 		}
@@ -203,6 +222,8 @@ public class HcadTaxFileAction extends AbstractHcadFileAction {
 		col++;
 		writeCell(sheet, landValueNumberStyle, totalRow, col++, totalTaxVal);
 		writeCell(sheet, assessmentValueStyle, totalRow, col++, totalAssessmentVal.setScale(2, RoundingMode.HALF_UP).toString());
+		col++;
+		writeCell(sheet, assessmentValueStyle, totalRow, col++, totalHcadTotalVal);
 	}
 	
 	protected ByteArrayOutputStream createWorkbook(List<TaxRecord> taxRecordList) {
@@ -249,5 +270,13 @@ public class HcadTaxFileAction extends AbstractHcadFileAction {
 
 	public void setAssessmentRate(double assessmentRate) {
 		this.assessmentRate = assessmentRate;
+	}
+
+	public File getTotalFile() {
+		return totalFile;
+	}
+
+	public void setTotalFile(File totalFile) {
+		this.totalFile = totalFile;
 	}
 }

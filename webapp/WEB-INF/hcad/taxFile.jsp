@@ -19,6 +19,7 @@
 	<s:file name="addressFile" label="Address File" />
 	<s:file name="exemptionFile" label="Exemption File" />
 	<s:textfield name="assessmentRate" label="Assessment Rate" />
+	<s:file name="totalFile" label="Total File" />
     <s:submit value="Generate" />
 </s:form>
 
