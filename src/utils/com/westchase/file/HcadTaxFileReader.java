@@ -141,12 +141,12 @@ public class HcadTaxFileReader extends AbstractHcadFileReader {
 				
 				taxRecordList.add(new TaxRecord(accountNumber, jur, year, owner, acresDouble, useCode, landValueLong, improvementValueLong, totalValue, wdExemptions, taxableValueLong, assessments, certified, totalFromHcad));
 			}
-			
-			for (Map.Entry<String, Double> entry : totals.entrySet()) {
-				if (entry.getValue() != null) {
-					//taxRecordList.add(new TaxRecord(entry.getKey(), entry.getValue()));
-					log.error("MISSING::::" + entry.getKey() + ", " + entry.getValue());
-				}
+		}
+		
+		for (Map.Entry<String, Double> entry : totals.entrySet()) {
+			if (entry.getValue() != null) {
+				//taxRecordList.add(new TaxRecord(entry.getKey(), entry.getValue()));
+				log.error("MISSING::::" + entry.getKey() + ", " + entry.getValue());
 			}
 		}
 		return taxRecordList;
