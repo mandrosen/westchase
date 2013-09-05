@@ -66,9 +66,9 @@ public class HcadTaxFileReader extends AbstractHcadFileReader {
 		return "\"" + nfGeneral.format(value) + "\"";
 	}
 	
-	private boolean includeRow(String accountNumber) {
-		return !exempts.contains(accountNumber);
-	}
+//	private boolean includeRow(String accountNumber) {
+//		return !exempts.contains(accountNumber);
+//	}
 	
 	private Double getTotalFromHcad(String formattedAccountNumber) {
 		Double total = null;

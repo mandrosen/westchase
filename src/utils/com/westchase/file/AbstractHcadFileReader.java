@@ -5,6 +5,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public abstract class AbstractHcadFileReader {
+	
+	protected static final String JURISDICTION = "0885";
 
 	protected final Log log = LogFactory.getLog(getClass());
 

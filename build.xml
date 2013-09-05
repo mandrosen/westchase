@@ -86,6 +86,10 @@
 
     	<copy todir="${deploy.utils.dir}">
     		<fileset dir="${build.utils.dir}"/>
+    		<fileset dir="${lib.dir}">
+    			<include name="poi*.jar" />
+    			<include name="xbean.jar" />
+    		</fileset>
     	</copy>
     	
     		
@@ -153,12 +157,13 @@
     		</fileset>
     	</copy>
     	
+    	<!--
     	<copy todir="${deploy.jboss.dir}">
     		<fileset dir="${basedir}/db">
     			<include name="mysql-ds.xml" />
     		</fileset>
     	</copy>
-    	
+    	-->
     	
     	<copy todir="${deploy.jboss.dir}">
     		<fileset dir="${deploy.dir}"/>

@@ -110,6 +110,7 @@
 							<ul>
 								<li><a href="<s:url action="addressFile/init" namespace="/hcad" />">Address File</a></li>
 								<li><a href="<s:url action="taxFile/init" namespace="/hcad" />">Tax File</a></li>
+								<li><a href="<s:url action="taxFlatFile/init" namespace="/hcad" />">Tax Flat File</a></li>
 							</ul>
 						</div>
 						<% if (request.isUserInRole("admin")) { %>
