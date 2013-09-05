@@ -186,22 +186,17 @@ public class HcadTaxFileAction extends AbstractHcadFileAction {
 	            totalTotalVal += taxRecord.getTotalValue();
 	            totalTaxVal += taxRecord.getTaxableValue();
 	            totalAssessmentVal.add(taxRecord.getAssessments());
-            
-			} else {
-				writeCell(sheet, accountNumberStyle, row, col++, formatAccountNumber(taxRecord.getAccountNumber()));
-				col += 12;
+
+	            
 	            if (taxRecord.getTotalFromHcad() != null) {
-	            	writeCell(sheet, assessmentValueStyle, row, col++, taxRecord.getTotalFromHcad());
-				}
+	            	totalHcadTotalVal += taxRecord.getTotalFromHcad().doubleValue();
+	            }
+	            
+				rowCount++;
+				
+				rowNum++;
+            
 			}
-            
-            if (taxRecord.getTotalFromHcad() != null) {
-            	totalHcadTotalVal += taxRecord.getTotalFromHcad().doubleValue();
-            }
-            
-			rowCount++;
-			
-			rowNum++;
 		}
 		
 		rowNum += 2;
@@ -224,6 +219,26 @@ public class HcadTaxFileAction extends AbstractHcadFileAction {
 		writeCell(sheet, assessmentValueStyle, totalRow, col++, totalAssessmentVal.setScale(2, RoundingMode.HALF_UP).toString());
 		col++;
 		writeCell(sheet, assessmentValueStyle, totalRow, col++, totalHcadTotalVal);
+		
+		rowNum += 5;
+		
+		Row missing = sheet.createRow(rowNum);
+		writeCell(sheet, style, missing, 0, "Missing:");
+		rowNum++;
+		// now add the missing records
+		for (TaxRecord taxRecord : taxRecordList) {
+			
+			Row row = sheet.createRow(rowNum);
+			col = 0;
+			if (taxRecord.isMissingRecord()) {
+				writeCell(sheet, accountNumberStyle, row, col++, formatAccountNumber(taxRecord.getAccountNumber()));
+				
+	            if (taxRecord.getTotalFromHcad() != null) {
+	            	writeCell(sheet, assessmentValueStyle, row, col++, taxRecord.getTotalFromHcad());
+				}
+	    		rowNum++;
+			}
+		}
 	}
 	
 	protected ByteArrayOutputStream createWorkbook(List<TaxRecord> taxRecordList) {
