@@ -138,7 +138,7 @@ public class HcadTaxFileAction extends AbstractHcadFileAction {
 		assessmentValueStyle.setFont(font);
 		
 
-        String[] headers = { "Account Number", "Jur", "Year", "Owner", "Acres", "Use Code", "Land Value", "Improvements Value", "Total Value", "WD Exemptions", "Taxable Value", "Assessments @" + formatAssessmentRate() + "/100", "Certified", "HCAD Text" };
+        String[] headers = { "Account Number", "Jur", "Year", "Owner", "Acres", "Use Code", "Land Value", "Improvements Value", "Total Value", "WD Exemptions", "Taxable Value", "Assessments @" + formatAssessmentRate() + "/100", "Certified", "HCAD PDF" };
         writeHeaders(sheet, headerStyle, 0, headers);
         
         int rowCount = 0;
