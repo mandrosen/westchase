@@ -18,6 +18,8 @@ import com.westchase.persistence.dto.patrol.OfficerCountDTO;
 import com.westchase.persistence.dto.patrol.OfficerListCountListDTO;
 import com.westchase.persistence.model.IdNamed;
 import com.westchase.persistence.model.Officer;
+import com.westchase.persistence.model.PatrolDetailCategory;
+import com.westchase.persistence.model.PatrolDetailType;
 import com.westchase.utils.DateUtils;
 import com.westchase.utils.ejb.ServiceLocator;
 import com.westchase.web.action.report.AbstractReportAction;
@@ -32,6 +34,12 @@ public class PatrolOfficerDetailReportAction extends AbstractReportAction {
 	
 	private int reportType;
 	
+	private List<Integer> patrolDetailTypeIdList;
+	private List<Integer> patrolDetailCategoryIdList;
+
+	private List<PatrolDetailType> availableDetailTypes;
+	private List<PatrolDetailCategory> availableDetailCategories;
+	
 	private OfficerListCountListDTO results;
 
 	public PatrolOfficerDetailReportAction() {
@@ -42,6 +50,8 @@ public class PatrolOfficerDetailReportAction extends AbstractReportAction {
 		PatrolService patrolServ = ServiceLocator.lookupPatrolService();
 		if (patrolServ != null) {
 			availableOfficers = patrolServ.listOfficers();
+			availableDetailTypes = patrolServ.listDetailTypes();
+			availableDetailCategories = patrolServ.listDetailCategories();
 		}
 	}
 	
@@ -58,9 +68,9 @@ public class PatrolOfficerDetailReportAction extends AbstractReportAction {
 			prepareLists();
 			
 			if (reportType == 1) {
-				results = patrolServ.runOfficerDetailCategoryReport(officerIdList, DateUtils.getDateFromWeb(startDate), DateUtils.getDateFromWeb(endDate));
+				results = patrolServ.runOfficerDetailCategoryReport(officerIdList, DateUtils.getDateFromWeb(startDate), DateUtils.getDateFromWeb(endDate), patrolDetailCategoryIdList);
 			} else {
-				results = patrolServ.runOfficerDetailTypeReport(officerIdList, DateUtils.getDateFromWeb(startDate), DateUtils.getDateFromWeb(endDate));
+				results = patrolServ.runOfficerDetailTypeReport(officerIdList, DateUtils.getDateFromWeb(startDate), DateUtils.getDateFromWeb(endDate), patrolDetailTypeIdList);
 			}
 			if (EXCEL.equals(type)) {
 				return exportToExcel();
@@ -269,6 +279,38 @@ public class PatrolOfficerDetailReportAction extends AbstractReportAction {
 
 	public void setResults(OfficerListCountListDTO results) {
 		this.results = results;
+	}
+
+	public List<PatrolDetailType> getAvailableDetailTypes() {
+		return availableDetailTypes;
+	}
+
+	public void setAvailableDetailTypes(List<PatrolDetailType> availableDetailTypes) {
+		this.availableDetailTypes = availableDetailTypes;
+	}
+
+	public List<PatrolDetailCategory> getAvailableDetailCategories() {
+		return availableDetailCategories;
+	}
+
+	public void setAvailableDetailCategories(List<PatrolDetailCategory> availableDetailCategories) {
+		this.availableDetailCategories = availableDetailCategories;
+	}
+
+	public List<Integer> getPatrolDetailTypeIdList() {
+		return patrolDetailTypeIdList;
+	}
+
+	public void setPatrolDetailTypeIdList(List<Integer> patrolDetailTypeIdList) {
+		this.patrolDetailTypeIdList = patrolDetailTypeIdList;
+	}
+
+	public List<Integer> getPatrolDetailCategoryIdList() {
+		return patrolDetailCategoryIdList;
+	}
+
+	public void setPatrolDetailCategoryIdList(List<Integer> patrolDetailCategoryIdList) {
+		this.patrolDetailCategoryIdList = patrolDetailCategoryIdList;
 	}
 
 }

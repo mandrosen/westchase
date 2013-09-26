@@ -35,8 +35,10 @@ public interface PatrolService {
 	List<PatrolPhone> listPatrolPhones();
 
 	List<PatrolDetailCategory> listDetailCategories();
+	List<PatrolDetailCategory> listDetailCategories(List<Integer> itemIdList);
 
 	List<PatrolDetailType> listDetailTypes();
+	List<PatrolDetailType> listDetailTypes(List<Integer> itemIdList);
 	
 	List<PropertyDTO> listProperties();
 
@@ -91,9 +93,9 @@ public interface PatrolService {
 	// -- Reports -- //
 	List<PatrolActivityReportDTO> runReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList);
 	
-	OfficerListCountListDTO<PatrolDetailType> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate);
+	OfficerListCountListDTO<PatrolDetailType> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolDetailTypeIdList);
 
-	OfficerListCountListDTO<PatrolDetailCategory> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate);
+	OfficerListCountListDTO<PatrolDetailCategory> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolDetailCategoryIdList);
 
 	List<PatrolDetailTypeDayTimeCountDTO> runDetailByDayTimeReport(Date startDate, Date endDate,
 			boolean includeProperty, boolean includeDay, boolean includeTime, List<Integer> patrolDetailTypeIdList, List<Integer> propertyIdList, List<Integer> dayIdList);

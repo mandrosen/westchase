@@ -14,6 +14,7 @@ import com.westchase.persistence.model.PatrolActivity;
 import com.westchase.persistence.model.PatrolActivityDetail;
 import com.westchase.persistence.model.PatrolDetailCategory;
 import com.westchase.persistence.model.PatrolDetailType;
+import com.westchase.persistence.model.Property;
 import com.westchase.utils.DateUtils;
 import com.westchase.utils.ejb.ServiceLocator;
 import com.westchase.web.action.AbstractWestchaseAction;
@@ -34,6 +35,9 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 	private List<Long> selectedCitizens;
 	
 	private List<Date> availableDates;
+	
+	private Integer propertyIdByMapNum;
+	private Integer propertyIdByAddr;
 	
 	private String receivedDate;
 	private String arrivedDate;
@@ -97,6 +101,10 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 
 			if (patrolActivityDetailId != null) {
 				currentPatrolActivityDetail = patrolServ.getActivityDetail(patrolActivityDetailId);
+				if (currentPatrolActivityDetail.getProperty() != null) {
+					setPropertyIdByAddr(currentPatrolActivityDetail.getProperty().getId());
+					setPropertyIdByMapNum(currentPatrolActivityDetail.getProperty().getId());
+				}
 				if (currentPatrolActivityDetail != null) {
 					setPatrolActivityId(currentPatrolActivityDetail.getPatrolActivity().getId());
 					currentCitizens = patrolServ.listActivityDetailCitizens(patrolActivityDetailId);
@@ -125,21 +133,30 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 		String error = null;
 		Long savedId = null;
 		if (currentPatrolActivityDetail != null) {
+			
+			Integer propertyId = getPropertyId();
+			if (propertyId == null) {
+				error = "One of the Property inputs are required.";
+			} else {
+				Property property = new Property(propertyId);
+				currentPatrolActivityDetail.setProperty(property);
+			
 
-        	setDateAndTimeForSave();
-        	String dateTimeError = validateDateTime();
-        	if (StringUtils.isNotBlank(dateTimeError)) {
-        		error = dateTimeError;
-        	} else {
-				try {
-					PatrolService patrolServ = ServiceLocator.lookupPatrolService();
-					if (patrolServ != null) {
-						savedId = patrolServ.saveOrUpdateActivityDetail(currentPatrolActivityDetail, selectedCitizens);
+	        	setDateAndTimeForSave();
+	        	String dateTimeError = validateDateTime();
+	        	if (StringUtils.isNotBlank(dateTimeError)) {
+	        		error = dateTimeError;
+	        	} else {
+					try {
+						PatrolService patrolServ = ServiceLocator.lookupPatrolService();
+						if (patrolServ != null) {
+							savedId = patrolServ.saveOrUpdateActivityDetail(currentPatrolActivityDetail, selectedCitizens);
+						}
+					} catch (Exception e) {
+						log.error("", e);
 					}
-				} catch (Exception e) {
-					log.error("", e);
-				}
-        	}
+	        	}
+			}
 		}
         if (StringUtils.isNotBlank(error)) {
         	addActionError(error);
@@ -156,6 +173,16 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 			setPatrolActivityId(currentPatrolActivityDetail.getPatrolActivity().getId());
 		}
 		return SUCCESS;
+	}
+
+	private Integer getPropertyId() {
+		if (propertyIdByMapNum != null) {
+			return propertyIdByMapNum;
+		}
+		if (propertyIdByAddr != null) {
+			return propertyIdByAddr;
+		}
+		return null;
 	}
 
 	public Long getPatrolActivityDetailId() {
@@ -353,5 +380,21 @@ public class PatrolActivityDetailAction extends AbstractWestchaseAction implemen
 			error.append("Arrived date and time must occur before clear date and time.");
 		}
 		return error.toString();
+	}
+
+	public Integer getPropertyIdByMapNum() {
+		return propertyIdByMapNum;
+	}
+
+	public void setPropertyIdByMapNum(Integer propertyIdByMapNum) {
+		this.propertyIdByMapNum = propertyIdByMapNum;
+	}
+
+	public Integer getPropertyIdByAddr() {
+		return propertyIdByAddr;
+	}
+
+	public void setPropertyIdByAddr(Integer propertyIdByAddr) {
+		this.propertyIdByAddr = propertyIdByAddr;
 	}
 }

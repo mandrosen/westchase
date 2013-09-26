@@ -16,6 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.westchase.ejb.PatrolService;
 import com.westchase.persistence.dto.cms.PropertyDTO;
 import com.westchase.persistence.dto.patrol.PatrolDetailTypeDayTimeCountDTO;
+import com.westchase.persistence.model.PatrolDetailCategory;
 import com.westchase.persistence.model.PatrolDetailType;
 import com.westchase.utils.DateUtils;
 import com.westchase.utils.ejb.ServiceLocator;

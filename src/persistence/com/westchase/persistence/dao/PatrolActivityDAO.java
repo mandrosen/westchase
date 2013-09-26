@@ -34,9 +34,13 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 				query.append(" and ").append(alias).append(".id = :id ");
 				paramMap.put("id", pa.getId());
 			}
-			if (criteria.getActivityDate() != null) {
-				query.append(" and ").append(alias).append(".startDateTime >= :activityDate ");
-				paramMap.put("activityDate", criteria.getActivityDate());
+			if (criteria.getStartDate() != null) {
+				query.append(" and ").append(alias).append(".startDateTime >= :startDate ");
+				paramMap.put("startDate", criteria.getStartDate());
+			}
+			if (criteria.getEndDate() != null) {
+				query.append(" and ").append(alias).append(".startDateTime < :endDate ");
+				paramMap.put("endDate", criteria.getEndDate());
 			}
 			if (pa.getOfficer() != null && pa.getOfficer().getId() != null && pa.getOfficer().getId().intValue() > 0) {
 				query.append(" and ").append(alias).append(".officer.id = :officerId ");
@@ -215,7 +219,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 	
 
 	// TODO: fix parameters (start/end date and officerIdList)
-	private Map<String, OfficerCountDTO> getOfficerCountMap(String item, String itemJoinColumn, List<Integer> officerIdList, Date startDate, Date endDate) {
+	private Map<String, OfficerCountDTO> getOfficerCountMap(String item, String itemJoinColumn, List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> itemIdList) {
 		Map<String, OfficerCountDTO> counts = new HashMap<String, OfficerCountDTO>();
 		String query = "select " + 
 				" t1.officer_id, " + 
@@ -246,6 +250,9 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			if (endDate != null) {
 				query += " and pa1.end_date_time < :endDate ";
 			}
+			if (hasListValues(itemIdList)) {
+				query += " and item1.id in (:itemIdList) ";
+			}
 			
 			query += " ) as officer_total, " + 
 				" (select count(pad2.id) " + 
@@ -262,6 +269,9 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			if (endDate != null) {
 				query += " and pa2.end_date_time < :endDate ";
 			}
+			if (hasListValues(itemIdList)) {
+				query += " and item2.id in (:itemIdList) ";
+			}
 			
 			query += " ) as type_total " + 
 				"from patrol_activity_detail pad " + 
@@ -276,6 +286,9 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		}
 		if (endDate != null) {
 			query += " and pa.end_date_time < :endDate ";
+		}
+		if (hasListValues(itemIdList)) {
+			query += " and item.id in (:itemIdList) ";
 		}
 		query += "group by pa.officer_id, item.id) t1 " + 
 				" inner join officer o on t1.officer_id = o.id";
@@ -299,6 +312,9 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			}
 			if (endDate != null) {
 				q.setParameter("endDate", endDate);
+			}
+			if (hasListValues(itemIdList)) {
+				q.setParameterList("itemIdList", itemIdList);
 			}
 			List<Object[]> countList = q.list();
 			if (countList != null && !countList.isEmpty()) {
@@ -327,12 +343,12 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		return counts;
 	}
 
-	public Map<String, OfficerCountDTO> countDetailTypeByOfficer(List<Integer> officerIdList, Date startDate, Date endDate) {
-		return getOfficerCountMap("patrol_detail_type", "patrol_detail_type_id", officerIdList, startDate, endDate);
+	public Map<String, OfficerCountDTO> countDetailTypeByOfficer(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolDetailTypeIdList) {
+		return getOfficerCountMap("patrol_detail_type", "patrol_detail_type_id", officerIdList, startDate, endDate, patrolDetailTypeIdList);
 	}
 	
-	public Map<String, OfficerCountDTO> countDetailCategoryByOfficer(List<Integer> officerIdList, Date startDate, Date endDate) {
-		return getOfficerCountMap("patrol_detail_category", "patrol_detail_category_id", officerIdList, startDate, endDate);
+	public Map<String, OfficerCountDTO> countDetailCategoryByOfficer(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolDetailCategoryIdList) {
+		return getOfficerCountMap("patrol_detail_category", "patrol_detail_category_id", officerIdList, startDate, endDate, patrolDetailCategoryIdList);
 	}
 
 	public List<Date> listAvailableDatesForDetail(Long patrolActivityId) {

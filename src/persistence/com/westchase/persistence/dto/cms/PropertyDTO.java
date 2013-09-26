@@ -11,6 +11,8 @@ public class PropertyDTO {
 	
 	private String hcad;
 	
+	private String geoNumber;
+	
 	private String geoAddress;
 	
 	public PropertyDTO() {
@@ -22,6 +24,11 @@ public class PropertyDTO {
 		setId(id);
 		setBuildingName(buildingName);
 		setGeoAddress(geoAddress);
+	}
+	
+	public PropertyDTO(Integer id, String buildingName, String hcad, String geoNumber, String geoAddress) {
+		this(id, buildingName, hcad, geoAddress);
+		setGeoNumber(geoNumber);
 	}
 
 	public String getBuildingName() {
@@ -70,11 +77,28 @@ public class PropertyDTO {
 
 	public String getSummaryStringForPublicSafety() {
 		StringBuffer summary = new StringBuffer();
-		summary.append(StringUtils.leftPad(String.valueOf(id), 3, '0')).append(" - ").append(buildingName);
+		summary.append(StringUtils.leftPad(String.valueOf(id), 4, '0')).append(" - ").append(buildingName);
 		return summary.toString();
 	}
 
 	public void setSummaryStringForPublicSafety(String summaryString) {
+	}
+
+	public String getSummaryStringForPublicSafetyByAddr() {
+		StringBuffer summary = new StringBuffer();
+		summary.append(geoNumber).append(" ").append(geoAddress).append(" - ").append(StringUtils.leftPad(String.valueOf(id), 4, '0'));
+		return summary.toString();
+	}
+
+	public void setSummaryStringForPublicSafetyByAddr(String summaryString) {
+	}
+
+	public String getGeoNumber() {
+		return geoNumber;
+	}
+
+	public void setGeoNumber(String geoNumber) {
+		this.geoNumber = geoNumber;
 	}
 
 }

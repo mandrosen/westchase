@@ -348,7 +348,14 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
         criteria.setOrderDir(getOrderDir());
         if (StringUtils.isNotBlank(startDate)) {
         	try {
-        		criteria.setActivityDate(new SimpleDateFormat("yyyy-MM-dd").parse(startDate));
+        		criteria.setStartDate(new SimpleDateFormat("yyyy-MM-dd").parse(startDate));
+        	} catch (Exception e) {
+        		log.error("", e);
+        	}
+        }
+        if (StringUtils.isNotBlank(endDate)) {
+        	try {
+        		criteria.setEndDate(new SimpleDateFormat("yyyy-MM-dd").parse(endDate));
         	} catch (Exception e) {
         		log.error("", e);
         	}
@@ -382,7 +389,11 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 
 	        		List<PatrolActivity> possibleConflicts = patrolServ.listOtherByOfficerAndDay(currentPatrolActivity);
 	        		if (possibleConflicts != null && !possibleConflicts.isEmpty()) {
-	        			getRequest().getSession(true).setAttribute("WCActionWarning", "This record overlaps with another patrol.  Check for conflicts.");
+	        			StringBuffer conflictStr = new StringBuffer();
+	        			for (PatrolActivity pa : possibleConflicts) {
+	        				conflictStr.append("<a href='/westchase/patrol/editActivity-").append(pa.getId()).append(".action' target='_pa").append(pa.getId()).append("'>").append(pa.getId()).append("</a>,");
+	        			}
+	        			getRequest().getSession(true).setAttribute("WCActionWarning", "This record overlaps with another patrol.  Conflicts: " + conflictStr);
 	        		}
 
 	        		setPatrolActivityId(patrolServ.saveOrUpdateActivity(currentPatrolActivity));

@@ -38,9 +38,15 @@
 				</td>
 			</tr>
 			<tr>
-				<th>Date</th>
+				<th>Start Date</th>
 				<td>
-					<sx:datetimepicker name="startDate" displayFormat="MM/dd/yyyy"/>
+					<sx:datetimepicker name="startDate" displayFormat="MMddyyyy"/>
+				</td>
+			</tr>
+			<tr>
+				<th>End Date</th>
+				<td>
+					<sx:datetimepicker name="endDate" displayFormat="MMddyyyy"/>
 				</td>
 			</tr>
 			

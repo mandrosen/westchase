@@ -7,7 +7,8 @@ import com.westchase.persistence.model.PatrolActivity;
 
 public class PatrolActivitySearchCriteria extends SearchCriteria<PatrolActivity> {
 	
-	private Date activityDate;
+	private Date startDate;
+	private Date endDate;
 	
 	private List<Integer> patrolTypeIdList;
 
@@ -15,12 +16,20 @@ public class PatrolActivitySearchCriteria extends SearchCriteria<PatrolActivity>
 		super();
 	}
 
-	public Date getActivityDate() {
-		return activityDate;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setActivityDate(Date activityDate) {
-		this.activityDate = activityDate;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	public List<Integer> getPatrolTypeIdList() {

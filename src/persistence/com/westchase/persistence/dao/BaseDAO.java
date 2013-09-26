@@ -173,7 +173,7 @@ public class BaseDAO<E> implements GenericDAO<E> {
 		}
 	}
 	
-	protected boolean hasListValues(List<Integer> listValues) {
+	public static boolean hasListValues(List<Integer> listValues) {
 		boolean hasListValues = false;
 		if (listValues != null && !listValues.isEmpty()) {
 			for (Integer listValue : listValues) {

@@ -123,9 +123,12 @@
 		    
 		<s:textfield label="Incident ID" name="currentPatrolActivityDetail.incidentId" required="false" />
 		
-		<s:select label="Property" list="availableProperties" name="currentPatrolActivityDetail.property.id" 
+		<s:select label="Property" list="availableProperties" name="propertyIdByMapNum" 
    			headerKey="" headerValue="--" 
-   			listValue="summaryStringForPublicSafety" listKey="id" emptyOption="false" required="true" />
+   			listValue="summaryStringForPublicSafety" listKey="id" emptyOption="false" />
+		<s:select label="Property" list="availableProperties" name="propertyIdByAddr" 
+   			headerKey="" headerValue="--" 
+   			listValue="summaryStringForPublicSafetyByAddr" listKey="id" emptyOption="false" />
 		    
 		<s:textfield label="Location Description" name="currentPatrolActivityDetail.locationDesc" />
 		

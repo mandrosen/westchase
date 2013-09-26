@@ -45,7 +45,7 @@
 </s:if>
 <c:if test="${not empty WCActionWarning}">
    <div class="message-section actionmessages warnings">
-      <c:out value="${WCActionWarning}" />
+      <c:out value="${WCActionWarning}" escapeXml="false" />
       <c:remove var="WCActionWarning" />
    </div>
 </c:if>

@@ -77,12 +77,12 @@
     </tr>
 </thead>
 <tbody>
-    <s:iterator value="results" status="status">
+    <s:iterator value="results" status="status" var="result">
         <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>">
  
  			<td><s:checkbox name="includedContacts" fieldValue="%{id}" /></td>
 		    <td><s:property value="categoryCode"/></td>
-		    <td><s:property value="lastName"/></td>
+		    <td><a href="/westchase/phonebook/edit-${result.id}.action" target="_pb${result.id}"><s:property value="lastName"/></a></td>
 		    <td><s:property value="firstName"/></td>
 		    <td><s:property value="salutation"/></td>
 		    <td><s:property value="title"/></td>

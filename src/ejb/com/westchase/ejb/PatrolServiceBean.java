@@ -15,6 +15,7 @@ import org.jboss.ejb3.annotation.SecurityDomain;
 import com.westchase.persistence.criteria.CitizenSearchCriteria;
 import com.westchase.persistence.criteria.OfficerSearchCriteria;
 import com.westchase.persistence.criteria.PatrolActivitySearchCriteria;
+import com.westchase.persistence.dao.BaseDAO;
 import com.westchase.persistence.dao.CitizenDAO;
 import com.westchase.persistence.dao.OfficerDAO;
 import com.westchase.persistence.dao.PatrolActivityDAO;
@@ -87,9 +88,26 @@ public class PatrolServiceBean implements PatrolService {
 	}
 
 	@Override
+	public List<PatrolDetailCategory> listDetailCategories(List<Integer> itemIdList) {
+		if (!BaseDAO.hasListValues(itemIdList)) {
+			return listDetailCategories(itemIdList);
+		}
+		final PatrolDetailCategoryDAO dao = new PatrolDetailCategoryDAO();
+		return dao.findAll(itemIdList);
+	}
+
+	@Override
 	public List<PatrolDetailType> listDetailTypes() {
 		final PatrolDetailTypeDAO dao = new PatrolDetailTypeDAO();
 		return dao.findAll(Order.asc("name"));
+	}
+	@Override
+	public List<PatrolDetailType> listDetailTypes(List<Integer> itemIdList) {
+		if (!BaseDAO.hasListValues(itemIdList)) {
+			return listDetailTypes(itemIdList);
+		}
+		final PatrolDetailTypeDAO dao = new PatrolDetailTypeDAO();
+		return dao.findAll(itemIdList);
 	}
 
 	@Override
@@ -303,29 +321,29 @@ public class PatrolServiceBean implements PatrolService {
 	}
 
 	@Override
-	public OfficerListCountListDTO<PatrolDetailType> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate) {
+	public OfficerListCountListDTO<PatrolDetailType> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolDetailTypeIdList) {
 		OfficerListCountListDTO<PatrolDetailType> dto = 
 				new OfficerListCountListDTO<PatrolDetailType>();
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
 		
 		dto.setOfficerList(listOfficers(officerIdList));
-		dto.setItemList(listDetailTypes());
+		dto.setItemList(listDetailTypes(patrolDetailTypeIdList));
 		
-		dto.setOfficerCounts(dao.countDetailTypeByOfficer(officerIdList, startDate, endDate));
+		dto.setOfficerCounts(dao.countDetailTypeByOfficer(officerIdList, startDate, endDate, patrolDetailTypeIdList));
 		
 		return dto;
 	}
 
 	@Override
-	public OfficerListCountListDTO<PatrolDetailCategory> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate) {
+	public OfficerListCountListDTO<PatrolDetailCategory> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolDetailCategoryIdList) {
 		OfficerListCountListDTO<PatrolDetailCategory> dto = 
 				new OfficerListCountListDTO<PatrolDetailCategory>();
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
 		
 		dto.setOfficerList(listOfficers(officerIdList));
-		dto.setItemList(listDetailCategories());
+		dto.setItemList(listDetailCategories(patrolDetailCategoryIdList));
 		
-		dto.setOfficerCounts(dao.countDetailCategoryByOfficer(officerIdList, startDate, endDate));
+		dto.setOfficerCounts(dao.countDetailCategoryByOfficer(officerIdList, startDate, endDate, patrolDetailCategoryIdList));
 		
 		return dto;
 	}

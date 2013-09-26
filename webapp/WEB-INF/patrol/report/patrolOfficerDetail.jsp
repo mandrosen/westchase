@@ -71,15 +71,15 @@
 				</td>
 			</tr>
 			<tr>
-				<th>Start Date <span class="format">(mm/dd/yyyy)</span></th>
+				<th>Start Date <span class="format">(mmddyyyy)</span></th>
 				<td>
-					<sx:datetimepicker name="startDate" displayFormat="MM/dd/yyyy"/>
+					<sx:datetimepicker name="startDate" displayFormat="MMddyyyy"/>
 				</td>
 			</tr>
 			<tr>
-				<th>End Date <span class="format">(mm/dd/yyyy)</span></th>
+				<th>End Date <span class="format">(mmddyyyy)</span></th>
 				<td>
-					<sx:datetimepicker name="endDate" displayFormat="MM/dd/yyyy"/>
+					<sx:datetimepicker name="endDate" displayFormat="MMddyyyy"/>
 				</td>
 			</tr>
 			
@@ -90,6 +90,22 @@
 					<s:radio name="reportType" list="#{'0':'Call Codes','1':'Category (CFS...)'}" value="%{reportType}" />
 		    	</td>
     		</tr>
+			<tr>
+				<th>Call Code</th>
+				<td>
+					<s:select name="patrolDetailTypeIdList" headerKey="-1" headerValue="--" 
+					    list="availableDetailTypes" listValue="name" listKey="id" emptyOption="false" 
+					    multiple="true" size="10" />
+				</td>
+			</tr>
+			<tr>
+				<th>Category</th>
+				<td>
+					<s:select name="patrolDetailCategoryIdList" headerKey="-1" headerValue="--" 
+					    list="availableDetailCategories" listValue="name" listKey="id" emptyOption="false" 
+					    multiple="true" size="10" />
+				</td>
+			</tr>
 			
 		    <tr><td colspan="2"><s:submit value="Run" onclick="$('#typeparam').val('')" /></td></tr>
 		    <tr><td colspan="2"><input type="button" value="Export to Excel" onclick="exportreport('excel')" /></td></tr>

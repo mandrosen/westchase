@@ -384,7 +384,7 @@ public class PropertyDAO extends BaseDAO<Property> {
 
 	public List<PropertyDTO> listAllForPatrolDetail() {
 		List<PropertyDTO> properties = null;
-		String query = "select new com.westchase.persistence.dto.cms.PropertyDTO(p.id, p.buildingName, p.hcad, p.geoAddress) from Property p order by p.buildingName";
+		String query = "select new com.westchase.persistence.dto.cms.PropertyDTO(p.id, p.buildingName, p.hcad, p.geoNumber, p.geoAddress) from Property p order by p.buildingName";
 		try {
 			properties = getSession().createQuery(query).list();
 		} catch (Exception e) {

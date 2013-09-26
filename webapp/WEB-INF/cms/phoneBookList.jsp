@@ -73,7 +73,7 @@
 	   		<option value="true">true</option>
 	   		<option value="true">false</option>
 	   	</select></th>
-	   	<th><s:textfield name="searchObject.email" size="10"/></th>
+	   	<th><s:textfield name="searchObject.email" size="50"/></th>
 	   	<th><s:textfield name="searchObject.altEmail" size="10"/></th>
 	   	<th><s:textfield name="searchObject.wkPhone" size="10"/></th>
 	   	<th><s:textfield name="searchObject.faxPhone" size="10"/></th>

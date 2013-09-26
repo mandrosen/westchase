@@ -151,7 +151,7 @@ public class ContactsByCategoryCodeReportAction extends AbstractReportAction {
 
 			writeTitle(wb, sheet, "Contacts by Category Code Report");
 
-			String[] headers = { "Category", "Salutation", "First Name", "Last Name", "Title", "Job Title",
+			String[] headers = { "Category", "ID", "Salutation", "First Name", "Last Name", "Title", "Job Title",
 					"Company", "Naics", "No Employees", "St Number", "St Address", "Room No", "City", "State", "ZipCode", "Email", "Mobile Phone", "Work Phone" };
 			// Write the Header to the excel file
 			writeHeaders(wb, sheet, headers);
@@ -171,24 +171,26 @@ public class ContactsByCategoryCodeReportAction extends AbstractReportAction {
 				int rowNum = FIRST_DATA_ROW;
 				for (ContactDTO result : results) {
 					Row row = sheet.createRow(rowNum);
-					writeCell(wb, sheet, row, 0, result.getCategoryCode(), style);
-					writeCell(wb, sheet, row, 1, result.getSalutation(), style);
-					writeCell(wb, sheet, row, 2, result.getFirstName(), style);
-					writeCell(wb, sheet, row, 3, result.getLastName(), style);
-					writeCell(wb, sheet, row, 4, result.getTitle(), style);
-					writeCell(wb, sheet, row, 5, result.getJobTitle(), style);
-					writeCell(wb, sheet, row, 6, result.getCompany(), style);
-					writeCell(wb, sheet, row, 7, result.getNaics(), style);
-					writeCell(wb, sheet, row, 8, result.getNoEmployees(), style);
-					writeCell(wb, sheet, row, 9, result.getStNumber(), style);
-					writeCell(wb, sheet, row, 10, result.getStAddress(), style);
-					writeCell(wb, sheet, row, 11, result.getRoomNo(), style);
-					writeCell(wb, sheet, row, 12, result.getCity(), style);
-					writeCell(wb, sheet, row, 13, result.getState(), style);
-					writeCell(wb, sheet, row, 14, result.getZipCode(), style);
-					writeCell(wb, sheet, row, 15, result.getEmail(), style);
-					writeCell(wb, sheet, row, 16, result.getMobilePhone(), style);
-					writeCell(wb, sheet, row, 17, result.getWkPhone(), style);
+					int col = 0;
+					writeCell(wb, sheet, row, col++, result.getCategoryCode(), style);
+					writeCell(wb, sheet, row, col++, result.getId(), style);
+					writeCell(wb, sheet, row, col++, result.getSalutation(), style);
+					writeCell(wb, sheet, row, col++, result.getFirstName(), style);
+					writeCell(wb, sheet, row, col++, result.getLastName(), style);
+					writeCell(wb, sheet, row, col++, result.getTitle(), style);
+					writeCell(wb, sheet, row, col++, result.getJobTitle(), style);
+					writeCell(wb, sheet, row, col++, result.getCompany(), style);
+					writeCell(wb, sheet, row, col++, result.getNaics(), style);
+					writeCell(wb, sheet, row, col++, result.getNoEmployees(), style);
+					writeCell(wb, sheet, row, col++, result.getStNumber(), style);
+					writeCell(wb, sheet, row, col++, result.getStAddress(), style);
+					writeCell(wb, sheet, row, col++, result.getRoomNo(), style);
+					writeCell(wb, sheet, row, col++, result.getCity(), style);
+					writeCell(wb, sheet, row, col++, result.getState(), style);
+					writeCell(wb, sheet, row, col++, result.getZipCode(), style);
+					writeCell(wb, sheet, row, col++, result.getEmail(), style);
+					writeCell(wb, sheet, row, col++, result.getMobilePhone(), style);
+					writeCell(wb, sheet, row, col++, result.getWkPhone(), style);
 					rowNum++;
 				}
 			}

@@ -92,15 +92,15 @@
 				</td>
 			</tr>
 			<tr>
-				<th>Start Date <span class="format">(mm/dd/yyyy)</span></th>
+				<th>Start Date <span class="format">(mmddyyyy)</span></th>
 				<td>
-					<sx:datetimepicker name="startDate" displayFormat="MM/dd/yyyy"/>
+					<sx:datetimepicker name="startDate" displayFormat="MMddyyyy"/>
 				</td>
 			</tr>
 			<tr>
-				<th>End Date <span class="format">(mm/dd/yyyy)</span></th>
+				<th>End Date <span class="format">(mmddyyyy)</span></th>
 				<td>
-					<sx:datetimepicker name="endDate" displayFormat="MM/dd/yyyy"/>
+					<sx:datetimepicker name="endDate" displayFormat="MMddyyyy"/>
 				</td>
 			</tr>
 			<tr>
