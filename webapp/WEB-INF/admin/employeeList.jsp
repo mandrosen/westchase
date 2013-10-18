@@ -6,9 +6,8 @@
 <body>
 <h1>Employee List</h1>
 
-<%--
+
 <p><a href="<s:url action="edit-" includeParams="none"/>">Create new Employee</a></p>
---%>
 
 <table class="results">
 <thead>

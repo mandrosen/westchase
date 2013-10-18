@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.westchase.persistence.model.Employee;
+import com.westchase.persistence.model.Role;
 import com.westchase.persistence.model.Wcuser;
 
 /**
@@ -19,5 +20,9 @@ public interface EmployeeService {
 	
 	Employee get(Integer id);
 	
-	void saveOrUpdate(Integer employeeId, Employee emp, Wcuser user) throws Exception;
+	String saveOrUpdate(Integer employeeId, Employee emp, Wcuser user, List<Integer> roleIdList) throws Exception;
+
+	List<Role> listRoles();
+	
+	List<Integer> listRoleIdsForUser(Integer id);
 }

@@ -42,10 +42,6 @@
             <result>/WEB-INF/admin/employeeEdit.jsp</result>
             <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
         </action>
-        <action name="create" class="com.westchase.web.action.admin.EmployeeAction">
-            <result>/WEB-INF/admin/employeeEdit.jsp</result>
-            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
-        </action>
         <action name="save" class="com.westchase.web.action.admin.EmployeeAction" method="save">
             <result name="input">/WEB-INF/admin/employeeEdit.jsp</result>
             <result type="redirect">edit-${currentEmployee.id}.action</result>

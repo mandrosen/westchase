@@ -1,5 +1,7 @@
 package com.westchase.persistence.dao;
 
+import java.util.List;
+
 import com.westchase.persistence.model.Wcuser;
 
 /**
@@ -17,6 +19,17 @@ public class WcuserDAO extends BaseDAO<Wcuser> {
 			log.error("", e);
 		}
 		return pw;
+	}
+	
+	public List<Wcuser> listByUsername(String username) {
+		List<Wcuser> userList = null;
+		String query = "select u from Wcuser u where u.username = :username";
+		try {
+			userList = getSession().createQuery(query).setParameter("username", username).list();
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return userList;
 	}
 
 }

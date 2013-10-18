@@ -1,13 +1,16 @@
 package com.westchase.web.action.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.naming.InitialContext;
+import org.apache.commons.lang.StringUtils;
 
 import com.westchase.ejb.EmployeeService;
 import com.westchase.persistence.model.Employee;
+import com.westchase.persistence.model.Role;
 import com.westchase.persistence.model.Wcuser;
+import com.westchase.utils.ejb.ServiceLocator;
 
 /**
  * @author marc
@@ -22,18 +25,16 @@ public class EmployeeAction extends AbstractAdminAction {
 	private Wcuser currentUser;
 	private String confirmPassword;
 	
+	private List<Role> roleList;
+	private List<Integer> roleIdList;
+	
 	private EmployeeService empServ;
 
 	public String execute() throws Exception {
         return super.execute();
     }
 	public String list() {
-        try {
-        	InitialContext ctx = new InitialContext();
-        	empServ = (EmployeeService) ctx.lookup("westchase/EmployeeServiceBean/local");
-        } catch (Exception e) {
-            log.error(e.getMessage()); 
-        }        	
+        empServ = ServiceLocator.lookupEmployeeService();
     	
         if (empServ != null) {
         	employees = empServ.findAll();
@@ -42,34 +43,66 @@ public class EmployeeAction extends AbstractAdminAction {
 		return SUCCESS;
 	}
 	
-	   public String save() throws Exception {
-	        if (getCurrentEmployee() != null && getCurrentUser() != null) {
+	private void setRoleIdList() {        	
+        empServ = ServiceLocator.lookupEmployeeService();
+        
+		if (currentUser != null && currentUser.getId() != null) {
+			roleIdList = empServ.listRoleIdsForUser(currentUser.getId());
+		}
+		if (roleIdList == null) {
+			roleIdList = new ArrayList<Integer>();
+		}
+	}
+	
+	private String validateUserEmployee() {
+		StringBuffer error = new StringBuffer();
+    	Wcuser user = getCurrentUser();
+    	Employee employee = getCurrentEmployee();
+    	if (StringUtils.isBlank(user.getUsername())) {
+    		error.append("Username is required.  ");
+    	}
+    	if (StringUtils.isBlank(employee.getFirstName())) {
+    		error.append("First name is required.  ");
+    	}
+    	if (StringUtils.isBlank(employee.getLastName())) {
+    		error.append("Last name is required.  ");
+    	}
+    	if (StringUtils.isBlank(employee.getEmail())) {
+    		error.append("Email is required.  ");
+    	}
+    	if (user.getPassword() != null && !user.getPassword().equals(getConfirmPassword())) {
+    		error.append("Password and Confirm Password do not match.  ");
+    	}
+    	if (!user.isDisabled() && (roleIdList == null || roleIdList.isEmpty())) {
+    		error.append("You must select at least one Role for active accounts.  ");
+    	}
+    	return error.toString();
+	}
+	
+   public String save() throws Exception {
+        if (getCurrentEmployee() != null && getCurrentUser() != null) {
+        	
+        	String error = validateUserEmployee();
+        	if (StringUtils.isNotBlank(error)) {
+        		addActionError(error);
+    			return INPUT;
+        	}
+        	
+	        empServ = ServiceLocator.lookupEmployeeService();
 
-	        	Wcuser user = getCurrentUser();
-	        	if (user.getPassword() != null && !user.getPassword().equals(getConfirmPassword())) {
-	        		addActionError("Password and Confirm Password do not match");
-	    			return INPUT;
-	        	}
-	        	
-	        	if (user.getId() == null || user.getId().intValue() <= 0) {
-	        		addActionError("Password is required for new accounts");
-	    			return INPUT;
-	        	}
-	        	
-	            try {
-	            	InitialContext ctx = new InitialContext();
-	                empServ = (EmployeeService) ctx.lookup("westchase/EmployeeServiceBean/local");
-	            } catch (Exception e) {
-	                log.error(e.getMessage()); 
-	            }        	
-
-	            Employee emp = getEmployee();
-	            if (emp != null && emp.getId() != null) {
-	            	empServ.saveOrUpdate(emp.getId(), getCurrentEmployee(), getCurrentUser());
-	            }
-	        }
-	        return SUCCESS;
-	    }
+            Employee emp = getEmployee();
+            if (emp != null && emp.getId() != null) {
+            	error = empServ.saveOrUpdate(emp.getId(), getCurrentEmployee(), getCurrentUser(), roleIdList);
+            	if (StringUtils.isNotBlank(error)) {
+            		addActionError(error);
+        			return INPUT;
+            	}
+            	
+            	getRequest().getSession(true).setAttribute("WCActionMessage", "Saved employee #" + getCurrentEmployee().getId());
+            }
+        }
+        return SUCCESS;
+    }
 
 	public List<Employee> getEmployees() {
 		return employees;
@@ -89,14 +122,11 @@ public class EmployeeAction extends AbstractAdminAction {
 
 	@Override
 	public void prepare() throws Exception {
+        empServ = ServiceLocator.lookupEmployeeService();
+		
+        roleList = empServ.listRoles();
+        
 		if (getEmployeeId() != null)  {
-	        try {
-	        	InitialContext ctx = new InitialContext();
-	        	empServ = (EmployeeService) ctx.lookup("westchase/EmployeeServiceBean/local");
-	        } catch (Exception e) {
-	            log.error(e.getMessage()); 
-	        }
-			
 	        Employee emp = empServ.get(getEmployeeId());
 	        setCurrentEmployee(emp);
 	        if (emp != null) {
@@ -105,11 +135,15 @@ public class EmployeeAction extends AbstractAdminAction {
 	        		Wcuser user = users.iterator().next();
 	        		if (user != null) {
 	        			user.setPassword(null);
+		        		setCurrentUser(user);
 	        		}
-	        		setCurrentUser(user);
 	        	}
 	        }
+		} else {
+			setCurrentEmployee(new Employee());
+			setCurrentUser(new Wcuser());
 		}
+		setRoleIdList();
 	}
 
 	public Integer getEmployeeId() {
@@ -130,6 +164,18 @@ public class EmployeeAction extends AbstractAdminAction {
 	}
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
+	}
+	public List<Role> getRoleList() {
+		return roleList;
+	}
+	public void setRoleList(List<Role> roleList) {
+		this.roleList = roleList;
+	}
+	public List<Integer> getRoleIdList() {
+		return roleIdList;
+	}
+	public void setRoleIdList(List<Integer> roleIdList) {
+		this.roleIdList = roleIdList;
 	}
 	
 }

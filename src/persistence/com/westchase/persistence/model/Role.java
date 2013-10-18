@@ -29,15 +29,22 @@ public class Role implements java.io.Serializable {
 	private Set<UserRole> userRoles = new HashSet<UserRole>(0);
 
 	public Role() {
+		super();
+	}
+	
+	public Role(Integer id) {
+		this();
+		setId(id);
 	}
 
 	public Role(String name) {
-		this.name = name;
+		this();
+		setName(name);
 	}
 
 	public Role(String name, Set<UserRole> userRoles) {
-		this.name = name;
-		this.userRoles = userRoles;
+		this(name);
+		setUserRoles(userRoles);
 	}
 
 	@Id
