@@ -59,7 +59,12 @@
     <s:password label="Confirm Password" name="confirmPassword" />
     <s:checkbox label="Disabled" name="currentUser.disabled" />
     
-    <s:checkboxlist label="Roles" list="roleList" name="roleIdList" listValue="name" listKey="id" required="true"  />  
+    <tr>
+    	<td class="tdLabel"><label class="label">Roles:</label></td>
+    	<td>
+    		<s:checkboxlist label="Roles" list="roleList" name="roleIdList" listValue="name" listKey="id" required="true" theme="simple"  />
+    	</td>
+    </tr>
     
     <s:submit value="Save" />
 </s:form>

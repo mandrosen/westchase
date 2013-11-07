@@ -112,6 +112,7 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 			int totalAptInitCount = 0;
 			int totalSpecialOpsCount = 0;
 			int totalEventCount = 0;
+			int totalFootPatrolCount = 0;
 			int totalOtherCount = 0;
 			
 			int totalCrimeArrestsFelony = 0;
@@ -168,6 +169,7 @@ public class PatrolActivityReportAction extends AbstractReportAction {
             		"Apt Initiatives",
             		"Special Ops",
             		"Events",
+            		"Foot Patrol",
             		"Others",
             		
             		HEADER_MARKER + "CRIME ARREST ACTIVITY",
@@ -293,6 +295,7 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getAptInitCount(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getSpecialOpsCount(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getEventCount(), style);
+					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getFootPatrolCount(), style);
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, result.getOtherCount(), style);
 					
 					writeCell(wb, sheet, sheet.getRow(startRowNum + rowNum++), col, "", headerStyle);
@@ -369,6 +372,7 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 					totalAptInitCount += result.getAptInitCount();
 					totalSpecialOpsCount += result.getSpecialOpsCount();
 					totalEventCount += result.getEventCount();
+					totalFootPatrolCount += result.getFootPatrolCount();
 					totalOtherCount += result.getOtherCount();
 					totalCrimeArrestsFelony += result.getCrimeArrestsFelony();
 					totalCrimeArrestsClassAbMisdemeanor += result.getCrimeArrestsClassAbMisdemeanor();
@@ -433,6 +437,7 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalAptInitCount, headerStyle);
 			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalSpecialOpsCount, headerStyle);
 			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalEventCount, headerStyle);
+			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalFootPatrolCount, headerStyle);
 			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, totalOtherCount, headerStyle);
 			
 			writeCell(wb, sheet, sheet.getRow(startRowNum + totalRowStart++), col, "", headerStyle);

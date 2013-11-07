@@ -70,7 +70,7 @@
 		<thead>
 			<tr>
 				<th colspan="4">&#160;</th>
-				<th colspan="6">&#160;</th>
+				<th colspan="7">&#160;</th>
 				
 				<th colspan="4">Crime Arrest Activity</th>
 				<th colspan="4">Warrants</th>
@@ -94,6 +94,7 @@
 				<th>Apt Init Count</th>
 				<th>Special Ops Count</th>
 				<th>Event Count</th>
+				<th>Foot Patrol Count</th>
 				<th>Other Count</th>
 				
 				
@@ -162,6 +163,7 @@
 					<td><s:property value="aptInitCount"/></td>
 					<td><s:property value="specialOpsCount"/></td>
 					<td><s:property value="eventCount"/></td>
+					<td><s:property value="footPatrolCount"/></td>
 					<td><s:property value="otherCount"/></td>
 				    
 				    <td><s:property value="crimeArrestsFelony"/></td>
