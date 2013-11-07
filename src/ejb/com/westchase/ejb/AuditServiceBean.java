@@ -150,11 +150,26 @@ public class AuditServiceBean implements AuditService {
 	}
 
 	@Override
-	public void save(int employeeId, PatrolActivity patrolActivity) {
+	public void save(int employeeId, PatrolActivity patrolActivity, List<Integer> hotspotIdListEast, List<Integer> hotspotIdListWest) {
     	StringBuffer desc = new StringBuffer(ToStringBuilder.reflectionToString(patrolActivity));
+    	desc.append(" hotspotIdListEast: [");
+    	desc.append(printListOfInt(hotspotIdListEast));
+    	desc.append(" ], hotspotIdListWest: [");
+    	desc.append(printListOfInt(hotspotIdListWest));    	
+    	desc.append(" ]");
     	save(employeeId, patrolActivity.getClass().getName(), patrolActivity.getId(), desc.toString());
 	}
 
+	private String printListOfInt(List<Integer> idList) {
+		StringBuilder str = new StringBuilder();
+		if (idList != null && !idList.isEmpty()) {
+			for (Integer id : idList) {
+				if (str.length() > 0) str.append(",");
+				str.append(id);
+			}
+		}
+		return str.toString();
+	}
 	@Override
 	public void save(int employeeId, PatrolActivityDetail patrolActivityDetail) {
     	StringBuffer desc = new StringBuffer(ToStringBuilder.reflectionToString(patrolActivityDetail));

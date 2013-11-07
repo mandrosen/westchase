@@ -21,6 +21,7 @@ public class PatrolActivityReportDTO implements Serializable {
 	private Long aptInitCount;
 	private Long specialOpsCount;
 	private Long eventCount;
+	private Long footPatrolCount;
 	private Long otherCount;
 
 	private Long crimeArrestsFelony;
@@ -92,6 +93,7 @@ public class PatrolActivityReportDTO implements Serializable {
 			Long aptInitCount,
 			Long specialOpsCount,
 			Long eventCount,
+			Long footPatrolCount,
 			Long otherCount,
 			
 			Long crimeArrestsFelony, 
@@ -145,6 +147,7 @@ public class PatrolActivityReportDTO implements Serializable {
 		this.aptInitCount =  aptInitCount;
 		this.specialOpsCount = specialOpsCount;
 		this.eventCount = eventCount;
+		this.footPatrolCount = footPatrolCount;
 		this.otherCount = otherCount;
 		
 		this.crimeArrestsFelony = crimeArrestsFelony;
@@ -684,6 +687,14 @@ public class PatrolActivityReportDTO implements Serializable {
 
 	public void setCommunityCrimePreventionSeminars(Long communityCrimePreventionSeminars) {
 		this.communityCrimePreventionSeminars = communityCrimePreventionSeminars;
+	}
+
+	public Long getFootPatrolCount() {
+		return footPatrolCount;
+	}
+
+	public void setFootPatrolCount(Long footPatrolCount) {
+		this.footPatrolCount = footPatrolCount;
 	}
 
 }

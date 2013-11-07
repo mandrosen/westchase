@@ -115,6 +115,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		.append("sum(case when p.patrolType.id = 3 then 1 else 0 end), ")
 		.append("sum(case when p.patrolType.id = 4 then 1 else 0 end), ")
 		.append("sum(case when p.patrolType.id = 6 then 1 else 0 end), ")
+		.append("sum(case when p.patrolType.id = 7 then 1 else 0 end), ")
 		.append("sum(case when p.patrolType.id = 5 then 1 else 0 end), ")
 		
 		.append("sum(p.crimeArrestsFelony), ")

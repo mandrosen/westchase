@@ -18,6 +18,7 @@ import com.westchase.persistence.model.PatrolActivity;
 import com.westchase.persistence.model.PatrolActivityDetail;
 import com.westchase.persistence.model.PatrolDetailCategory;
 import com.westchase.persistence.model.PatrolDetailType;
+import com.westchase.persistence.model.PatrolHotspot;
 import com.westchase.persistence.model.PatrolPhone;
 import com.westchase.persistence.model.PatrolShop;
 import com.westchase.persistence.model.PatrolType;
@@ -44,6 +45,8 @@ public interface PatrolService {
 
 	List<Citizen> listCitizens();
 	
+	List<PatrolHotspot> listPatrolHotspots(boolean eastWest);
+	
 	// -- PatrolActivity -- //
 	PatrolActivity getActivity(Long patrolActivityId) throws Exception;
 	
@@ -53,9 +56,11 @@ public interface PatrolService {
 	
 	List<PatrolActivity> listOtherByOfficerAndDay(PatrolActivity patrolActivity);
 	
-	Long saveOrUpdateActivity(PatrolActivity patrolActivity) throws Exception;
+	Long saveOrUpdateActivity(PatrolActivity patrolActivity, List<Integer> hotspotIdListEast, List<Integer> hotspotIdListWest) throws Exception;
 
 	void deleteActivity(Long patrolActivityId);
+	
+	List<Integer> getHotspotIdList(Long patrolActivityId, boolean eastWest);
 	
 	// -- PatrolActivityDetail -- //
 	PatrolActivityDetail getActivityDetail(Long patrolActivityDetailId) throws Exception;

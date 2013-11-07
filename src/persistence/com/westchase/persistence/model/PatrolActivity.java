@@ -86,6 +86,7 @@ public class PatrolActivity implements java.io.Serializable {
 	private int communityCrimePreventionSeminars;
 	private boolean deleted;
 	private Set<PatrolActivityDetail> patrolActivityDetails = new HashSet<PatrolActivityDetail>(0);
+	private Set<PatrolActivityHotspot> patrolActivityHotspots = new HashSet<PatrolActivityHotspot>(0);
 
 	public PatrolActivity() {
 		super();
@@ -780,6 +781,15 @@ public class PatrolActivity implements java.io.Serializable {
 
 	public void setPatrolActivityDetails(Set<PatrolActivityDetail> patrolActivityDetails) {
 		this.patrolActivityDetails = patrolActivityDetails;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "patrolActivity")
+	public Set<PatrolActivityHotspot> getPatrolActivityHotspots() {
+		return this.patrolActivityHotspots;
+	}
+
+	public void setPatrolActivityHotspots(Set<PatrolActivityHotspot> patrolActivityHotspots) {
+		this.patrolActivityHotspots = patrolActivityHotspots;
 	}
 
 }

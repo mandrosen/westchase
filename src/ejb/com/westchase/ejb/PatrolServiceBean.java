@@ -21,8 +21,10 @@ import com.westchase.persistence.dao.OfficerDAO;
 import com.westchase.persistence.dao.PatrolActivityDAO;
 import com.westchase.persistence.dao.PatrolActivityDetailCitizenDAO;
 import com.westchase.persistence.dao.PatrolActivityDetailDAO;
+import com.westchase.persistence.dao.PatrolActivityHotspotDAO;
 import com.westchase.persistence.dao.PatrolDetailCategoryDAO;
 import com.westchase.persistence.dao.PatrolDetailTypeDAO;
+import com.westchase.persistence.dao.PatrolHotspotDAO;
 import com.westchase.persistence.dao.PatrolPhoneDAO;
 import com.westchase.persistence.dao.PatrolShopDAO;
 import com.westchase.persistence.dao.PatrolTypeDAO;
@@ -36,8 +38,10 @@ import com.westchase.persistence.model.Officer;
 import com.westchase.persistence.model.PatrolActivity;
 import com.westchase.persistence.model.PatrolActivityDetail;
 import com.westchase.persistence.model.PatrolActivityDetailCitizen;
+import com.westchase.persistence.model.PatrolActivityHotspot;
 import com.westchase.persistence.model.PatrolDetailCategory;
 import com.westchase.persistence.model.PatrolDetailType;
+import com.westchase.persistence.model.PatrolHotspot;
 import com.westchase.persistence.model.PatrolPhone;
 import com.westchase.persistence.model.PatrolShop;
 import com.westchase.persistence.model.PatrolType;
@@ -122,6 +126,12 @@ public class PatrolServiceBean implements PatrolService {
 		return dao.findAll(Order.asc("firstName"));
 	}
 
+	@Override
+	public List<PatrolHotspot> listPatrolHotspots(boolean eastWest) {
+		final PatrolHotspotDAO dao = new PatrolHotspotDAO();
+		return dao.listHotspots(eastWest);
+	}
+
 	// -- PatrolActivity -- //
 	@Override
 	public PatrolActivity getActivity(Long patrolActivityId) throws Exception {
@@ -155,7 +165,7 @@ public class PatrolServiceBean implements PatrolService {
 	}
 
 	@Override
-	public Long saveOrUpdateActivity(PatrolActivity patrolActivity) throws Exception {
+	public Long saveOrUpdateActivity(PatrolActivity patrolActivity, List<Integer> hotspotIdListEast, List<Integer> hotspotIdListWest) throws Exception {
 		if (patrolActivity != null && patrolActivity.getOfficer() != null) {
 			
 			// check consistent times
@@ -167,16 +177,42 @@ public class PatrolServiceBean implements PatrolService {
 			final PatrolActivityDAO dao = new PatrolActivityDAO();
 			dao.saveOrUpdate(patrolActivity);
 			if (patrolActivity.getId() != null) {
+				
+				saveHotspotIdList(patrolActivity.getId(), false, hotspotIdListEast);
+				saveHotspotIdList(patrolActivity.getId(), true, hotspotIdListWest);
+				
 				return patrolActivity.getId();
 			}
 		}
 		return null;
 	}
 
+	private boolean saveHotspotIdList(Long patrolActivityId, boolean eastWest, List<Integer> hotspotIdList) {
+		PatrolActivityHotspotDAO dao = new PatrolActivityHotspotDAO();
+		if (dao.deleteAllForPatrolActivity(patrolActivityId, eastWest)) {
+			if (hotspotIdList != null && !hotspotIdList.isEmpty()) {
+				for (Integer hotspotId : hotspotIdList) {
+					PatrolActivityHotspot pah = new PatrolActivityHotspot();
+					pah.setPatrolActivity(new PatrolActivity(patrolActivityId));
+					pah.setPatrolHotspot(new PatrolHotspot(hotspotId));
+					dao.save(pah);
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void deleteActivity(Long patrolActivityId) {
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
 		dao.delete(patrolActivityId);
+	}
+	
+	@Override
+	public List<Integer> getHotspotIdList(Long patrolActivityId, boolean eastWest) {
+		PatrolActivityHotspotDAO dao = new PatrolActivityHotspotDAO();
+		return dao.listIdForActivity(patrolActivityId, eastWest);
 	}
 
 	// -- PatrolActivityDetail -- //

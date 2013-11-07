@@ -45,7 +45,7 @@ public interface AuditService {
 	
 	void save(int employeeId, Employee employee, Wcuser user);
 
-	void save(int employeeId, PatrolActivity patrolActivity);
+	void save(int employeeId, PatrolActivity patrolActivity, List<Integer> hotspotIdListEast, List<Integer> hotspotIdListWest);
 
 	void save(int employeeId, PatrolActivityDetail patrolActivityDetail);
 	

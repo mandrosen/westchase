@@ -14,6 +14,7 @@ import com.westchase.persistence.model.Employee;
 import com.westchase.persistence.model.Officer;
 import com.westchase.persistence.model.PatrolActivity;
 import com.westchase.persistence.model.PatrolActivityDetail;
+import com.westchase.persistence.model.PatrolHotspot;
 import com.westchase.persistence.model.PatrolPhone;
 import com.westchase.persistence.model.PatrolShop;
 import com.westchase.persistence.model.PatrolType;
@@ -38,6 +39,8 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	private List<PatrolType> availablePatrolTypes;
 	private List<PatrolShop> availablePatrolShops;
 	private List<PatrolPhone> availablePatrolPhones;
+	private List<PatrolHotspot> availablePatrolHotspotsEast;
+	private List<PatrolHotspot> availablePatrolHotspotsWest;
 	private List<Integer> availableCounts;
 	private List<Integer> availableCountsBig;
 
@@ -62,6 +65,8 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	private String hikeTimeEnd3;
 	
 	private List<Integer> patrolTypeIdList;
+	private List<Integer> hotspotIdListEast;
+	private List<Integer> hotspotIdListWest;
 
 	public PatrolActivityAction() {
 		super();
@@ -266,6 +271,8 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 				currentPatrolActivity = patrolServ.getActivity(patrolActivityId);
 				if (currentPatrolActivity != null) {
 					currentPatrolActivityDetails = patrolServ.findActivityDetail(patrolActivityId);
+					hotspotIdListEast = patrolServ.getHotspotIdList(patrolActivityId, false);
+					hotspotIdListWest = patrolServ.getHotspotIdList(patrolActivityId, true);
 				}
 				setupDateAndTime();
 			}
@@ -274,6 +281,8 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 			availablePatrolShops = patrolServ.listPatrolShops();
 			availablePatrolPhones = patrolServ.listPatrolPhones();
 			availableOfficers = patrolServ.listOfficers();
+			availablePatrolHotspotsEast = patrolServ.listPatrolHotspots(false);
+			availablePatrolHotspotsWest = patrolServ.listPatrolHotspots(true);
 
 			availableCounts = new ArrayList<Integer>();
 			for (int i = 1; i <= 100; i++) {
@@ -396,7 +405,7 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	        			getRequest().getSession(true).setAttribute("WCActionWarning", "This record overlaps with another patrol.  Conflicts: " + conflictStr);
 	        		}
 
-	        		setPatrolActivityId(patrolServ.saveOrUpdateActivity(currentPatrolActivity));
+	        		setPatrolActivityId(patrolServ.saveOrUpdateActivity(currentPatrolActivity, hotspotIdListEast, hotspotIdListWest));
 
 	        		if (patrolActivityId == null) {
 	        			error = "Unable to save Patrol Activity.  Make sure required fields are filled and the time does not overlap another patrol for this officer.";
@@ -404,7 +413,7 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	        			// success
 	        			if (audServ != null) {
 	        				int employeeId = emp.getId().intValue();
-	        				audServ.save(employeeId, currentPatrolActivity);
+	        				audServ.save(employeeId, currentPatrolActivity, hotspotIdListEast, hotspotIdListWest);
 	        			}
 		            }
 	        	} else {
@@ -731,5 +740,37 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 
 	public void setPatrolTypeIdList(List<Integer> patrolTypeIdList) {
 		this.patrolTypeIdList = patrolTypeIdList;
+	}
+
+	public List<PatrolHotspot> getAvailablePatrolHotspotsEast() {
+		return availablePatrolHotspotsEast;
+	}
+
+	public void setAvailablePatrolHotspotsEast(List<PatrolHotspot> availablePatrolHotspotsEast) {
+		this.availablePatrolHotspotsEast = availablePatrolHotspotsEast;
+	}
+
+	public List<PatrolHotspot> getAvailablePatrolHotspotsWest() {
+		return availablePatrolHotspotsWest;
+	}
+
+	public void setAvailablePatrolHotspotsWest(List<PatrolHotspot> availablePatrolHotspotsWest) {
+		this.availablePatrolHotspotsWest = availablePatrolHotspotsWest;
+	}
+
+	public List<Integer> getHotspotIdListEast() {
+		return hotspotIdListEast;
+	}
+
+	public void setHotspotIdListEast(List<Integer> hotspotIdListEast) {
+		this.hotspotIdListEast = hotspotIdListEast;
+	}
+
+	public List<Integer> getHotspotIdListWest() {
+		return hotspotIdListWest;
+	}
+
+	public void setHotspotIdListWest(List<Integer> hotspotIdListWest) {
+		this.hotspotIdListWest = hotspotIdListWest;
 	}
 }
