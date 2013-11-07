@@ -12,12 +12,12 @@
     <sx:head />
     
     <!--  // these need to point to 172... for westchase office. TODO add to config file -->
+    <script type="text/javascript" src="http://wcddbsvr/scripts/patrolActivity.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://wcddbsvr/styles/patrolActivity.css" />
  	<!--
-    <script type="text/javascript" src="http://localhost/scripts/patrolActivity.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://localhost/styles/patrolActivity.css" />
-    -->
     <script type="text/javascript" src="http://172.25.16.64/scripts/patrolActivity.js"></script>
     <link rel="stylesheet" type="text/css" href="http://172.25.16.64/styles/patrolActivity.css" />
+    -->
 </head>
 
 <body>
@@ -311,12 +311,31 @@
 								<tr><th>A.M. Checklist Completed (Vagrants)</th><td><s:checkbox name="currentPatrolActivity.amChecklistCompleted" tabindex="53" /></td></tr>
 								<tr><th>Business Checks Completed</th>
 									<td class="east-west">
-										<label>East<s:checkbox name="currentPatrolActivity.businessChecksCompletedEast" tabindex="54" /></label>
-										<label>West<s:checkbox name="currentPatrolActivity.businessChecksCompletedWest" tabindex="55" /></label>
+										<label>East<s:checkbox name="currentPatrolActivity.businessChecksCompletedEast" id="check-east" tabindex="54" onchange="showHideEastHotspots()" /></label>
+										<label>West<s:checkbox name="currentPatrolActivity.businessChecksCompletedWest" id="check-west" tabindex="55" onchange="showHideWestHotspots()" /></label>
 									</td>
 								</tr>
 							</tbody>
 						</table>
+						
+						<div class="hotspots">
+							<p>East Hotspots - <a class="close-link" onclick="$('#check-east-hotspots').toggle()">Show/Hide</a></p>
+							
+							<div class="options" id="check-east-hotspots">
+								<s:checkboxlist list="availablePatrolHotspotsEast" name="hotspotIdListEast" listKey="id" listValue="summaryString" theme="xhtml" />
+							</div>
+						
+						</div>
+						
+						<div class="hotspots">
+							<p>West Hotspots - <a class="close-link" onclick="$('#check-west-hotspots').toggle()">Show/Hide</a></p>
+							
+							<div class="options" id="check-west-hotspots">
+								<s:checkboxlist list="availablePatrolHotspotsWest" name="hotspotIdListWest" listKey="id" listValue="summaryString" theme="xhtml" />
+							</div>
+						
+						</div>
+						
 					</div>
 									
 				</td>
