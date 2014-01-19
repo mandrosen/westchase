@@ -8,6 +8,7 @@ import com.westchase.persistence.criteria.PropertySearchCriteria;
 import com.westchase.persistence.dto.cms.CompanyPropertyDTO;
 import com.westchase.persistence.model.FlagSize;
 import com.westchase.persistence.model.Property;
+import com.westchase.persistence.model.PropertyHcad;
 import com.westchase.persistence.model.PropertyType;
 
 @Local
@@ -33,4 +34,14 @@ public interface PropertyService {
 	List<FlagSize> listFlagSizes();
 
 	List<Property> findAllWithType(int propertyTypeId);
+
+	List<PropertyHcad> findHcadsByProperty(Integer propertyId);
+
+	PropertyHcad getPropertyHcad(Integer id);
+
+	Integer saveOrUpdateHcad(PropertyHcad propertyHcad);
+	
+	boolean deletePropertyHcad(Integer propertyHcadId);
+	
+	Integer getPropertyIdForHcad(Integer propertyHcadId);
 }

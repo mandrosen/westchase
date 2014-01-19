@@ -3,6 +3,7 @@ package com.westchase.ejb;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 
@@ -12,10 +13,12 @@ import org.jboss.ejb3.annotation.SecurityDomain;
 import com.westchase.persistence.criteria.PropertySearchCriteria;
 import com.westchase.persistence.dao.FlagSizeDAO;
 import com.westchase.persistence.dao.PropertyDAO;
+import com.westchase.persistence.dao.PropertyHcadDAO;
 import com.westchase.persistence.dao.PropertyTypeDAO;
 import com.westchase.persistence.dto.cms.CompanyPropertyDTO;
 import com.westchase.persistence.model.FlagSize;
 import com.westchase.persistence.model.Property;
+import com.westchase.persistence.model.PropertyHcad;
 import com.westchase.persistence.model.PropertyType;
 
 /**
@@ -26,6 +29,12 @@ import com.westchase.persistence.model.PropertyType;
 @SecurityDomain("WestchaseRealm")
 @Local(PropertyService.class)
 public class PropertyServiceBean implements PropertyService {
+
+	@EJB
+	private EmployeeService empServ;
+	
+	@EJB
+	private AuditService audServ;
 
 	@Override
 	public List<Property> findAll(PropertySearchCriteria criteria) {
@@ -104,6 +113,66 @@ public class PropertyServiceBean implements PropertyService {
 		if (propertyTypeId <= 0)
 			return dao.findAllWithType();
 		return dao.findAllWithType(propertyTypeId);
+	}
+	@Override
+	public List<PropertyHcad> findHcadsByProperty(Integer propertyId) {
+		PropertyHcadDAO dao = new PropertyHcadDAO();
+		return dao.findByProperty(propertyId);
+	}
+	@Override
+	public PropertyHcad getPropertyHcad(Integer id) {
+		PropertyHcadDAO dao = new PropertyHcadDAO();
+		return dao.get(id);
+	}
+	@Override
+	public Integer saveOrUpdateHcad(PropertyHcad propertyHcad) {
+		PropertyHcadDAO dao = new PropertyHcadDAO();
+		
+		if (isValidUniqueHcad(propertyHcad)) {
+			dao.saveOrUpdate(propertyHcad);
+			
+			audServ.save(empServ.getLoggedInEmployeeId(), propertyHcad);
+		
+			return propertyHcad.getId();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean deletePropertyHcad(Integer propertyHcadId) {
+		PropertyHcadDAO dao = new PropertyHcadDAO();
+		dao.delete(propertyHcadId);
+		
+		audServ.deletePropertyHcad(empServ.getLoggedInEmployeeId(), propertyHcadId);
+		
+		return true;
+	}
+
+	public boolean isValidUniqueHcad(PropertyHcad propertyHcad) {
+		PropertyHcadDAO dao = new PropertyHcadDAO();
+
+		PropertyHcad otherPropertyHcad = dao.findByHcad(propertyHcad.getHcad());
+		if (otherPropertyHcad == null) {
+			return true;
+		}
+		if (otherPropertyHcad.getProperty() != null && 
+				otherPropertyHcad.getProperty().getId() != null && 
+				!otherPropertyHcad.getProperty().getId().equals(propertyHcad.getProperty().getId())) {
+			return false;
+		}
+		if (otherPropertyHcad.getProperty() != null && 
+				otherPropertyHcad.getProperty().getId() != null && 
+				otherPropertyHcad.getProperty().getId().equals(propertyHcad.getProperty().getId()) &&
+				(propertyHcad.getId() == null || !otherPropertyHcad.getId().equals(propertyHcad.getId()))) {
+			return false;
+		}
+		
+		return true;
+	}
+	@Override
+	public Integer getPropertyIdForHcad(Integer propertyHcadId) {
+		PropertyHcadDAO dao = new PropertyHcadDAO();
+		return dao.getPropertyId(propertyHcadId);
 	}
 
 }

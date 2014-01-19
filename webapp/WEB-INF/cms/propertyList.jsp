@@ -36,7 +36,7 @@
 <table class="results">
 <thead>
 	<tr>
-		<th colspan="37" style="text-align: left">
+		<th colspan="38" style="text-align: left">
 			Updated by Me?
 			<s:checkbox name="updatedByMe" />
 		</th>
@@ -74,11 +74,11 @@
 		<th><s:textfield name="searchObject.frontage" size="10"/></th>
 		<th><s:textfield name="searchObject.hcad" size="10"/></th>
 		<th><s:textfield name="searchObject.largestVacancy" size="10"/></th>
-		<th><s:textfield name="searchObject.notes" size="10"/></th>
 		<th><s:textfield name="searchObject.noUnits" size="10"/></th>
 		<th><s:textfield name="searchObject.occupancyRate" size="10"/></th>
 		<th><s:textfield name="searchObject.occupiedSqFt" size="10"/></th>
 		<th><s:textfield name="searchObject.owner" size="10"/></th>
+		<th><s:textfield name="searchObject.metaOwner" size="10"/></th>
 		<th><s:textfield name="searchObject.priceSqFt" size="10"/></th>
 		<th><s:textfield name="searchObject.restrictions" size="10"/></th>
 	   	<th><select name="singleTenantSearch"/>
@@ -101,6 +101,7 @@
 		<th><s:textfield name="searchObject.yearBuilt" size="4" maxlength="5"/></th>
 	   	<th><sx:datetimepicker name="searchObject.inputDate" displayFormat="MM/dd/yyyy"/></th>
 	   	<th><sx:datetimepicker name="searchObject.lastUpdate" displayFormat="MM/dd/yyyy"/></th>
+		<th><s:textfield name="searchObject.notes" size="10"/></th>
 		<th><s:submit value="Search" /></th>
 	</tr>
     <tr>
@@ -130,6 +131,7 @@
     	<s:url action="sort" id="sortoccrt"><s:param name="orderCol" value="'occupancyRate'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortoccsqft"><s:param name="orderCol" value="'occupiedSqFt'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortowner"><s:param name="orderCol" value="'owner'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+    	<s:url action="sort" id="sortmetaowner"><s:param name="orderCol" value="'meta'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortprsqft"><s:param name="orderCol" value="'priceSqFt'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortrestr"><s:param name="orderCol" value="'restrictions'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortsingten"><s:param name="orderCol" value="'singleTenant'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
@@ -163,11 +165,11 @@
         <th><s:a href="%{sortfrtg}">Frontage</s:a></th>
         <th><s:a href="%{sorthcad}">HCAD</s:a></th>
         <th><s:a href="%{sortlargvac}">Largest Vacancy</s:a></th>
-        <th><s:a href="%{sortnotes}">Notes</s:a></th>
         <th><s:a href="%{sortnounit}">No Units</s:a></th>
         <th><s:a href="%{sortoccrt}">Occ Rate</s:a></th>
         <th><s:a href="%{sortoccsqft}">Occ Sq Ft</s:a></th>
-		<th><s:a href="%{sortowner}">Owner</s:a></th>
+		<th><s:a href="%{sortowner}">HCAD Owner</s:a></th>
+		<th><s:a href="%{sortmetaowner}">Meta Owner</s:a></th>
         <th><s:a href="%{sortprsqft}">Price Sq Ft</s:a></th>
         <th><s:a href="%{sortrestr}">Restrictions</s:a></th>
         <th><s:a href="%{sortsingten}">Single Tenant</s:a></th>
@@ -178,6 +180,7 @@
         <th><s:a href="%{sortyrblt}">Year Built</s:a></th>
         <th><s:a href="%{sortinpt}">Input Date</s:a></th>
         <th><s:a href="%{sortupdt}">Update Date</s:a></th>
+        <th><s:a href="%{sortnotes}">Notes</s:a></th>
         <th></th>
     </tr>
 </thead>
@@ -206,11 +209,11 @@
             <td><s:property value="frontage"/></td>
             <td><s:property value="hcad"/></td>
             <td><s:property value="largestVacancy"/></td>
-            <td><s:property value="notes"/></td>
             <td><s:property value="noUnits"/></td>
             <td><s:property value="occupancyRate"/></td>
             <td><s:property value="occupiedSqFt"/></td>
             <td><s:property value="owner"/></td>
+            <td><s:property value="metaOwner"/></td>
             <td><s:property value="priceSqFt"/></td>
             <td><s:property value="restrictions"/></td>
             <td><s:property value="singleTenant"/></td>
@@ -221,6 +224,7 @@
             <td><s:property value="yearBuilt"/></td>
             <td><s:date name="inputDate" format="MM/dd/yyyy" /></td>
             <td><s:date name="lastUpdate" format="MM/dd/yyyy" /></td>
+            <td><s:property value="notes"/></td>
             <td></td>
         </tr>
     </s:iterator>

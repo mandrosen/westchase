@@ -16,6 +16,7 @@ import com.westchase.persistence.model.PatrolActivity;
 import com.westchase.persistence.model.PatrolActivityDetail;
 import com.westchase.persistence.model.PhoneBook;
 import com.westchase.persistence.model.Property;
+import com.westchase.persistence.model.PropertyHcad;
 import com.westchase.persistence.model.Todo;
 import com.westchase.persistence.model.Wcuser;
 
@@ -53,6 +54,8 @@ public interface AuditService {
 	
 	void save(int employeeId, Citizen citizen);
 
+	void save(int employeeId, PropertyHcad propertyHcad);
+
 	void delete(int employeeId, Class clazz, Integer id);
 
 	void completeTodo(int employeeId, Integer todoId);
@@ -64,5 +67,7 @@ public interface AuditService {
 	void deletePatrolActivity(Integer employeeId, Long id);
 	
 	void deletePatrolActivityDetail(Integer employeeId, Long id);
+
+	void deletePropertyHcad(Integer employeeId, Integer id);
 
 }

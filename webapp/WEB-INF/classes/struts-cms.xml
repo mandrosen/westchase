@@ -281,6 +281,28 @@
             <result type="redirect">edit-${currentProperty.id}.action</result>
         </action>
     </package>
+    
+    <package name="propertyHcad" extends="cms-default" namespace="/propertyHcad">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="edit-*" class="com.westchase.web.action.cms.PropertyHcadAction" method="edit">
+      		<param name="id">{1}</param>
+            <result>/WEB-INF/cms/propertyHcadEdit.jsp</result>
+            <interceptor-ref name="crudStack"/>
+        </action>
+        
+        <action name="save" class="com.westchase.web.action.cms.PropertyHcadAction" method="save">
+            <result type="redirect">/property/edit-${propertyId}.action</result>
+            <interceptor-ref name="basicStack"/>
+        </action>      
+        
+        <action name="delete-*" class="com.westchase.web.action.cms.PropertyHcadAction" method="delete">
+            <param name="id">{1}</param>
+            <result type="redirect">/property/edit-${propertyId}.action</result>
+            <interceptor-ref name="crudStack"/>
+        </action>      
+
+    </package>
 
     <package name="company" extends="cms-default" namespace="/company">
         <default-interceptor-ref name="crudStack"/>

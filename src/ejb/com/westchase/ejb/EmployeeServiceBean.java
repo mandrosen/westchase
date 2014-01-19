@@ -1,11 +1,14 @@
 package com.westchase.ejb;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Local;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
 import org.apache.commons.lang.StringUtils;
@@ -29,6 +32,9 @@ import com.westchase.utils.encryption.EncryptionUtils;
 @SecurityDomain("WestchaseRealm")
 @Local(EmployeeService.class)
 public class EmployeeServiceBean implements EmployeeService {
+
+	@Resource
+	private SessionContext context;
 	
 	@EJB
 	private AuditService audServ;
@@ -39,6 +45,34 @@ public class EmployeeServiceBean implements EmployeeService {
 		Employee emp = dao.findByUsername(username);
 		emp.setLastLogin(new Date());
 		return emp;
+	}
+	
+	@Override
+	public Employee getLoggedInEmployee() {
+		Principal principal = context.getCallerPrincipal();
+		if (principal != null) {
+			return getEmployeeByUsername(principal.getName());
+		}
+		return null;
+	}
+	
+	@Override
+	public Integer getLoggedInEmployeeId() {
+		Principal principal = context.getCallerPrincipal();
+		if (principal != null) {
+			return getEmployeeIdByUsername(principal.getName());
+		}
+		return null;
+	}
+
+	private Employee getEmployeeByUsername(String username) {
+		WcuserDAO dao = new WcuserDAO();
+		return dao.getEmployeeByUsername(username);
+	}
+
+	private Integer getEmployeeIdByUsername(String username) {
+		WcuserDAO dao = new WcuserDAO();
+		return dao.getEmployeeIdByUsername(username);
 	}
 
 	@Override
@@ -55,23 +89,24 @@ public class EmployeeServiceBean implements EmployeeService {
 	
 	private boolean checkUniqueUsername(Wcuser user) {
 		WcuserDAO dao = new WcuserDAO();
-		List<Wcuser> otherUsers = dao.listByUsername(user.getUsername());
+//		List<Wcuser> otherUsers = dao.listByUsername(user.getUsername());
+		Wcuser otherUser = dao.getByUsername(user.getUsername());
 		if (user.getId() == null) {
-			if (otherUsers != null && !otherUsers.isEmpty()) {
+			if (otherUser != null) {
 				return false;
 			}
 		} else {
-			if (otherUsers != null && !otherUsers.isEmpty()) {
-				for (Wcuser otherUser : otherUsers) {
+			if (otherUser != null) {
+//				for (Wcuser otherUser : otherUsers) {
 					if (!otherUser.getId().equals(user.getId())) {
 						return false;
 					}
-				}
+//				}
 			}
 		}
-		for (Wcuser otherUser : otherUsers) {
+//		for (Wcuser otherUser : otherUsers) {
 			dao.getSession().evict(otherUser);
-		}
+//		}
 		return true;
 	}
 

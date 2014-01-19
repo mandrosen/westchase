@@ -17,7 +17,13 @@
     		$("#flag-pole-size").removeAttr("disabled");
     	}
     }
+	function confirmRemoveHcad(id) {
+		if (confirm("Are you sure you want to remove this hcad?")) {
+			document.location.href = "/westchase/propertyHcad/delete.action?id=" + id;
+		}
+	}
     </script>
+
 </head>
 
 <body>
@@ -30,6 +36,15 @@
 
 <p><a href="/westchase/property/list?useLast=1">Back to Current List</a></p>
 <p><a href="<s:url action="list"/>">Back to List</a></p>
+
+
+	
+<c:if test="${not empty WCActionMessage}">
+   <div class="message-section actionmessages">
+      <c:out value="${WCActionMessage}" />
+      <c:remove var="WCActionMessage" />
+   </div>
+</c:if>
 
 <s:form name="editForm" action="save">
 	<c:if test="${not empty linkCompanyId}">
@@ -92,7 +107,8 @@
 	
 	<s:textfield label="Occupancy Rate" name="currentProperty.occupancyRate" size="10" maxlength="10"/>
 	<s:textfield label="Occupancy Sq Ft" name="currentProperty.occupiedSqFt" size="10" maxlength="10"/>
-	<s:textfield label="Owner" name="currentProperty.owner" size="50" maxlength="50" required="true" />
+	<s:textfield label="HCAD Owner" name="currentProperty.owner" size="50" maxlength="50" required="true" />
+	<s:textfield label="Meta Owner" name="currentProperty.metaOwner" size="50" maxlength="50" />
 	<%--
 	<s:textfield label="Person" name="currentProperty.phoneBook.company.company"/>
 	--%>
@@ -112,6 +128,33 @@
 	
     <s:submit value="Save" />
 </s:form>
+
+<h3>Hcads</h3>
+<table class="hcads">
+	<thead>
+	    <tr>
+	        <th>Id</th>
+	        <th>Hcad</th>
+	        <th>Notes</th>
+	        <th></th>
+	    </tr>
+    </thead>
+    <tbody>
+		<s:iterator value="currentPropertyHcads" status="status">
+			<tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>">
+				<td><a href="<s:url action="edit-%{id}" namespace="/propertyHcad" />"><s:property value="id"/></a></td>
+			    <td><s:property value="hcad"/></td>
+			    <td><s:property value="notes"/></td>
+			    <td>
+			    	<a href="javascript:confirmRemoveHcad(<s:property value='id'/>)">Delete</a>
+			    </td>
+			</tr>
+		</s:iterator>
+	</tbody>
+</table>
+<c:if test="${not empty currentProperty.id}">
+	<a href="<s:url action="edit-?propertyId=%{currentProperty.id}" namespace="/propertyHcad" includeParams="none"/>">Add new Hcad</a>
+</c:if>
 
 <h3>Companies</h3>
 <table class="companies">

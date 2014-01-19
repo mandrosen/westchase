@@ -104,6 +104,9 @@ public class PropertyDAO extends BaseDAO<Property> {
 			if (StringUtils.isNotBlank(p.getOwner())) {
 				query.append(" and " + alias + ".owner like concat('%','").append(p.getOwner()).append("','%')");	
 			}
+			if (StringUtils.isNotBlank(p.getMetaOwner())) {
+				query.append(" and " + alias + ".metaOwner like concat('%','").append(p.getMetaOwner()).append("','%')");	
+			}
 			if (StringUtils.isNotBlank(p.getCenter())) {
 				query.append(" and " + alias + ".center like concat('%','").append(p.getCenter()).append("','%')");	
 			}

@@ -15,6 +15,10 @@ import com.westchase.persistence.model.Wcuser;
 @Local
 public interface EmployeeService {
 	Employee loginEmployee(String username);
+	
+	Employee getLoggedInEmployee();
+	
+	Integer getLoggedInEmployeeId();
 
 	List<Employee> findAll();
 	

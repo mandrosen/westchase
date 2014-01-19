@@ -62,6 +62,7 @@ public class Property implements java.io.Serializable {
 	private Double acreage;
 	private String hcad;
 	private String owner;
+	private String metaOwner;
 	private String center;
 	private String yearBuilt;
 	private String facet;
@@ -491,6 +492,16 @@ public class Property implements java.io.Serializable {
 
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+
+	@Column(name = "MetaOwner", length = 50)
+	@Length(max = 50)
+	public String getMetaOwner() {
+		return this.metaOwner;
+	}
+
+	public void setMetaOwner(String metaOwner) {
+		this.metaOwner = metaOwner;
 	}
 
 	@Column(name = "Center", length = 50)

@@ -13,6 +13,7 @@ import com.westchase.persistence.model.Company;
 import com.westchase.persistence.model.Employee;
 import com.westchase.persistence.model.FlagSize;
 import com.westchase.persistence.model.Property;
+import com.westchase.persistence.model.PropertyHcad;
 import com.westchase.persistence.model.PropertyType;
 import com.westchase.persistence.model.State;
 import com.westchase.persistence.model.Street;
@@ -32,6 +33,7 @@ public class PropertyAction extends AbstractCMSAction<Property, PropertySearchCr
 
     private Integer propertyId;
     private Property currentProperty;
+    private List<PropertyHcad> currentPropertyHcads;
     private List<Property> properties;
     
     private Integer linkCompanyId;
@@ -125,11 +127,13 @@ public class PropertyAction extends AbstractCMSAction<Property, PropertySearchCr
         propServ = ServiceLocator.lookupPropertyService();
         compServ = ServiceLocator.lookupCompanyService();
         
-    	if (getPropertyId() != null) {
+    	if (getPropertyId() != null && propServ != null) {
 		
 	        Property preFetched = propServ.get(getPropertyId());
 	        if (preFetched != null) {
 	            setCurrentProperty(preFetched);
+	            
+	            currentPropertyHcads = propServ.findHcadsByProperty(getPropertyId());
 	            
 	            if (compServ != null) {
 	            	currentCompanies = compServ.getByProperty(preFetched.getId());
@@ -327,5 +331,11 @@ public class PropertyAction extends AbstractCMSAction<Property, PropertySearchCr
 	}
 	public void setAvailableFlagSizes(List<FlagSize> availableFlagSizes) {
 		this.availableFlagSizes = availableFlagSizes;
+	}
+	public List<PropertyHcad> getCurrentPropertyHcads() {
+		return currentPropertyHcads;
+	}
+	public void setCurrentPropertyHcads(List<PropertyHcad> currentPropertyHcads) {
+		this.currentPropertyHcads = currentPropertyHcads;
 	}
 }

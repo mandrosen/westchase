@@ -30,6 +30,7 @@ import com.westchase.persistence.model.PatrolActivity;
 import com.westchase.persistence.model.PatrolActivityDetail;
 import com.westchase.persistence.model.PhoneBook;
 import com.westchase.persistence.model.Property;
+import com.westchase.persistence.model.PropertyHcad;
 import com.westchase.persistence.model.Todo;
 import com.westchase.persistence.model.Wcuser;
 
@@ -234,6 +235,16 @@ public class AuditServiceBean implements AuditService {
 	@Override
 	public void deletePatrolActivityDetail(Integer employeeId, Long id) {
 		delete(employeeId, PatrolActivityDetail.class, id);
+	}
+	@Override
+	public void save(int employeeId, PropertyHcad propertyHcad) {
+    	StringBuffer desc = new StringBuffer(ToStringBuilder.reflectionToString(propertyHcad));
+    	save(employeeId, propertyHcad.getClass().getName(), propertyHcad.getId(), desc.toString());
+	}
+	@Override
+	public void deletePropertyHcad(Integer employeeId, Integer id) {
+		delete(employeeId, PropertyHcad.class, id);
+		
 	}
 
 }
