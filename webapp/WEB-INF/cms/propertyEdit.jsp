@@ -153,7 +153,10 @@
 	</tbody>
 </table>
 <c:if test="${not empty currentProperty.id}">
-	<a href="<s:url action="edit-?propertyId=%{currentProperty.id}" namespace="/propertyHcad" includeParams="none"/>">Add new Hcad</a>
+	<s:url var="addHcadUrl" action="edit-=%{currentProperty.id}" namespace="/propertyHcad">
+		<s:param name="propertyId"><s:property value="currentProperty.id" /></s:param>
+	</s:url>
+	<a href="<s:property value="#addHcadUrl" />">Add new Hcad</a>
 </c:if>
 
 <h3>Companies</h3>
