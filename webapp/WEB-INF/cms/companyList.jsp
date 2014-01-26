@@ -43,7 +43,7 @@
 <table class="results">
 <thead>
 	<tr>
-		<th colspan="25" style="text-align: left">
+		<th colspan="28" style="text-align: left">
 			<label>
 				Updated by Me?
 				<s:checkbox name="updatedByMe" />

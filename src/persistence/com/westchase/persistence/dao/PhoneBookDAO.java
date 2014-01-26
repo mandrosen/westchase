@@ -115,6 +115,9 @@ public class PhoneBookDAO extends BaseDAO<PhoneBook>{
 			query.append(" order by ").append(alias).append(".").append(criteria.getOrderCol()).append(" ").append(criteria.getOrderDir());
 		}
 		Query q = getSession().createQuery(query.toString());
+		if (criteria.isEmptySearch()) {
+			q.setMaxResults(40);
+		}
 		if (pb != null) {
 			if (pb.getId() != null) {
 				q.setParameter("id", pb.getId());

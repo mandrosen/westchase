@@ -11,6 +11,33 @@ public class PhoneBookSearchCriteria extends SearchCriteria<PhoneBook> {
 	private Boolean westchaseToday;
 	private Boolean investor;
 	private boolean orphanedOnly;
+	
+	public boolean isEmptySearch() {
+		PhoneBook so = getSearchObject(); 
+		return dontEmail == null && westchaseToday == null && investor == null && orphanedOnly == false &&
+				(so == null ||
+				(so.getId() == null &&
+				so.getTitle() == null &&
+				so.getFirstName() == null &&
+				so.getMiddleInitial() == null &&
+				so.getLastName() == null &&
+				so.getSuffix() == null &&
+				so.getSalutation() == null &&
+				(so.getCompany() == null || so.getCompany().getCompany() == null) &&
+				so.getDepartment() == null &&
+				so.getJobTitle() == null &&
+				so.getEmail() == null &&
+				so.getAltEmail() == null &&
+				so.getWkPhone() == null &&
+				so.getFaxPhone() == null &&
+				so.getMobilePhone() == null &&
+				so.getHomePhone() == null &&
+				so.getHomeFax() == null &&
+				so.getHomeAddress() == null &&
+				so.getInputDate() == null &&
+				so.getLastupdate() == null));
+	}
+	
 	public Boolean getDontEmail() {
 		return dontEmail;
 	}

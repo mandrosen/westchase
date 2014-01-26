@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 
 import com.westchase.persistence.Constants;
@@ -99,7 +100,7 @@ public class PropertyDAO extends BaseDAO<Property> {
 			}
 			
 			if (StringUtils.isNotBlank(p.getHcad())) {
-				query.append(" and " + alias + ".hcad like concat('%','").append(p.getHcad()).append("','%')");	
+				query.append(" and ph.hcad = :hcad ");	
 			}
 			if (StringUtils.isNotBlank(p.getOwner())) {
 				query.append(" and " + alias + ".owner like concat('%','").append(p.getOwner()).append("','%')");	
@@ -151,6 +152,9 @@ public class PropertyDAO extends BaseDAO<Property> {
 			query.append(" order by " + alias + ".").append(criteria.getOrderCol()).append(" ").append(criteria.getOrderDir());
 		}
 		Query q = getSession().createQuery(query.toString());
+		if (criteria.isEmptySearch()) {
+			q.setMaxResults(40);
+		}
 		if (p != null) {
 			if (p.getId() != null) {
 				q.setParameter("id", p.getId());
@@ -194,6 +198,9 @@ public class PropertyDAO extends BaseDAO<Property> {
 			if (p.getAcreage() != null) {
 				q.setParameter("acreage", p.getAcreage());
 			}
+			if (StringUtils.isNotBlank(p.getHcad())) {
+				q.setParameter("hcad", p.getHcad());
+			}
 		}
 		return q;
 	}
@@ -204,16 +211,15 @@ public class PropertyDAO extends BaseDAO<Property> {
 		try {			
 			Integer empId = criteria.getEmployeeId();
 			if (empId != null && empId.intValue() > 0) {
-
-				Query q = getQuery(criteria, "select distinct ap.property from AuditProperty ap where ap.employee.id = :empId and ap.property.id > -1 and ap.property.deleted = 0 " , "ap.property");
+				Query q = getQuery(criteria, "select distinct ap.property from AuditProperty ap left join fetch ap.property.propertyHcads ph where ap.employee.id = :empId and ap.property.id > -1 and ap.property.deleted = 0 " , "ap.property");
 				properties = prepareQuery(q, criteria).setParameter("empId", empId).list();		
 			} else {
-				Query q = getQuery(criteria, "select p from Property p where p.id > -1 and p.deleted = 0 ", "p");
+				Query q = getQuery(criteria, "select p from Property p left join fetch p.propertyHcads ph where p.id > -1 and p.deleted = 0 ", "p");
 				properties = prepareQuery(q, criteria).list();		
 			}			
 		} catch (Exception e) {
 			log.error("", e);
-		}		
+		}
 		return properties;
 	}
 	
@@ -223,10 +229,10 @@ public class PropertyDAO extends BaseDAO<Property> {
 			Long l = null;
 			Integer empId = criteria.getEmployeeId();
 			if (empId != null && empId.intValue() > 0) {
-				Query q = getQuery(criteria, "select count(distinct ap.property) from AuditProperty ap where ap.employee.id = :empId and ap.property.id > -1 and ap.property.deleted = 0 ", "ap.property");
+				Query q = getQuery(criteria, "select count(distinct ap.property) from AuditProperty ap left join ap.property.propertyHcads ph where ap.employee.id = :empId and ap.property.id > -1 and ap.property.deleted = 0 ", "ap.property");
 				l = (Long) q.setParameter("empId", empId).uniqueResult();		
 			} else {
-				Query q = getQuery(criteria, "select count(p) from Property p where p.id > -1 and p.deleted = 0 ", "p");
+				Query q = getQuery(criteria, "select count(p) from Property p left join p.propertyHcads ph where p.id > -1 and p.deleted = 0 ", "p");
 				l = (Long) q.uniqueResult();	
 			}		
 			if (l != null) {

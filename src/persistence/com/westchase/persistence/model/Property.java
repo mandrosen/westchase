@@ -74,6 +74,7 @@ public class Property implements java.io.Serializable {
 //	private PhoneBook phoneBook;
 	private boolean deleted;
 	private Set<PhoneBookRelation> phoneBookRelations = new HashSet<PhoneBookRelation>(0);
+	private Set<PropertyHcad> propertyHcads = new HashSet<PropertyHcad>(0);
 
 	public Property() {
 	}
@@ -615,5 +616,14 @@ public class Property implements java.io.Serializable {
 
 	public void setPhoneBookRelations(Set<PhoneBookRelation> phoneBookRelations) {
 		this.phoneBookRelations = phoneBookRelations;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "property")
+	public Set<PropertyHcad> getPropertyHcads() {
+		return this.propertyHcads;
+	}
+
+	public void setPropertyHcads(Set<PropertyHcad> propertyHcads) {
+		this.propertyHcads = propertyHcads;
 	}
 }

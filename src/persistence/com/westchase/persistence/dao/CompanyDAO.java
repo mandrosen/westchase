@@ -160,6 +160,9 @@ public class CompanyDAO extends BaseDAO<Company> {
 			query.append(" order by " + alias + ".").append(criteria.getOrderCol()).append(" ").append(criteria.getOrderDir());
 		}
 		Query q = getSession().createQuery(query.toString());
+		if (criteria.isEmptySearch()) {
+			q.setMaxResults(40);
+		}
 		if (c != null) {
 			if (c.getId() != null) {
 				q.setParameter("id", c.getId());

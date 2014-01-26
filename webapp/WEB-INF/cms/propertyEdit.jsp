@@ -99,7 +99,7 @@
 	<s:checkbox label="For Sale" name="currentProperty.forSale" />
 	
 	<s:textfield label="Frontage" name="currentProperty.frontage" size="50" maxlength="50"/>
-	<s:textfield label="HCAD" name="currentProperty.hcad" size="50" maxlength="50"/>
+	<s:textfield label="HCAD (deprecated)" name="currentProperty.hcad" size="50" maxlength="50"/>
     <tr><td>&#160;</td><td><a href="http://www.hcad.org/" target="_hcad">hcad.org</a></td></tr>	
 	<s:textfield label="Largest Vacancy" name="currentProperty.largestVacancy" size="10" maxlength="10" />
 
@@ -153,7 +153,7 @@
 	</tbody>
 </table>
 <c:if test="${not empty currentProperty.id}">
-	<s:url var="addHcadUrl" action="edit-=%{currentProperty.id}" namespace="/propertyHcad">
+	<s:url var="addHcadUrl" action="edit-" namespace="/propertyHcad">
 		<s:param name="propertyId"><s:property value="currentProperty.id" /></s:param>
 	</s:url>
 	<a href="<s:property value="#addHcadUrl" />">Add new Hcad</a>

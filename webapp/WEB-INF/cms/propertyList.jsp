@@ -207,7 +207,11 @@
             <td><s:property value="flagPole"/></td>
             <td><s:property value="forSale"/></td>
             <td><s:property value="frontage"/></td>
-            <td><s:property value="hcad"/></td>
+            <td>
+            	<s:iterator value="propertyHcads" id="propertyHcad" status="phstatus">
+            		<s:if test="#phstatus.index != 0">,</s:if><s:property value="hcad" />
+            	</s:iterator>
+            </td>
             <td><s:property value="largestVacancy"/></td>
             <td><s:property value="noUnits"/></td>
             <td><s:property value="occupancyRate"/></td>
