@@ -38,7 +38,7 @@
 <s:textfield label="Work Phone" name="currentPhoneBook.wkPhone" size="12" maxlength="50" required="true"/>
 <s:textfield label="Work Ext" name="currentPhoneBook.wkext" size="3" maxlength="50"/>
 <s:textfield label="Direct Phone" name="currentPhoneBook.directPhone" size="12" maxlength="50"/>
-<s:textfield label="Fax Phone" name="currentPhoneBook.faxPhone" size="12" maxlength="50" required="true" />
+<s:textfield label="Fax Phone" name="currentPhoneBook.faxPhone" size="12" maxlength="50" />
 <s:textfield label="Cell Phone" name="currentPhoneBook.mobilePhone" size="12" maxlength="50"/>
 
 <s:textfield label="Home Address" name="currentPhoneBook.homeAddress" size="60" maxlength="255" />

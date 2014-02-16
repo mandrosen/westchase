@@ -17,7 +17,7 @@
 		
 		
 		<convert converter="bean" match="com.westchase.persistence.model.Property">
-			<param name="exclude" value="phoneBookRelations" />
+			<param name="exclude" value="phoneBookRelations,propertyHcads" />
 		</convert>
 		<convert converter="bean" match="com.westchase.persistence.model.PhoneBook">
 			<param name="exclude" value="phoneBookCategories, phoneBookRelations" />

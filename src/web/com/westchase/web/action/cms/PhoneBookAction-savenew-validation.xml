@@ -34,9 +34,6 @@
 		</field-validator>
     </field>
     <field name="currentPhoneBook.faxPhone">
-        <field-validator type="requiredstring">
-            <message><![CDATA[ Fax Number is required ]]></message>
-        </field-validator>
 		<field-validator type="regex">
 			<param name="expression">([0-9\-\(\)\. ])*</param>
 			<message><![CDATA[ Phone numbers can only contain numbers and () and - and . ]]></message>
