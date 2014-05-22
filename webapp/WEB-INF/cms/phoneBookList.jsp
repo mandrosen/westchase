@@ -25,17 +25,45 @@
 <p class="total"><s:property value="totalCount" /> total results</p>
 <div class="prevnext">
 	<s:if test="%{page > 0}">
-		<s:url id="first" action="first"><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+		<s:url id="first" action="first">
+			<s:param name="page" value="%{page}"/>
+			<s:param name="currentOrderCol" value="%{currentOrderCol}"/>
+			<s:param name="dontEmailSearch" value="%{dontEmailSearch}"/>
+			<s:param name="investorSearch" value="%{investorSearch}"/>
+			<s:param name="westchaseTodaySearch" value="%{westchaseTodaySearch}"/>
+			<s:param name="orphanedOnly" value="%{orphanedOnly}"/>
+		</s:url>
 		<s:a href="%{first}">First</s:a>
 		
-		<s:url id="prev" action="prev"><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+		<s:url id="prev" action="prev">
+			<s:param name="page" value="%{page}"/>
+			<s:param name="currentOrderCol" value="%{currentOrderCol}"/>
+			<s:param name="dontEmailSearch" value="%{dontEmailSearch}"/>
+			<s:param name="investorSearch" value="%{investorSearch}"/>
+			<s:param name="westchaseTodaySearch" value="%{westchaseTodaySearch}"/>
+			<s:param name="orphanedOnly" value="%{orphanedOnly}"/>
+		</s:url>
 		<s:a href="%{prev}">Previous</s:a>
 	</s:if>  
 	<s:if test="%{page < (maxPage - 1)}">
-		<s:url id="next" action="next"><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url> 
+		<s:url id="next" action="next">
+			<s:param name="page" value="%{page}"/>
+			<s:param name="currentOrderCol" value="%{currentOrderCol}"/>
+			<s:param name="dontEmailSearch" value="%{dontEmailSearch}"/>
+			<s:param name="investorSearch" value="%{investorSearch}"/>
+			<s:param name="westchaseTodaySearch" value="%{westchaseTodaySearch}"/>
+			<s:param name="orphanedOnly" value="%{orphanedOnly}"/>
+		</s:url> 
 		<s:a href="%{next}">Next</s:a>
 		
-		<s:url id="goToPage" action="goToPage"><s:param name="nextPage" value="%{maxPage - 1}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+		<s:url id="goToPage" action="goToPage">
+			<s:param name="nextPage" value="%{maxPage - 1}"/>
+			<s:param name="currentOrderCol" value="%{currentOrderCol}"/>
+			<s:param name="dontEmailSearch" value="%{dontEmailSearch}"/>
+			<s:param name="investorSearch" value="%{investorSearch}"/>
+			<s:param name="westchaseTodaySearch" value="%{westchaseTodaySearch}"/>
+			<s:param name="orphanedOnly" value="%{orphanedOnly}"/>
+		</s:url>
 		<s:a href="%{goToPage}">Last</s:a>
 	</s:if>
 </div>
@@ -205,11 +233,25 @@
 </s:form>
 <div class="prevnext">
 	<s:if test="%{page > 0}">
-		<s:url id="prev" action="prev"><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+		<s:url id="prev" action="prev">
+			<s:param name="page" value="%{page}"/>
+			<s:param name="currentOrderCol" value="%{currentOrderCol}"/>
+			<s:param name="dontEmailSearch" value="%{dontEmailSearch}"/>
+			<s:param name="investorSearch" value="%{investorSearch}"/>
+			<s:param name="westchaseTodaySearch" value="%{westchaseTodaySearch}"/>
+			<s:param name="orphanedOnly" value="%{orphanedOnly}"/>
+		</s:url>
 		<s:a href="%{prev}">Previous</s:a>
 	</s:if>  
 	<s:if test="%{page < (maxPage - 1)}">
-		<s:url id="next" action="next"><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url> 
+		<s:url id="next" action="next">
+			<s:param name="page" value="%{page}"/>
+			<s:param name="currentOrderCol" value="%{currentOrderCol}"/>
+			<s:param name="dontEmailSearch" value="%{dontEmailSearch}"/>
+			<s:param name="investorSearch" value="%{investorSearch}"/>
+			<s:param name="westchaseTodaySearch" value="%{westchaseTodaySearch}"/>
+			<s:param name="orphanedOnly" value="%{orphanedOnly}"/>
+		</s:url> 
 		<s:a href="%{next}">Next</s:a>
 	</s:if>
 </div>
