@@ -67,6 +67,11 @@
 		</c:if>
 	
 	
+		<c:set var="currentRecValue"><fmt:formatDate pattern='yyyy-MM-dd' value='${currentPatrolActivityDetail.receivedDateTime}' /></c:set>
+		<c:set var="currentArrValue"><fmt:formatDate pattern='yyyy-MM-dd' value='${currentPatrolActivityDetail.arrivedDateTime}' /></c:set>
+		<c:set var="currentClrValue"><fmt:formatDate pattern='yyyy-MM-dd' value='${currentPatrolActivityDetail.clearedDateTime}' /></c:set>
+	
+	
 		<s:select label="Category" list="availableDetailCategories" name="currentPatrolActivityDetail.patrolDetailCategory.id"
 		    headerKey="-1" headerValue="--" listValue="name" listKey="id" emptyOption="false" 
 		    required="true" />
@@ -76,7 +81,10 @@
 			<td>
 		<select name="receivedDate">
 			<c:forEach items="${availableDates}" var="d">
-				<option value="<fmt:formatDate pattern='yyyy-MM-dd' value='${d}' />"><fmt:formatDate pattern='MMddyyyy' value='${d}' /></option>
+				<c:set var="dValue"><fmt:formatDate pattern='yyyy-MM-dd' value='${d}' /></c:set>
+				<c:set var="sel" value="" />
+				<c:if test="${dValue eq currentRecValue}"><c:set var="sel">selected="selected"</c:set></c:if>
+				<option value="<c:out value='${dValue}' />" <c:out value='${sel}' />><fmt:formatDate pattern='MMddyyyy' value='${d}' /></option>
 			</c:forEach>
 		</select>
 			</td>
@@ -91,7 +99,10 @@
 			<td>
 		<select name="arrivedDate">
 			<c:forEach items="${availableDates}" var="d">
-				<option value="<fmt:formatDate pattern='yyyy-MM-dd' value='${d}' />"><fmt:formatDate pattern='MMddyyyy' value='${d}' /></option>
+				<c:set var="dValue"><fmt:formatDate pattern='yyyy-MM-dd' value='${d}' /></c:set>
+				<c:set var="sel" value="" />
+				<c:if test="${dValue eq currentArrValue}"><c:set var="sel">selected="selected"</c:set></c:if>
+				<option value="<c:out value='${dValue}' />" <c:out value='${sel}' />><fmt:formatDate pattern='MMddyyyy' value='${d}' /></option>
 			</c:forEach>
 		</select>
 			</td>
@@ -105,7 +116,10 @@
 			<td>
 		<select name="clearedDate">
 			<c:forEach items="${availableDates}" var="d">
-				<option value="<fmt:formatDate pattern='yyyy-MM-dd' value='${d}' />"><fmt:formatDate pattern='MMddyyyy' value='${d}' /></option>
+				<c:set var="dValue"><fmt:formatDate pattern='yyyy-MM-dd' value='${d}' /></c:set>
+				<c:set var="sel" value="" />
+				<c:if test="${dValue eq currentClrValue}"><c:set var="sel">selected="selected"</c:set></c:if>
+				<option value="<c:out value='${dValue}' />" <c:out value='${sel}' />><fmt:formatDate pattern='MMddyyyy' value='${d}' /></option>
 			</c:forEach>
 		</select>
 			</td>
