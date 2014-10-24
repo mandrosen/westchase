@@ -15,6 +15,7 @@ import com.westchase.persistence.dao.PropertyDAO;
 import com.westchase.persistence.dto.report.ContactDTO;
 import com.westchase.persistence.dto.report.PhoneBookCompanyDTO;
 import com.westchase.persistence.dto.report.PhoneBookPropertyDTO;
+import com.westchase.persistence.dto.report.PropertyCompanyPhoneBookDTO;
 import com.westchase.persistence.model.Category;
 import com.westchase.persistence.model.Naics;
 import com.westchase.persistence.model.PhoneBook;
@@ -90,5 +91,11 @@ public class ReportServiceBean implements ReportService {
 	public List<PhoneBookPropertyDTO> runOfficeBuildingPropertyReport(int squareFootage, double occupancy, boolean westchaseOnly) {
 		PropertyDAO dao = new PropertyDAO();
 		return dao.findOfficeBuildingProperties(squareFootage, occupancy, westchaseOnly);
+	}
+
+	@Override
+	public List<PropertyCompanyPhoneBookDTO> runPropertyCompanyPhoneBookReport(Integer propertyId) {
+		PropertyDAO dao = new PropertyDAO();
+		return dao.listPropertyCompanyPhoneBooks(propertyId);
 	}
 }

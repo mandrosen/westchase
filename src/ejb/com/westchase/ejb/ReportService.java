@@ -7,6 +7,7 @@ import javax.ejb.Local;
 import com.westchase.persistence.dto.report.ContactDTO;
 import com.westchase.persistence.dto.report.PhoneBookCompanyDTO;
 import com.westchase.persistence.dto.report.PhoneBookPropertyDTO;
+import com.westchase.persistence.dto.report.PropertyCompanyPhoneBookDTO;
 import com.westchase.persistence.model.Category;
 import com.westchase.persistence.model.Naics;
 import com.westchase.persistence.model.PhoneBook;
@@ -51,5 +52,8 @@ public interface ReportService {
 	
 	// requested by Vivian Little on 6/23/2010 -- see email
 	List<PhoneBookPropertyDTO> runOfficeBuildingPropertyReport(int squareFootage, double occupancy, boolean westchaseOnly);
+
+	// added after meeting on 2014-10-23 for Irma/Dave
+	List<PropertyCompanyPhoneBookDTO> runPropertyCompanyPhoneBookReport(Integer propertyId);
 
 }

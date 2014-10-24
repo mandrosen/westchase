@@ -13,6 +13,7 @@ import com.westchase.persistence.dto.cms.CompanyPropertyDTO;
 import com.westchase.persistence.dto.cms.PropertyDTO;
 import com.westchase.persistence.dto.report.ContactDTO;
 import com.westchase.persistence.dto.report.PhoneBookPropertyDTO;
+import com.westchase.persistence.dto.report.PropertyCompanyPhoneBookDTO;
 import com.westchase.persistence.model.PhoneBook;
 import com.westchase.persistence.model.Property;
 
@@ -400,6 +401,59 @@ public class PropertyDAO extends BaseDAO<Property> {
 			log.error("", e);
 		}
 		return properties;
+	}
+	
+	public List<PropertyCompanyPhoneBookDTO> listPropertyCompanyPhoneBooks(Integer propertyId) {
+		List<PropertyCompanyPhoneBookDTO> dtoList = null;
+		String sql = "select p.id as mapno,\r\n" + 
+				"  c.id as companyid,\r\n" + 
+				"  pb.id phoneBookId,\r\n" + 
+				"  c.company,\r\n" + 
+				"  pb.firstname,\r\n" + 
+				"  pb.lastname,\r\n" + 
+				"  concat(c.stnumber, ' ', c.staddress) address,\r\n" + 
+				"  c.roomno,\r\n" + 
+				"  c.city,\r\n" + 
+				"  c.state,\r\n" + 
+				"  c.zipcode,\r\n" + 
+				"  pb.wkphone,\r\n" + 
+				"  pb.email,\r\n" + 
+				"  group_concat(pbc.categorycode) as cats\r\n" + 
+				"from property p\r\n" + 
+				"  inner join company_mapno cm on cm.mapno = p.id\r\n" + 
+				"  inner join company c on cm.companyid = c.id\r\n" + 
+				"  inner join phone_book pb on pb.companyid = c.id\r\n" + 
+				"  inner join phone_book_category pbc on pbc.phonebookid = pb.id\r\n" + 
+				"where p.id = :propertyId " + 
+				"group by p.id, c.id, pb.id";
+		try {
+			List<Object[]> resultList = getSession().createSQLQuery(sql)
+					.addScalar("mapno", Hibernate.INTEGER)
+					.addScalar("companyId", Hibernate.INTEGER)
+					.addScalar("phoneBookId", Hibernate.INTEGER)
+					.addScalar("company", Hibernate.STRING)
+					.addScalar("firstname", Hibernate.STRING)
+					.addScalar("lastname", Hibernate.STRING)
+					.addScalar("address", Hibernate.STRING)
+					.addScalar("roomno", Hibernate.STRING)
+					.addScalar("city", Hibernate.STRING)
+					.addScalar("state", Hibernate.STRING)
+					.addScalar("zipcode", Hibernate.STRING)
+					.addScalar("wkphone", Hibernate.STRING)
+					.addScalar("email", Hibernate.STRING)
+					.addScalar("cats", Hibernate.STRING)
+					.setParameter("propertyId", propertyId)
+					.list();
+			if (resultList != null && !resultList.isEmpty()) {
+				dtoList = new ArrayList<PropertyCompanyPhoneBookDTO>();
+				for (Object[] result : resultList) {
+					dtoList.add(new PropertyCompanyPhoneBookDTO(result));
+				}
+			}
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return dtoList;
 	}
 
 
