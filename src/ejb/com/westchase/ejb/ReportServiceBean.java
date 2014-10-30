@@ -94,8 +94,8 @@ public class ReportServiceBean implements ReportService {
 	}
 
 	@Override
-	public List<PropertyCompanyPhoneBookDTO> runPropertyCompanyPhoneBookReport(Integer propertyId) {
+	public List<PropertyCompanyPhoneBookDTO> runPropertyCompanyPhoneBookReport(List<Integer> propertyIdList) {
 		PropertyDAO dao = new PropertyDAO();
-		return dao.listPropertyCompanyPhoneBooks(propertyId);
+		return dao.listPropertyCompanyPhoneBooks(propertyIdList);
 	}
 }

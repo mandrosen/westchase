@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -18,7 +20,7 @@ import com.westchase.utils.ejb.ServiceLocator;
 
 public class PropertyCompanyPhoneBookReportAction extends AbstractReportAction {
 	
-	private Integer propertyId;
+	private String propertyIdStr;
 	
 	private List<PropertyCompanyPhoneBookDTO> results;
 
@@ -33,10 +35,11 @@ public class PropertyCompanyPhoneBookReportAction extends AbstractReportAction {
 	@Override
 	public String execute() {
 		results = new ArrayList<PropertyCompanyPhoneBookDTO>();
-		if (propertyId != null && propertyId.intValue() > 0) {
+		if (StringUtils.isNotBlank(type)) {
+			List<Integer> propertyIdList = getPropertyIdList();
 			ReportService reportServ = ServiceLocator.lookupReportService();
 			if (reportServ != null) {
-				results = reportServ.runPropertyCompanyPhoneBookReport(propertyId);
+				results = reportServ.runPropertyCompanyPhoneBookReport(propertyIdList);
 				if (EXCEL.equals(type)) {
 					return exportToExcel();
 				}
@@ -46,6 +49,20 @@ public class PropertyCompanyPhoneBookReportAction extends AbstractReportAction {
 			}
 		}
 		return SUCCESS;	
+	}
+
+	private List<Integer> getPropertyIdList() {
+		List<Integer> propertyIdList = null;
+		if (StringUtils.isNotBlank(propertyIdStr)) {
+			String[] propertyIds = propertyIdStr.split("\\s*,\\s*");
+			if (propertyIds != null && propertyIds.length > 0) {
+				propertyIdList = new ArrayList<Integer>();
+				for (String propertyIdVal : propertyIds) {
+					propertyIdList.add(new Integer(NumberUtils.toInt(propertyIdVal)));
+				}
+			}
+		}
+		return propertyIdList;
 	}
 
 	@Override
@@ -119,12 +136,12 @@ public class PropertyCompanyPhoneBookReportAction extends AbstractReportAction {
 		return bos;
 	}
 
-	public Integer getPropertyId() {
-		return propertyId;
+	public String getPropertyIdStr() {
+		return propertyIdStr;
 	}
 
-	public void setPropertyId(Integer propertyId) {
-		this.propertyId = propertyId;
+	public void setPropertyIdStr(String propertyIdStr) {
+		this.propertyIdStr = propertyIdStr;
 	}
 
 	public List<PropertyCompanyPhoneBookDTO> getResults() {

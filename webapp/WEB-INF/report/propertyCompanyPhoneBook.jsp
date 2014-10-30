@@ -24,9 +24,9 @@
 	<table>
 	<tr>
 		<td>Mapno</td>
-		<td><s:textfield label="Mapno" name="propertyId"/></td>
+		<td><s:textfield label="Mapno(s)" name="propertyIdStr"/> <span class="format">ex: 1, 2, 4 or leave blank for all</span></td>
     </tr>
-    <tr><td colspan="2"><input type="button" value="Run" onclick="exportreport('')" /></td></tr>
+    <tr><td colspan="2"><input type="button" value="Run" onclick="exportreport('web')" /></td></tr>
     <tr><td colspan="2"><input type="button" value="Export to Excel" onclick="exportreport('excel')" /></td></tr>
     </table>
 </s:form>

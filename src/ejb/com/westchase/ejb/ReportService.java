@@ -54,6 +54,6 @@ public interface ReportService {
 	List<PhoneBookPropertyDTO> runOfficeBuildingPropertyReport(int squareFootage, double occupancy, boolean westchaseOnly);
 
 	// added after meeting on 2014-10-23 for Irma/Dave
-	List<PropertyCompanyPhoneBookDTO> runPropertyCompanyPhoneBookReport(Integer propertyId);
+	List<PropertyCompanyPhoneBookDTO> runPropertyCompanyPhoneBookReport(List<Integer> propertyIdList);
 
 }

@@ -403,7 +403,7 @@ public class PropertyDAO extends BaseDAO<Property> {
 		return properties;
 	}
 	
-	public List<PropertyCompanyPhoneBookDTO> listPropertyCompanyPhoneBooks(Integer propertyId) {
+	public List<PropertyCompanyPhoneBookDTO> listPropertyCompanyPhoneBooks(List<Integer> propertyIdList) {
 		List<PropertyCompanyPhoneBookDTO> dtoList = null;
 		String sql = "select p.id as mapno,\r\n" + 
 				"  c.id as companyid,\r\n" + 
@@ -423,11 +423,14 @@ public class PropertyDAO extends BaseDAO<Property> {
 				"  inner join company_mapno cm on cm.mapno = p.id\r\n" + 
 				"  inner join company c on cm.companyid = c.id\r\n" + 
 				"  inner join phone_book pb on pb.companyid = c.id\r\n" + 
-				"  inner join phone_book_category pbc on pbc.phonebookid = pb.id\r\n" + 
-				"where p.id = :propertyId " + 
-				"group by p.id, c.id, pb.id";
+				"  inner join phone_book_category pbc on pbc.phonebookid = pb.id " +
+				"where p.id > 0 ";
+		if (propertyIdList != null && !propertyIdList.isEmpty()) {
+			sql += " and p.id in (:propertyIdList) ";
+		}
+		sql += "group by p.id, c.id, pb.id";
 		try {
-			List<Object[]> resultList = getSession().createSQLQuery(sql)
+			Query q = getSession().createSQLQuery(sql)
 					.addScalar("mapno", Hibernate.INTEGER)
 					.addScalar("companyId", Hibernate.INTEGER)
 					.addScalar("phoneBookId", Hibernate.INTEGER)
@@ -441,9 +444,11 @@ public class PropertyDAO extends BaseDAO<Property> {
 					.addScalar("zipcode", Hibernate.STRING)
 					.addScalar("wkphone", Hibernate.STRING)
 					.addScalar("email", Hibernate.STRING)
-					.addScalar("cats", Hibernate.STRING)
-					.setParameter("propertyId", propertyId)
-					.list();
+					.addScalar("cats", Hibernate.STRING);
+			if (propertyIdList != null && !propertyIdList.isEmpty()) {
+				q.setParameterList("propertyIdList", propertyIdList);
+			}
+			List<Object[]> resultList = q.list();
 			if (resultList != null && !resultList.isEmpty()) {
 				dtoList = new ArrayList<PropertyCompanyPhoneBookDTO>();
 				for (Object[] result : resultList) {
