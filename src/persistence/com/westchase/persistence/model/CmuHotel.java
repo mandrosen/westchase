@@ -33,6 +33,7 @@ public class CmuHotel implements java.io.Serializable {
 	private String comments;
 	private Date updated;
 	private Date verified;
+	private boolean staticInfoCorrect;
 
 	public CmuHotel() {
 	}
@@ -161,6 +162,15 @@ public class CmuHotel implements java.io.Serializable {
 
 	public void setVerified(Date verified) {
 		this.verified = verified;
+	}
+
+	@Column(name = "static_info_correct")
+	public boolean isStaticInfoCorrect() {
+		return staticInfoCorrect;
+	}
+
+	public void setStaticInfoCorrect(boolean staticInfoCorrect) {
+		this.staticInfoCorrect = staticInfoCorrect;
 	}
 
 }

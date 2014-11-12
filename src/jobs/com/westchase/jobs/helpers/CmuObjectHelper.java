@@ -36,6 +36,7 @@ public class CmuObjectHelper {
 		cmuApt.setSupervisorEmail(input.getSupervisor_email());
 		cmuApt.setSupervisorFax(input.getSupervisor_fax());
 		cmuApt.setSupervisorPhone(input.getSupervisor_phone());
+		cmuApt.setStaticInfoCorrect(input.isStatic_info_correct());
 		return cmuApt;
 	}
 	
@@ -55,6 +56,7 @@ public class CmuObjectHelper {
 		cmuDevsite.setProperty(new Property(input.getProperty()));
 		cmuDevsite.setRestrictions(input.getRestrictions());
 		cmuDevsite.setSiteSize(new Double(input.getSite_size()));
+		cmuDevsite.setStaticInfoCorrect(input.isStatic_info_correct());
 		return cmuDevsite;
 	}
 	
@@ -68,6 +70,7 @@ public class CmuObjectHelper {
 		cmuHotel.setGeneralMgrPhone(input.getGeneral_mgr_phone());
 		cmuHotel.setOccupancy(new Double(input.getOccupancy()));
 		cmuHotel.setProperty(new Property(input.getProperty()));
+		cmuHotel.setStaticInfoCorrect(input.isStatic_info_correct());
 		return cmuHotel;
 	}
 	
@@ -110,6 +113,7 @@ public class CmuObjectHelper {
 		cmuOrs.setPropertyMgrFax(input.getProperty_mgr_fax());
 		cmuOrs.setPropertyMgrPhone(input.getProperty_mgr_phone());
 		cmuOrs.setSqFtForLease(new Double(input.getSq_ft_for_lease()));
+		cmuOrs.setStaticInfoCorrect(input.isStatic_info_correct());
 		return cmuOrs;
 	}
 	
