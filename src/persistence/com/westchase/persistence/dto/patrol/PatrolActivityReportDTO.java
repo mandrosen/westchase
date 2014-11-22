@@ -24,35 +24,36 @@ public class PatrolActivityReportDTO implements Serializable {
 	private Long footPatrolCount;
 	private Long otherCount;
 
-	private Long crimeArrestsFelony;
-	private Long crimeArrestsClassAbMisdemeanor;
-	private Long crimeArrestsClassCTicket;
-	private Long crimeArrestsTrafficDrt;
-	private Long warrantsCity;
-	private Long warrantsFelony;
-	private Long warrantsMisdemeanor;
-	private Long warrantsSetcic;
-	private Long drtInvestigationsWarnings;
-	private Long drtInvestigationsAbatements;
-	private Long drtInvestigationsTickets;
-	private Long drtInvestigationsOffenseReports;
-	private Long fieldParking;
-	private Long fieldChargesFiled;
-	private Long fieldSuspectsInJail;
-	private Long fieldHolds;
-	private Long fieldTrafficStops;
-	private Long trafficMoving;
-	private Long trafficNonMoving;
+	private Double crimeArrestsFelony;
+	private Double crimeArrestsClassAbMisdemeanor;
+	private Double crimeArrestsClassCTicket;
+	private Double crimeArrestsTrafficDrt;
+	private Double warrantsCity;
+	private Double warrantsFelony;
+	private Double warrantsMisdemeanor;
+	private Double warrantsSetcic;
+	private Double drtInvestigationsWarnings;
+	private Double drtInvestigationsAbatements;
+	private Double drtInvestigationsTickets;
+	private Double drtInvestigationsOffenseReports;
+	private Double fieldParking;
+	private Double fieldChargesFiled;
+	private Double fieldSuspectsInJail;
+	private Double fieldHolds;
+	private Double fieldTrafficStops;
+	private Double trafficMoving;
+	private Double trafficNonMoving;
 	
-	private Long primaryCalls;
-	private Long secondaryCalls;
-	private Long onViewsFlaggedDown;
-	private Long incidentReports;
-	private Long accidentReports;
-	private Long supplementReports;
-	private Long crimeInitiatives;
-	private Long crimeInitiativesInWcVehicle;
-	private Long adminAssignments;
+	private Double primaryCalls;
+	private Double secondaryCalls;
+	private Double onViewsFlaggedDown;
+	private Double incidentReports;
+	private Double accidentReports;
+	private Double supplementReports;
+	private Double crimeInitiatives;
+	private Double crimeInitiativesInWcVehicle;
+	private Double adminAssignments;
+	
 	private Long amChecklistCompleted;
 	private Long businessChecksCompletedEast;
 	private Long businessChecksCompletedWest;
@@ -96,34 +97,34 @@ public class PatrolActivityReportDTO implements Serializable {
 			Long footPatrolCount,
 			Long otherCount,
 			
-			Long crimeArrestsFelony, 
-			Long crimeArrestsClassAbMisdemeanor,
-			Long crimeArrestsClassCTicket, 
-			Long crimeArrestsTrafficDrt, 
-			Long warrantsCity, 
-			Long warrantsFelony,
-			Long warrantsMisdemeanor, 
-			Long warrantsSetcic, 
-			Long drtInvestigationsWarnings,
-			Long drtInvestigationsAbatements, 
-			Long drtInvestigationsTickets, 
-			Long drtInvestigationsOffenseReports,
-			Long fieldParking, 
-			Long fieldChargesFiled, 
-			Long fieldSuspectsInJail, 
-			Long fieldHolds,
-			Long fieldTrafficStops, 
-			Long trafficMoving, 
-			Long trafficNonMoving, 
-			Long primaryCalls, 
-			Long secondaryCalls,
-			Long onViewsFlaggedDown, 
-			Long incidentReports, 
-			Long accidentReports, 
-			Long supplementReports,
-			Long crimeInitiatives, 
-			Long crimeInitiativesInWcVehicle, 
-			Long adminAssignments, 
+			Double crimeArrestsFelony, 
+			Double crimeArrestsClassAbMisdemeanor,
+			Double crimeArrestsClassCTicket, 
+			Double crimeArrestsTrafficDrt, 
+			Double warrantsCity, 
+			Double warrantsFelony,
+			Double warrantsMisdemeanor, 
+			Double warrantsSetcic, 
+			Double drtInvestigationsWarnings,
+			Double drtInvestigationsAbatements, 
+			Double drtInvestigationsTickets, 
+			Double drtInvestigationsOffenseReports,
+			Double fieldParking, 
+			Double fieldChargesFiled, 
+			Double fieldSuspectsInJail, 
+			Double fieldHolds,
+			Double fieldTrafficStops, 
+			Double trafficMoving, 
+			Double trafficNonMoving, 
+			Double primaryCalls, 
+			Double secondaryCalls,
+			Double onViewsFlaggedDown, 
+			Double incidentReports, 
+			Double accidentReports, 
+			Double supplementReports,
+			Double crimeInitiatives, 
+			Double crimeInitiativesInWcVehicle, 
+			Double adminAssignments, 
 			Long amChecklistCompleted,
 			Long businessChecksCompletedEast, 
 			Long businessChecksCompletedWest, 
@@ -192,7 +193,14 @@ public class PatrolActivityReportDTO implements Serializable {
 		this.communityCrimePreventionSeminars = communityCrimePreventionSeminars;
 	}
 	
-	// used to debug hql load issue
+//	 used to debug hql load issue
+//
+//	public PatrolActivityReportDTO(
+//			Officer officer, 
+//			Object onViewsFlaggedDown) {
+//		setOfficer(officer);
+//	}	
+//	
 //	public PatrolActivityReportDTO(
 //			Object officer, 
 //			Object dutyHours,
@@ -365,227 +373,227 @@ public class PatrolActivityReportDTO implements Serializable {
 	public void setOtherCount(Long otherCount) {
 		this.otherCount = otherCount;
 	}
-	public Long getCrimeArrestsFelony() {
+	public Double getCrimeArrestsFelony() {
 		return crimeArrestsFelony;
 	}
 
-	public void setCrimeArrestsFelony(Long crimeArrestsFelony) {
+	public void setCrimeArrestsFelony(Double crimeArrestsFelony) {
 		this.crimeArrestsFelony = crimeArrestsFelony;
 	}
 
-	public Long getCrimeArrestsClassAbMisdemeanor() {
+	public Double getCrimeArrestsClassAbMisdemeanor() {
 		return crimeArrestsClassAbMisdemeanor;
 	}
 
-	public void setCrimeArrestsClassAbMisdemeanor(Long crimeArrestsClassAbMisdemeanor) {
+	public void setCrimeArrestsClassAbMisdemeanor(Double crimeArrestsClassAbMisdemeanor) {
 		this.crimeArrestsClassAbMisdemeanor = crimeArrestsClassAbMisdemeanor;
 	}
 
-	public Long getCrimeArrestsClassCTicket() {
+	public Double getCrimeArrestsClassCTicket() {
 		return crimeArrestsClassCTicket;
 	}
 
-	public void setCrimeArrestsClassCTicket(Long crimeArrestsClassCTicket) {
+	public void setCrimeArrestsClassCTicket(Double crimeArrestsClassCTicket) {
 		this.crimeArrestsClassCTicket = crimeArrestsClassCTicket;
 	}
 
-	public Long getCrimeArrestsTrafficDrt() {
+	public Double getCrimeArrestsTrafficDrt() {
 		return crimeArrestsTrafficDrt;
 	}
 
-	public void setCrimeArrestsTrafficDrt(Long crimeArrestsTrafficDrt) {
+	public void setCrimeArrestsTrafficDrt(Double crimeArrestsTrafficDrt) {
 		this.crimeArrestsTrafficDrt = crimeArrestsTrafficDrt;
 	}
 
-	public Long getWarrantsCity() {
+	public Double getWarrantsCity() {
 		return warrantsCity;
 	}
 
-	public void setWarrantsCity(Long warrantsCity) {
+	public void setWarrantsCity(Double warrantsCity) {
 		this.warrantsCity = warrantsCity;
 	}
 
-	public Long getWarrantsFelony() {
+	public Double getWarrantsFelony() {
 		return warrantsFelony;
 	}
 
-	public void setWarrantsFelony(Long warrantsFelony) {
+	public void setWarrantsFelony(Double warrantsFelony) {
 		this.warrantsFelony = warrantsFelony;
 	}
 
-	public Long getWarrantsMisdemeanor() {
+	public Double getWarrantsMisdemeanor() {
 		return warrantsMisdemeanor;
 	}
 
-	public void setWarrantsMisdemeanor(Long warrantsMisdemeanor) {
+	public void setWarrantsMisdemeanor(Double warrantsMisdemeanor) {
 		this.warrantsMisdemeanor = warrantsMisdemeanor;
 	}
 
-	public Long getWarrantsSetcic() {
+	public Double getWarrantsSetcic() {
 		return warrantsSetcic;
 	}
 
-	public void setWarrantsSetcic(Long warrantsSetcic) {
+	public void setWarrantsSetcic(Double warrantsSetcic) {
 		this.warrantsSetcic = warrantsSetcic;
 	}
 
-	public Long getDrtInvestigationsWarnings() {
+	public Double getDrtInvestigationsWarnings() {
 		return drtInvestigationsWarnings;
 	}
 
-	public void setDrtInvestigationsWarnings(Long drtInvestigationsWarnings) {
+	public void setDrtInvestigationsWarnings(Double drtInvestigationsWarnings) {
 		this.drtInvestigationsWarnings = drtInvestigationsWarnings;
 	}
 
-	public Long getDrtInvestigationsAbatements() {
+	public Double getDrtInvestigationsAbatements() {
 		return drtInvestigationsAbatements;
 	}
 
-	public void setDrtInvestigationsAbatements(Long drtInvestigationsAbatements) {
+	public void setDrtInvestigationsAbatements(Double drtInvestigationsAbatements) {
 		this.drtInvestigationsAbatements = drtInvestigationsAbatements;
 	}
 
-	public Long getDrtInvestigationsTickets() {
+	public Double getDrtInvestigationsTickets() {
 		return drtInvestigationsTickets;
 	}
 
-	public void setDrtInvestigationsTickets(Long drtInvestigationsTickets) {
+	public void setDrtInvestigationsTickets(Double drtInvestigationsTickets) {
 		this.drtInvestigationsTickets = drtInvestigationsTickets;
 	}
 
-	public Long getDrtInvestigationsOffenseReports() {
+	public Double getDrtInvestigationsOffenseReports() {
 		return drtInvestigationsOffenseReports;
 	}
 
-	public void setDrtInvestigationsOffenseReports(Long drtInvestigationsOffenseReports) {
+	public void setDrtInvestigationsOffenseReports(Double drtInvestigationsOffenseReports) {
 		this.drtInvestigationsOffenseReports = drtInvestigationsOffenseReports;
 	}
 
-	public Long getFieldParking() {
+	public Double getFieldParking() {
 		return fieldParking;
 	}
 
-	public void setFieldParking(Long fieldParking) {
+	public void setFieldParking(Double fieldParking) {
 		this.fieldParking = fieldParking;
 	}
 
-	public Long getFieldChargesFiled() {
+	public Double getFieldChargesFiled() {
 		return fieldChargesFiled;
 	}
 
-	public void setFieldChargesFiled(Long fieldChargesFiled) {
+	public void setFieldChargesFiled(Double fieldChargesFiled) {
 		this.fieldChargesFiled = fieldChargesFiled;
 	}
 
-	public Long getFieldSuspectsInJail() {
+	public Double getFieldSuspectsInJail() {
 		return fieldSuspectsInJail;
 	}
 
-	public void setFieldSuspectsInJail(Long fieldSuspectsInJail) {
+	public void setFieldSuspectsInJail(Double fieldSuspectsInJail) {
 		this.fieldSuspectsInJail = fieldSuspectsInJail;
 	}
 
-	public Long getFieldHolds() {
+	public Double getFieldHolds() {
 		return fieldHolds;
 	}
 
-	public void setFieldHolds(Long fieldHolds) {
+	public void setFieldHolds(Double fieldHolds) {
 		this.fieldHolds = fieldHolds;
 	}
 
-	public Long getFieldTrafficStops() {
+	public Double getFieldTrafficStops() {
 		return fieldTrafficStops;
 	}
 
-	public void setFieldTrafficStops(Long fieldTrafficStops) {
+	public void setFieldTrafficStops(Double fieldTrafficStops) {
 		this.fieldTrafficStops = fieldTrafficStops;
 	}
 
-	public Long getTrafficMoving() {
+	public Double getTrafficMoving() {
 		return trafficMoving;
 	}
 
-	public void setTrafficMoving(Long trafficMoving) {
+	public void setTrafficMoving(Double trafficMoving) {
 		this.trafficMoving = trafficMoving;
 	}
 
-	public Long getTrafficNonMoving() {
+	public Double getTrafficNonMoving() {
 		return trafficNonMoving;
 	}
 
-	public void setTrafficNonMoving(Long trafficNonMoving) {
+	public void setTrafficNonMoving(Double trafficNonMoving) {
 		this.trafficNonMoving = trafficNonMoving;
 	}
 
-	public Long getPrimaryCalls() {
+	public Double getPrimaryCalls() {
 		return primaryCalls;
 	}
 
-	public void setPrimaryCalls(Long primaryCalls) {
+	public void setPrimaryCalls(Double primaryCalls) {
 		this.primaryCalls = primaryCalls;
 	}
 
-	public Long getSecondaryCalls() {
+	public Double getSecondaryCalls() {
 		return secondaryCalls;
 	}
 
-	public void setSecondaryCalls(Long secondaryCalls) {
+	public void setSecondaryCalls(Double secondaryCalls) {
 		this.secondaryCalls = secondaryCalls;
 	}
 
-	public Long getOnViewsFlaggedDown() {
+	public Double getOnViewsFlaggedDown() {
 		return onViewsFlaggedDown;
 	}
 
-	public void setOnViewsFlaggedDown(Long onViewsFlaggedDown) {
+	public void setOnViewsFlaggedDown(Double onViewsFlaggedDown) {
 		this.onViewsFlaggedDown = onViewsFlaggedDown;
 	}
 
-	public Long getIncidentReports() {
+	public Double getIncidentReports() {
 		return incidentReports;
 	}
 
-	public void setIncidentReports(Long incidentReports) {
+	public void setIncidentReports(Double incidentReports) {
 		this.incidentReports = incidentReports;
 	}
 
-	public Long getAccidentReports() {
+	public Double getAccidentReports() {
 		return accidentReports;
 	}
 
-	public void setAccidentReports(Long accidentReports) {
+	public void setAccidentReports(Double accidentReports) {
 		this.accidentReports = accidentReports;
 	}
 
-	public Long getSupplementReports() {
+	public Double getSupplementReports() {
 		return supplementReports;
 	}
 
-	public void setSupplementReports(Long supplementReports) {
+	public void setSupplementReports(Double supplementReports) {
 		this.supplementReports = supplementReports;
 	}
 
-	public Long getCrimeInitiatives() {
+	public Double getCrimeInitiatives() {
 		return crimeInitiatives;
 	}
 
-	public void setCrimeInitiatives(Long crimeInitiatives) {
+	public void setCrimeInitiatives(Double crimeInitiatives) {
 		this.crimeInitiatives = crimeInitiatives;
 	}
 
-	public Long getCrimeInitiativesInWcVehicle() {
+	public Double getCrimeInitiativesInWcVehicle() {
 		return crimeInitiativesInWcVehicle;
 	}
 
-	public void setCrimeInitiativesInWcVehicle(Long crimeInitiativesInWcVehicle) {
+	public void setCrimeInitiativesInWcVehicle(Double crimeInitiativesInWcVehicle) {
 		this.crimeInitiativesInWcVehicle = crimeInitiativesInWcVehicle;
 	}
 
-	public Long getAdminAssignments() {
+	public Double getAdminAssignments() {
 		return adminAssignments;
 	}
 
-	public void setAdminAssignments(Long adminAssignments) {
+	public void setAdminAssignments(Double adminAssignments) {
 		this.adminAssignments = adminAssignments;
 	}
 

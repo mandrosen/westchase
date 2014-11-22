@@ -75,11 +75,40 @@
 			<tbody>
 				<tr>
 					<td>
+						<label for="officer-count">Officers</label>
+						<s:optiontransferselect 
+						      label="Officers"
+						      name="leftSideOfficers"
+						      leftTitle="Available Officers"
+						      rightTitle="Current Officers"
+						      list="availableOfficers"
+						      listKey="id"
+						      listValue="fullNameReverse"
+						      
+						      doubleName="selectedOfficerIdList"
+						      doubleList="currentOfficers"
+						      doubleListKey="id"
+						      doubleListValue="fullNameReverse"
+						      doubleHeaderKey="doubleHeaderKey"
+						      doubleHeaderValue="--- Please Select ---"
+						
+							  allowAddAllToLeft="true"
+						      allowAddAllToRight="false"
+						      allowSelectAll="false" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<table class="header-fields">
+			<tbody>
+				<tr>
+					<!-- <td>
 						<label for="officer-id">Officer</label>
 						<s:select list="availableOfficers" name="currentPatrolActivity.officer.id" id="officer-id"
 						    headerKey="-1" headerValue="-- Please Select --" listValue="fullNameReverse" listKey="id" emptyOption="false" 
 						    required="true" tabindex="1" />
-					</td>
+					</td>-->
 					<td>
 						<label for="patrol-type-id">Patrol Type</label>
 						<s:select list="availablePatrolTypes" name="currentPatrolActivity.patrolType.id" id="patrol-type-id"

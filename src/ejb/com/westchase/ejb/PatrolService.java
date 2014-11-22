@@ -50,13 +50,15 @@ public interface PatrolService {
 	// -- PatrolActivity -- //
 	PatrolActivity getActivity(Long patrolActivityId) throws Exception;
 	
+	List<Officer> listActivityOfficers(Long patrolActivityId);
+	
 	List<PatrolActivity> findAll(PatrolActivitySearchCriteria criteria);
 	
 	long findAllCount(PatrolActivitySearchCriteria criteria);
 	
 	List<PatrolActivity> listOtherByOfficerAndDay(PatrolActivity patrolActivity);
 	
-	Long saveOrUpdateActivity(PatrolActivity patrolActivity, List<Integer> hotspotIdListEast, List<Integer> hotspotIdListWest) throws Exception;
+	Long saveOrUpdateActivity(List<Integer> officerIdList, PatrolActivity patrolActivity, List<Integer> hotspotIdListEast, List<Integer> hotspotIdListWest) throws Exception;
 
 	void deleteActivity(Long patrolActivityId);
 	

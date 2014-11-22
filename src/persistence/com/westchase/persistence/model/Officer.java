@@ -29,8 +29,14 @@ public class Officer implements java.io.Serializable {
 	private Integer badge;
 	private String cellPhone;
 	private Set<PatrolActivity> patrolActivities = new HashSet<PatrolActivity>(0);
+	private Set<PatrolActivityOfficer> patrolActivityOfficers = new HashSet<PatrolActivityOfficer>(0);
 
 	public Officer() {
+	}
+	
+	public Officer(Integer id) {
+		this();
+		setId(id);
 	}
 
 	public Officer(String firstName, String lastName) {
@@ -100,6 +106,15 @@ public class Officer implements java.io.Serializable {
 
 	public void setPatrolActivities(Set<PatrolActivity> patrolActivities) {
 		this.patrolActivities = patrolActivities;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "officer")
+	public Set<PatrolActivityOfficer> getPatrolActivityOfficers() {
+		return this.patrolActivityOfficers;
+	}
+
+	public void setPatrolActivityOfficers(Set<PatrolActivityOfficer> patrolActivityOfficers) {
+		this.patrolActivityOfficers = patrolActivityOfficers;
 	}
 	
 	@Transient

@@ -115,34 +115,34 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 			int totalFootPatrolCount = 0;
 			int totalOtherCount = 0;
 			
-			int totalCrimeArrestsFelony = 0;
-			int totalCrimeArrestsClassAbMisdemeanor = 0;
-			int totalCrimeArrestsClassCTicket = 0;
-			int totalCrimeArrestsTrafficDrt = 0;
-			int totalWarrantsCity = 0;
-			int totalWarrantsFelony = 0;
-			int totalWarrantsMisdemeanor = 0;
-			int totalWarrantsSetcic = 0;
-			int totalDrtInvestigationsWarnings = 0;
-			int totalDrtInvestigationsAbatements = 0;
-			int totalDrtInvestigationsTickets = 0;
-			int totalDrtInvestigationsOffenseReports = 0;
-			int totalFieldParking = 0;
-			int totalFieldChargesFiled = 0;
-			int totalFieldSuspectsInJail = 0;
-			int totalFieldHolds = 0;
-			int totalFieldTrafficStops = 0;
-			int totalTrafficMoving = 0;
-			int totalTrafficNonMoving = 0;
-			int totalPrimaryCalls = 0;
-			int totalSecondaryCalls = 0;
-			int totalOnViewsFlaggedDown = 0;
-			int totalIncidentReports = 0;
-			int totalAccidentReports = 0;
-			int totalSupplementReports = 0;
-			int totalCrimeInitiatives = 0;
-			int totalCrimeInitiativesInWcVehicle = 0;
-			int totalAdminAssignments = 0;
+			double totalCrimeArrestsFelony = 0;
+			double totalCrimeArrestsClassAbMisdemeanor = 0;
+			double totalCrimeArrestsClassCTicket = 0;
+			double totalCrimeArrestsTrafficDrt = 0;
+			double totalWarrantsCity = 0;
+			double totalWarrantsFelony = 0;
+			double totalWarrantsMisdemeanor = 0;
+			double totalWarrantsSetcic = 0;
+			double totalDrtInvestigationsWarnings = 0;
+			double totalDrtInvestigationsAbatements = 0;
+			double totalDrtInvestigationsTickets = 0;
+			double totalDrtInvestigationsOffenseReports = 0;
+			double totalFieldParking = 0;
+			double totalFieldChargesFiled = 0;
+			double totalFieldSuspectsInJail = 0;
+			double totalFieldHolds = 0;
+			double totalFieldTrafficStops = 0;
+			double totalTrafficMoving = 0;
+			double totalTrafficNonMoving = 0;
+			double totalPrimaryCalls = 0;
+			double totalSecondaryCalls = 0;
+			double totalOnViewsFlaggedDown = 0;
+			double totalIncidentReports = 0;
+			double totalAccidentReports = 0;
+			double totalSupplementReports = 0;
+			double totalCrimeInitiatives = 0;
+			double totalCrimeInitiativesInWcVehicle = 0;
+			double totalAdminAssignments = 0;
 			int totalAmChecklistCompleted = 0;
 			int totalBusinessChecksCompletedEast = 0;
 			int totalBusinessChecksCompletedWest = 0;
@@ -512,7 +512,10 @@ public class PatrolActivityReportAction extends AbstractReportAction {
 //			sheet.addMergedRegion(region);
 			
 			for (int i = 0; i < col; i++) {
-				sheet.autoSizeColumn(i);
+				try {
+					sheet.autoSizeColumn(i);
+				} catch (Exception e) {
+				}
 			}
             
 		} catch (Exception e) {

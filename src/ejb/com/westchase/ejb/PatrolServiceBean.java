@@ -4,9 +4,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.criterion.Order;
@@ -22,6 +24,7 @@ import com.westchase.persistence.dao.PatrolActivityDAO;
 import com.westchase.persistence.dao.PatrolActivityDetailCitizenDAO;
 import com.westchase.persistence.dao.PatrolActivityDetailDAO;
 import com.westchase.persistence.dao.PatrolActivityHotspotDAO;
+import com.westchase.persistence.dao.PatrolActivityOfficerDAO;
 import com.westchase.persistence.dao.PatrolDetailCategoryDAO;
 import com.westchase.persistence.dao.PatrolDetailTypeDAO;
 import com.westchase.persistence.dao.PatrolHotspotDAO;
@@ -39,6 +42,7 @@ import com.westchase.persistence.model.PatrolActivity;
 import com.westchase.persistence.model.PatrolActivityDetail;
 import com.westchase.persistence.model.PatrolActivityDetailCitizen;
 import com.westchase.persistence.model.PatrolActivityHotspot;
+import com.westchase.persistence.model.PatrolActivityOfficer;
 import com.westchase.persistence.model.PatrolDetailCategory;
 import com.westchase.persistence.model.PatrolDetailType;
 import com.westchase.persistence.model.PatrolHotspot;
@@ -107,7 +111,7 @@ public class PatrolServiceBean implements PatrolService {
 	}
 	@Override
 	public List<PatrolDetailType> listDetailTypes(List<Integer> itemIdList) {
-		if (!BaseDAO.hasListValues(itemIdList)) {
+		if (itemIdList != null && !BaseDAO.hasListValues(itemIdList)) {
 			return listDetailTypes(itemIdList);
 		}
 		final PatrolDetailTypeDAO dao = new PatrolDetailTypeDAO();
@@ -140,6 +144,13 @@ public class PatrolServiceBean implements PatrolService {
 	}
 	
 	@Override
+	@PermitAll
+	public List<Officer> listActivityOfficers(Long patrolActivityId) {
+		final PatrolActivityOfficerDAO dao = new PatrolActivityOfficerDAO();
+		return dao.listOfficers(patrolActivityId);
+	}
+	
+	@Override
 	public List<PatrolActivity> findAll(PatrolActivitySearchCriteria criteria) {
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
 		return dao.findAll(criteria);
@@ -165,11 +176,13 @@ public class PatrolServiceBean implements PatrolService {
 	}
 
 	@Override
-	public Long saveOrUpdateActivity(PatrolActivity patrolActivity, List<Integer> hotspotIdListEast, List<Integer> hotspotIdListWest) throws Exception {
-		if (patrolActivity != null && patrolActivity.getOfficer() != null) {
+	public Long saveOrUpdateActivity(List<Integer> officerIdList, PatrolActivity patrolActivity, List<Integer> hotspotIdListEast, List<Integer> hotspotIdListWest) throws Exception {
+		if (patrolActivity != null && CollectionUtils.isNotEmpty(officerIdList)) {
 			
 			// check consistent times
 			//List<PatrolActivity> sameOfficerSameDayList = listOtherByOfficerAndDay(patrolActivity.getId(), patrolActivity.getOfficer().getId(), patrolActivity.getStartDateTime());
+			
+			patrolActivity.setPatrolOfficerCount(officerIdList.size());
 			
 			if (patrolActivity.getPatrolPhone() != null && patrolActivity.getPatrolPhone().getId() != null && patrolActivity.getPatrolPhone().getId().intValue() < 0) {
 				patrolActivity.setPatrolPhone(null);
@@ -178,6 +191,8 @@ public class PatrolServiceBean implements PatrolService {
 			dao.saveOrUpdate(patrolActivity);
 			if (patrolActivity.getId() != null) {
 				
+				savePatrolActivityOfficerList(patrolActivity.getId(), officerIdList);
+				
 				saveHotspotIdList(patrolActivity.getId(), false, hotspotIdListEast);
 				saveHotspotIdList(patrolActivity.getId(), true, hotspotIdListWest);
 				
@@ -185,6 +200,20 @@ public class PatrolServiceBean implements PatrolService {
 			}
 		}
 		return null;
+	}
+
+	private void savePatrolActivityOfficerList(Long patrolActivityId, List<Integer> officerIdList) {
+		if (patrolActivityId != null && patrolActivityId.longValue() > 0 && CollectionUtils.isNotEmpty(officerIdList)) {
+			PatrolActivityOfficerDAO dao = new PatrolActivityOfficerDAO();
+			dao.removeAllForPatrolActivity(patrolActivityId);
+		
+			for (Integer officerId : officerIdList) {
+				PatrolActivityOfficer patrolActivityOfficer = new PatrolActivityOfficer();
+				patrolActivityOfficer.setOfficer(new Officer(officerId));
+				patrolActivityOfficer.setPatrolActivity(new PatrolActivity(patrolActivityId));
+				dao.save(patrolActivityOfficer);
+			}
+		}
 	}
 
 	private boolean saveHotspotIdList(Long patrolActivityId, boolean eastWest, List<Integer> hotspotIdList) {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.westchase.ejb.AuditService;
@@ -33,6 +34,7 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	private Long patrolActivityId;
     private Long delId;
 	private PatrolActivity currentPatrolActivity;
+	private List<Officer> currentOfficers;
 	private List<PatrolActivityDetail> currentPatrolActivityDetails;
 
 	private List<Officer> availableOfficers;
@@ -64,6 +66,7 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	private String hikeDateEnd3;
 	private String hikeTimeEnd3;
 	
+	private List<Integer> selectedOfficerIdList;
 	private List<Integer> patrolTypeIdList;
 	private List<Integer> hotspotIdListEast;
 	private List<Integer> hotspotIdListWest;
@@ -270,6 +273,7 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 			if (patrolActivityId != null) {
 				currentPatrolActivity = patrolServ.getActivity(patrolActivityId);
 				if (currentPatrolActivity != null) {
+					currentOfficers = patrolServ.listActivityOfficers(patrolActivityId);
 					currentPatrolActivityDetails = patrolServ.findActivityDetail(patrolActivityId);
 					hotspotIdListEast = patrolServ.getHotspotIdList(patrolActivityId, false);
 					hotspotIdListWest = patrolServ.getHotspotIdList(patrolActivityId, true);
@@ -396,6 +400,7 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	        	Employee emp = getEmployee();
 	        	if (emp != null && emp.getId() != null) {
 
+	        		// TODO: update this for multiple officers per activity
 	        		List<PatrolActivity> possibleConflicts = patrolServ.listOtherByOfficerAndDay(currentPatrolActivity);
 	        		if (possibleConflicts != null && !possibleConflicts.isEmpty()) {
 	        			StringBuffer conflictStr = new StringBuffer();
@@ -405,7 +410,7 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	        			getRequest().getSession(true).setAttribute("WCActionWarning", "This record overlaps with another patrol.  Conflicts: " + conflictStr);
 	        		}
 
-	        		setPatrolActivityId(patrolServ.saveOrUpdateActivity(currentPatrolActivity, hotspotIdListEast, hotspotIdListWest));
+	        		setPatrolActivityId(patrolServ.saveOrUpdateActivity(selectedOfficerIdList, currentPatrolActivity, hotspotIdListEast, hotspotIdListWest));
 
 	        		if (patrolActivityId == null) {
 	        			error = "Unable to save Patrol Activity.  Make sure required fields are filled and the time does not overlap another patrol for this officer.";
@@ -705,7 +710,7 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 	@Override
 	public void validate() {
 		if ((delId == null || delId.longValue() <= 0) && currentPatrolActivity != null) {
-			if (currentPatrolActivity.getOfficer() == null || currentPatrolActivity.getOfficer().getId() == null || currentPatrolActivity.getOfficer().getId().intValue() <= 0) {
+			if (CollectionUtils.isEmpty(selectedOfficerIdList)) {
 	//			addFieldError("currentPatrolActivity.officer.id", "Officer is required");
 				addActionError("Officer is required");
 			}
@@ -772,5 +777,21 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 
 	public void setHotspotIdListWest(List<Integer> hotspotIdListWest) {
 		this.hotspotIdListWest = hotspotIdListWest;
+	}
+
+	public List<Officer> getCurrentOfficers() {
+		return currentOfficers;
+	}
+
+	public void setCurrentOfficers(List<Officer> currentOfficers) {
+		this.currentOfficers = currentOfficers;
+	}
+
+	public List<Integer> getSelectedOfficerIdList() {
+		return selectedOfficerIdList;
+	}
+
+	public void setSelectedOfficerIdList(List<Integer> selectedOfficerIdList) {
+		this.selectedOfficerIdList = selectedOfficerIdList;
 	}
 }

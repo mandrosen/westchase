@@ -27,6 +27,7 @@ public class PatrolActivity implements java.io.Serializable {
 
 	private Long id;
 	private Officer officer;
+	private int patrolOfficerCount;
 	private PatrolShop patrolShop;
 	private PatrolPhone patrolPhone;
 	private PatrolType patrolType;
@@ -87,6 +88,7 @@ public class PatrolActivity implements java.io.Serializable {
 	private boolean deleted;
 	private Set<PatrolActivityDetail> patrolActivityDetails = new HashSet<PatrolActivityDetail>(0);
 	private Set<PatrolActivityHotspot> patrolActivityHotspots = new HashSet<PatrolActivityHotspot>(0);
+	private Set<PatrolActivityOfficer> patrolActivityOfficers = new HashSet<PatrolActivityOfficer>(0);
 
 	public PatrolActivity() {
 		super();
@@ -252,13 +254,22 @@ public class PatrolActivity implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "officer_id", nullable = false)
+	@JoinColumn(name = "officer_id", nullable = true)
 	public Officer getOfficer() {
 		return this.officer;
 	}
 
 	public void setOfficer(Officer officer) {
 		this.officer = officer;
+	}
+
+	@Column(name = "patrol_officer_count")
+	public int getPatrolOfficerCount() {
+		return patrolOfficerCount;
+	}
+
+	public void setPatrolOfficerCount(int patrolOfficerCount) {
+		this.patrolOfficerCount = patrolOfficerCount;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -790,6 +801,15 @@ public class PatrolActivity implements java.io.Serializable {
 
 	public void setPatrolActivityHotspots(Set<PatrolActivityHotspot> patrolActivityHotspots) {
 		this.patrolActivityHotspots = patrolActivityHotspots;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "patrolActivity")
+	public Set<PatrolActivityOfficer> getPatrolActivityOfficers() {
+		return this.patrolActivityOfficers;
+	}
+
+	public void setPatrolActivityOfficers(Set<PatrolActivityOfficer> patrolActivityOfficers) {
+		this.patrolActivityOfficers = patrolActivityOfficers;
 	}
 
 }

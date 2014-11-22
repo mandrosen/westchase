@@ -105,7 +105,7 @@
 	            <td><a href="<s:url action="editActivity-%{id}" />"><s:property value="id"/></a></td>
 	            <td><s:property value="officer.fullNameReverse"/></td>
 	
-	            <td><s:date name="startDateTime" format="MM/dd/yyyy" /></td>
+	            <td><s:date name="activityDate" format="MM/dd/yyyy" /></td>
 	            <td><s:property value="patrolType.name" /></td>
 	            <td>
 	           		<a href="<s:url action="editActivity-%{id}" />">Edit</a>

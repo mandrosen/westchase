@@ -43,7 +43,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 				paramMap.put("endDate", criteria.getEndDate());
 			}
 			if (pa.getOfficer() != null && pa.getOfficer().getId() != null && pa.getOfficer().getId().intValue() > 0) {
-				query.append(" and ").append(alias).append(".officer.id = :officerId ");
+				query.append(" and pao.officer.id = :officerId ");
 				paramMap.put("officerId", pa.getOfficer().getId());
 			}
 		}
@@ -53,7 +53,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		if (StringUtils.isNotBlank(criteria.getOrderCol())) {
 			String orderBy = alias + "." + criteria.getOrderCol() + " " + criteria.getOrderDir();
 			if (!"officer.lastName".equals(criteria.getOrderCol())) {
-				orderBy += ", " + alias + ".officer.lastName asc";
+				orderBy += ", pao.officer.lastName asc";
 			}
 			query.append("order by ").append(orderBy);
 		}
@@ -72,7 +72,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 	public List<PatrolActivity> findAll(PatrolActivitySearchCriteria criteria) {
 		List<PatrolActivity> patrolActivities = null;
 		try {
-			Query q = getQuery(criteria, "select p from PatrolActivity p where p.deleted = 0 ", "p");
+			Query q = getQuery(criteria, "select new com.westchase.persistence.dto.patrol.PatrolActivitySearchResultDTO(p.id, pao.officer, p.startDateTime, p.patrolType) from PatrolActivity p join p.patrolActivityOfficers pao where p.deleted = 0 ", "p");
 			patrolActivities = prepareQuery(q, criteria).list();		
 		} catch (Exception e) {
 			log.error("", e);
@@ -84,7 +84,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		long count = 0;
 		try {
 			Long l = null;
-			Query q = getQuery(criteria, "select count(p) from PatrolActivity p where p.deleted = 0 ", "p");
+			Query q = getQuery(criteria, "select count(p) from PatrolActivity p join p.patrolActivityOfficers pao where p.deleted = 0 ", "p");
 			l = (Long) q.uniqueResult();	
 			if (l != null) {
 				count = l.longValue();
@@ -93,8 +93,61 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			log.error("", e);
 		}
 		return count;
+	}	
+	
+	public List<PatrolActivityReportDTO> runReportTest(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList) {
+		List<PatrolActivityReportDTO> results = null;
+		
+		Date now = new Date(); // date used for coalesce with null patrol times (hikeBike)
+		
+		StringBuffer query = new StringBuffer("select new com.westchase.persistence.dto.patrol.PatrolActivityReportDTO(")
+		
+		.append("pao.officer, ") 
+		.append("sum(p.onViewsFlaggedDown / (p.patrolOfficerCount * 1.0)) ")
+		
+		.append(") from PatrolActivity p join p.patrolActivityOfficers pao where p.deleted = 0 ");
+		
+		if (hasListValues(officerIdList)) {
+			query.append(" and pao.officer.id in (:officerIdList) ");
+		}
+		if (startDate != null) {
+			query.append(" and p.startDateTime >= :startDate ");
+		}
+		if (endDate != null) {
+			query.append(" and p.startDateTime < :endDate ");
+		}
+		
+		if (hasListValues(patrolTypeIdList)) {
+			query.append(" and p.patrolType.id in (:patrolTypeIdList) ");
+		}
+		
+		query.append(" group by pao.officer.id order by pao.officer.lastName, pao.officer.firstName ");
+		try {
+			Query q = getSession().createQuery(query.toString());
+			// q.setParameter("now", now);
+			if (hasListValues(officerIdList)) {
+				q.setParameterList("officerIdList", officerIdList);
+			}
+			if (startDate != null) {
+				q.setParameter("startDate", startDate);
+			}
+			if (endDate != null) {
+				q.setParameter("endDate", endDate);
+			}
+			if (hasListValues(patrolTypeIdList)) {
+				q.setParameterList("patrolTypeIdList", patrolTypeIdList);
+			}
+			results = q.list();
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return results;
 	}
 
+	// NOTE: cast should work in Hibernate (http://docs.jboss.org/hibernate/core/4.3/manual/en-US/html/ch16.html#queryhql-expressions)
+	// but I am getting an IllegalStateException No data type for node: org.hibernate.hql.ast.tree.MethodNode
+	// so instead I am multiplying by 1.0
+	// without the cast or multiplication the division operation returns a Long
 	public List<PatrolActivityReportDTO> runReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList) {
 		List<PatrolActivityReportDTO> results = null;
 		
@@ -102,7 +155,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		
 		StringBuffer query = new StringBuffer("select new com.westchase.persistence.dto.patrol.PatrolActivityReportDTO(")
 		
-		.append("p.officer, ") 
+		.append("pao.officer, ") 
 		.append("sum(timestampdiff(MINUTE, coalesce(p.startDateTime, :now), coalesce(p.endDateTime, :now))), ")
 		.append("sum(p.endMiles - p.startMiles), ")
 		.append("sum(timestampdiff(MINUTE, coalesce(p.hikePatrolledDateTimeStart1, :now), coalesce(p.hikePatrolledDateTimeEnd1, :now))) + ")
@@ -118,35 +171,35 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		.append("sum(case when p.patrolType.id = 7 then 1 else 0 end), ")
 		.append("sum(case when p.patrolType.id = 5 then 1 else 0 end), ")
 		
-		.append("sum(p.crimeArrestsFelony), ")
-		.append("sum(p.crimeArrestsClassAbMisdemeanor), ")
-		.append("sum(p.crimeArrestsClassCTicket), ")
-		.append("sum(p.crimeArrestsTrafficDrt), ")
-		.append("sum(p.warrantsCity), ")
-		.append("sum(p.warrantsFelony), ")
-		.append("sum(p.warrantsMisdemeanor), ")
-		.append("sum(p.warrantsSetcic), ")
-		.append("sum(p.drtInvestigationsWarnings), ")
-		.append("sum(p.drtInvestigationsAbatements), ")
-		.append("sum(p.drtInvestigationsTickets), ")
-		.append("sum(p.drtInvestigationsOffenseReports), ")
-		.append("sum(p.fieldParking), ")
-		.append("sum(p.fieldChargesFiled), ")
-		.append("sum(p.fieldSuspectsInJail), ")
-		.append("sum(p.fieldHolds), ")
-		.append("sum(p.fieldTrafficStops), ")
-		.append("sum(p.trafficMoving), ")
-		.append("sum(p.trafficNonMoving), ")
+		.append("sum(p.crimeArrestsFelony / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.crimeArrestsClassAbMisdemeanor / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.crimeArrestsClassCTicket / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.crimeArrestsTrafficDrt / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.warrantsCity / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.warrantsFelony / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.warrantsMisdemeanor / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.warrantsSetcic / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.drtInvestigationsWarnings / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.drtInvestigationsAbatements / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.drtInvestigationsTickets / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.drtInvestigationsOffenseReports / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.fieldParking / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.fieldChargesFiled / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.fieldSuspectsInJail / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.fieldHolds / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.fieldTrafficStops / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.trafficMoving / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.trafficNonMoving / (p.patrolOfficerCount * 1.0)), ")
 		
-		.append("sum(p.primaryCalls), ")
-		.append("sum(p.secondaryCalls), ")
-		.append("sum(p.onViewsFlaggedDown), ")
-		.append("sum(p.incidentReports), ")
-		.append("sum(p.accidentReports), ")
-		.append("sum(p.supplementReports), ")
-		.append("sum(p.crimeInitiatives), ")
-		.append("sum(p.crimeInitiativesInWcVehicle), ")
-		.append("sum(p.adminAssignments), ")
+		.append("sum(p.primaryCalls / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.secondaryCalls / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.onViewsFlaggedDown / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.incidentReports / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.accidentReports / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.supplementReports / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.crimeInitiatives / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.crimeInitiativesInWcVehicle / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.adminAssignments / (p.patrolOfficerCount * 1.0)), ")
 		.append("sum(case when p.amChecklistCompleted is true then 1 else 0 end), ")
 		.append("sum(case when p.businessChecksCompletedEast is true then 1 else 0 end), ")
 		.append("sum(case when p.businessChecksCompletedWest is true then 1 else 0 end), ")
@@ -160,10 +213,10 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		.append("sum(p.communityCptedInspections), ")
 		.append("sum(p.communityCrimePreventionSeminars) ")
 		
-		.append(") from PatrolActivity p where p.deleted = 0 ");
+		.append(") from PatrolActivity p join p.patrolActivityOfficers pao where p.deleted = 0 ");
 		
 		if (hasListValues(officerIdList)) {
-			query.append(" and p.officer.id in (:officerIdList) ");
+			query.append(" and pao.officer.id in (:officerIdList) ");
 		}
 		if (startDate != null) {
 			query.append(" and p.startDateTime >= :startDate ");
@@ -176,7 +229,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			query.append(" and p.patrolType.id in (:patrolTypeIdList) ");
 		}
 		
-		query.append(" group by p.officer.id order by p.officer.lastName, p.officer.firstName ");
+		query.append(" group by pao.officer.id order by pao.officer.lastName, pao.officer.firstName ");
 		try {
 			Query q = getSession().createQuery(query.toString());
 			q.setParameter("now", now);
@@ -232,7 +285,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 				" t1.officer_total, " + 
 				" t1.type_total " +
 				"from ( " + 
-				"select pa.officer_id, " + 
+				"select pao.officer_id, " + 
 				" item.id as type_id, " + 
 				" item.name as type_name, " + 
 				" count(pad.id) officer_type_total, " + 
@@ -240,10 +293,11 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 				" (select count(pad1.id) " + 
 				" from " + item + " item1 inner join patrol_activity_detail pad1 on pad1." + itemJoinColumn + " = item1.id " + 
 				" inner join patrol_activity pa1 on pad1.patrol_activity_id = pa1.id " + 
-				" where pa1.officer_id = pa.officer_id ";
+				" inner join patrol_activity_officer pao1 on pa1.id = pao1.patrol_activity_id " + 
+				" where pao1.officer_id = pao.officer_id ";
 
 			if (hasListValues(officerIdList)) {
-				query += " and pa1.officer_id in (:officerIdList) ";
+				query += " and pao1.officer_id in (:officerIdList) ";
 			}
 			if (startDate != null) {
 				query += " and pa1.start_date_time >= :startDate ";
@@ -259,10 +313,11 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 				" (select count(pad2.id) " + 
 				" from " + item + " item2 left outer join patrol_activity_detail pad2 on pad2." + itemJoinColumn + " = item2.id " + 
 				" inner join patrol_activity pa2 on pad2.patrol_activity_id = pa2.id " +
+				" inner join patrol_activity_officer pao2 on pa2.id = pao2.patrol_activity_id " + 
 				" where item2.id = item.id ";
 
 			if (hasListValues(officerIdList)) {
-				query += " and pa2.officer_id in (:officerIdList) ";
+				query += " and pao2.officer_id in (:officerIdList) ";
 			}
 			if (startDate != null) {
 				query += " and pa2.start_date_time >= :startDate ";
@@ -277,10 +332,11 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			query += " ) as type_total " + 
 				"from patrol_activity_detail pad " + 
 				" inner join patrol_activity pa on pad.patrol_activity_id = pa.id " + 
+				" inner join patrol_activity_officer pao on pa.id = pao.patrol_activity_id " + 
 				" inner join " + item + " item on pad." + itemJoinColumn + " = item.id " +
 				"where 1 = 1 ";
 		if (hasListValues(officerIdList)) {
-			query += " and pa.officer_id in (:officerIdList) ";
+			query += " and pao.officer_id in (:officerIdList) ";
 		}
 		if (startDate != null) {
 			query += " and pa.start_date_time >= :startDate ";
@@ -291,7 +347,7 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 		if (hasListValues(itemIdList)) {
 			query += " and item.id in (:itemIdList) ";
 		}
-		query += "group by pa.officer_id, item.id) t1 " + 
+		query += "group by pao.officer_id, item.id) t1 " + 
 				" inner join officer o on t1.officer_id = o.id";
 		try {
 			// TODO: get transformer to work
