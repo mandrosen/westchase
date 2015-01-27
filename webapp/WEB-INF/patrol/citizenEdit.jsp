@@ -43,7 +43,7 @@
     <!-- <s:textfield label="TX DL" name="currentCitizen.txDl" size="10" maxlength="10"/> -->
     <s:textfield label="Organization" name="currentCitizen.organization" size="40" maxlength="255" required="true" />
     <s:textfield label="Street Address" name="currentCitizen.streetAddress" size="40" maxlength="255" required="true" />
-    <s:textfield label="Zip Code" name="currentCitizen.zipCode" size="40" maxlength="255" required="true" />
+    <s:textfield label="Zip Code" name="currentCitizen.zipCode" size="5" maxlength="5" required="true" />
     <s:submit value="Save" />
 </s:form>
 <p><a href="/westchase/patrol/listCitizen?useLast=1">Back to Current List</a></p>

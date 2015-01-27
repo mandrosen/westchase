@@ -11,6 +11,7 @@ import org.hibernate.criterion.Order;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import com.westchase.persistence.criteria.CompanySearchCriteria;
+import com.westchase.persistence.dao.CompanyCodeDAO;
 import com.westchase.persistence.dao.CompanyDAO;
 import com.westchase.persistence.dao.CompanyMapnoDAO;
 import com.westchase.persistence.dao.CompanyTypeDAO;
@@ -18,6 +19,7 @@ import com.westchase.persistence.dao.NaicsDAO;
 import com.westchase.persistence.dao.StateDAO;
 import com.westchase.persistence.dao.StreetDAO;
 import com.westchase.persistence.model.Company;
+import com.westchase.persistence.model.CompanyCode;
 import com.westchase.persistence.model.CompanyMapno;
 import com.westchase.persistence.model.CompanyType;
 import com.westchase.persistence.model.Naics;
@@ -161,6 +163,12 @@ public class CompanyServiceBean implements CompanyService {
 	@Override
 	public List<Street> listStreets() {
 		final StreetDAO dao = new StreetDAO();
+		return dao.findAll(Order.asc("name"));
+	}
+
+	@Override
+	public List<CompanyCode> listCompanyCodes() {
+		CompanyCodeDAO dao = new CompanyCodeDAO();
 		return dao.findAll(Order.asc("name"));
 	}
 

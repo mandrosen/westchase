@@ -37,8 +37,8 @@
             <message><![CDATA[ Zip Code is required ]]></message>
         </field-validator>
 		<field-validator type="regex">
-			<param name="expression">[0-9]{5}(-[0-9]{4})?</param>
-			<message><![CDATA[ ZipCode must be in the format ##### or #####-#### ]]></message>
+			<param name="expression">[0-9]{5}</param>
+			<message><![CDATA[ ZipCode must be in the format ##### ]]></message>
 		</field-validator>
     </field>	
     <field name="currentProperty.owner">

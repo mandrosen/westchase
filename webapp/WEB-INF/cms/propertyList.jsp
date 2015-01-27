@@ -80,7 +80,7 @@
 		<th><s:textfield name="searchObject.geoAddress" size="10"/></th>
 		<th><s:textfield name="searchObject.geoCity" size="10"/></th>
 		<th><s:textfield name="searchObject.geoState" size="2"/></th>
-		<th><s:textfield name="searchObject.geoZipCode" size="10"/></th>
+		<th><s:textfield name="searchObject.geoZipCode" size="5" maxlength="5"/></th>
 		<th><s:textfield name="searchObject.latitude" size="3"/></th>
 		<th><s:textfield name="searchObject.longitude" size="3"/></th>
 		<th>

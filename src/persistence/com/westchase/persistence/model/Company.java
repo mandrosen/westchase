@@ -32,6 +32,7 @@ public class Company implements java.io.Serializable {
 
 	private Integer id;
 	private CompanyType companyType;
+	private CompanyCode companyCode;
 	private String company;
 	private String stNumber;
 	private String stAddress;
@@ -134,6 +135,16 @@ public class Company implements java.io.Serializable {
 		this.companyType = companyType;
 	}
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "CompanyCode")
+	public CompanyCode getCompanyCode() {
+		return companyCode;
+	}
+
+	public void setCompanyCode(CompanyCode companyCode) {
+		this.companyCode = companyCode;
+	}
+	
 	@Column(name = "Company", length = 100)
 	public String getCompany() {
 		return this.company;

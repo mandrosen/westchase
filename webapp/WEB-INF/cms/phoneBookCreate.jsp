@@ -90,7 +90,12 @@
 		    headerKey="" headerValue="-- Please Select --" listValue="name" listKey="code" emptyOption="false"
 		    required="true"/>    
     
-    <s:textfield label="Zip Code" name="currentCompany.zipCode" required="true" size="10" maxlength="10" />
+    <s:textfield label="Zip Code" name="currentCompany.zipCode" required="true" size="5" maxlength="5" />
+    
+	<s:select label="Company Type" list="availableCompanyTypes" name="currentCompany.companyType.id" 
+		    headerKey="" headerValue="-- Please Select --" listValue="name" listKey="id" emptyOption="false"/>
+	<s:select label="Company Code" list="availableCompanyCodes" name="currentCompany.companyCode.code" 
+		    headerKey="" headerValue="-- Please Select --" listValue="name" listKey="code" emptyOption="false"/>
     
     <s:textfield label="Website" name="currentCompany.website" size="75" maxlength="255"/>
     

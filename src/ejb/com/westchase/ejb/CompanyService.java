@@ -6,6 +6,7 @@ import javax.ejb.Local;
 
 import com.westchase.persistence.criteria.CompanySearchCriteria;
 import com.westchase.persistence.model.Company;
+import com.westchase.persistence.model.CompanyCode;
 import com.westchase.persistence.model.CompanyMapno;
 import com.westchase.persistence.model.CompanyType;
 import com.westchase.persistence.model.Naics;
@@ -46,5 +47,7 @@ public interface CompanyService {
 	List<Company> findAllWithType(int companyTypeId);
 	
 	List<Street> listStreets();
+	
+	List<CompanyCode> listCompanyCodes();
 
 }

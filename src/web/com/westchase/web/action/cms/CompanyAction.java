@@ -13,6 +13,7 @@ import com.westchase.persistence.criteria.CompanySearchCriteria;
 import com.westchase.persistence.dto.cms.CompanyPropertyDTO;
 import com.westchase.persistence.dto.cms.PhoneBookCategoryDTO;
 import com.westchase.persistence.model.Company;
+import com.westchase.persistence.model.CompanyCode;
 import com.westchase.persistence.model.CompanyType;
 import com.westchase.persistence.model.Employee;
 import com.westchase.persistence.model.Naics;
@@ -49,6 +50,7 @@ public class CompanyAction extends AbstractCMSAction<Company, CompanySearchCrite
     private List<KeyValue> availableClassifications = new ArrayList<KeyValue>();
     private List<KeyValue> availableSubClassifications = new ArrayList<KeyValue>();
     private List<CompanyType> availableCompanyTypes = new ArrayList<CompanyType>();
+    private List<CompanyCode> availableCompanyCodes = new ArrayList<CompanyCode>();
     
     
     private String vendorSearch;
@@ -184,6 +186,7 @@ public class CompanyAction extends AbstractCMSAction<Company, CompanySearchCrite
     		availableNaics = compServ.findAllNaics();
     		availableStreets = compServ.listStreets();
     		availableCompanyTypes = compServ.listCompanyTypes();
+    		availableCompanyCodes = compServ.listCompanyCodes();
     	}
  
         availableClassifications = new ArrayList<KeyValue>();
@@ -408,5 +411,13 @@ public class CompanyAction extends AbstractCMSAction<Company, CompanySearchCrite
 
 	public void setAvailableStreets(List<Street> availableStreets) {
 		this.availableStreets = availableStreets;
+	}
+
+	public List<CompanyCode> getAvailableCompanyCodes() {
+		return availableCompanyCodes;
+	}
+
+	public void setAvailableCompanyCodes(List<CompanyCode> availableCompanyCodes) {
+		this.availableCompanyCodes = availableCompanyCodes;
 	}
 }

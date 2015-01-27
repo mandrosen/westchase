@@ -74,7 +74,7 @@
 		    headerKey="" headerValue="-- Please Select --" listValue="name" listKey="code" emptyOption="false"
 		    required="true"/>
 	
-	<s:textfield label="Geo Zip Code" name="currentProperty.geoZipCode" size="10" maxlength="10" required="true"/>
+	<s:textfield label="Geo Zip Code" name="currentProperty.geoZipCode" size="5" maxlength="5" required="true"/>
 	<s:textfield label="Latitude" name="currentProperty.latitude" size="10" />
 	<s:textfield label="Longitude" name="currentProperty.longitude" size="10" />
 	<s:select label="Property Type" list="availablePropertyTypes" name="currentProperty.propertyType.id" 

@@ -75,7 +75,7 @@
 <table class="results">
 <thead>
 	<tr>
-		<th colspan="28" style="text-align: left">
+		<th colspan="29" style="text-align: left">
 			<label>
 				Updated by Me?
 				<s:checkbox name="updatedByMe" />
@@ -103,7 +103,7 @@
 	    <th><s:textfield name="searchObject.roomNo" size="4"/></th>
 	    <th><s:textfield name="searchObject.city" size="10"/></th>
 	    <th><s:textfield name="searchObject.state" size="2"/></th>
-	    <th><s:textfield name="searchObject.zipCode" size="5" /></th>
+	    <th><s:textfield name="searchObject.zipCode" size="5" maxlength="5" /></th>
 	    
 	    <th><s:textfield name="searchObject.wkPhone" size="10"/></th>
 	    <th><s:textfield name="searchObject.faxPhone" size="10"/></th>
@@ -112,6 +112,10 @@
 		<th>
 			<s:select list="availableCompanyTypes" name="searchObject.companyType.id" 
 		    headerKey="" headerValue="" listValue="name" listKey="id" emptyOption="false"/>
+		</th>
+		<th>
+			<s:select list="availableCompanyCodes" name="searchObject.companyCode.code" 
+		    headerKey="" headerValue="" listValue="name" listKey="code" emptyOption="false"/>
 		</th>
 	    <th><s:textfield name="searchObject.website"/></th>
 	    
@@ -155,6 +159,7 @@
 	    <s:url action="sort" id="sortlat"><s:param name="orderCol" value="'latitude'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortlong"><s:param name="orderCol" value="'longitude'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
     	<s:url action="sort" id="sortcomptype"><s:param name="orderCol" value="'companyType.id'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
+    	<s:url action="sort" id="sortcompcode"><s:param name="orderCol" value="'companyCode.code'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
 	   	<s:url action="sort" id="sortweb"><s:param name="orderCol" value="'website'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
 	    <s:url action="sort" id="sortowner"><s:param name="orderCol" value="'owner'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
 	    <s:url action="sort" id="sortcenter"><s:param name="orderCol" value="'center'"/><s:param name="page" value="%{page}"/><s:param name="currentOrderCol" value="%{currentOrderCol}"/></s:url>
@@ -184,6 +189,7 @@
         <th><s:a href="%{sortlat}">Latitude</s:a></th>
         <th><s:a href="%{sortlong}">Longitude</s:a></th>
         <th><s:a href="%{sortcomptype}">Company Type</s:a></th>
+        <th><s:a href="%{sortcompcode}">Company Code</s:a></th>
         <th><s:a href="%{sortweb}">Website</s:a></th>
         <th><s:a href="%{sortowner}">Owner</s:a></th>
         <th><s:a href="%{sortcenter}">Center</s:a></th>
@@ -218,6 +224,7 @@
             <td><s:property value="latitude" default=""/></td>
             <td><s:property value="longitude" default=""/></td>
             <td><s:property value="companyType.name"/></td>
+            <td><s:property value="companyCode.name"/></td>
 		    <td><a href='http://<s:property value="website"/>' target="_blank"><s:property value="website"/></a></td>
 		    <td><s:property value="owner"/></td>
 		    <td><s:property value="center"/></td>

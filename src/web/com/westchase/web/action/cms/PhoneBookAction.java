@@ -16,6 +16,8 @@ import com.westchase.ejb.PhoneBookService;
 import com.westchase.persistence.criteria.PhoneBookSearchCriteria;
 import com.westchase.persistence.model.Category;
 import com.westchase.persistence.model.Company;
+import com.westchase.persistence.model.CompanyCode;
+import com.westchase.persistence.model.CompanyType;
 import com.westchase.persistence.model.Employee;
 import com.westchase.persistence.model.PhoneBook;
 import com.westchase.persistence.model.State;
@@ -68,6 +70,8 @@ public class PhoneBookAction extends AbstractCMSAction<PhoneBook, PhoneBookSearc
     private List<KeyValue> availableClassifications = new ArrayList<KeyValue>();
     private List<KeyValue> availableSubClassifications = new ArrayList<KeyValue>();
     private List<KeyValue> availableGenders = new ArrayList<KeyValue>();
+    private List<CompanyType> availableCompanyTypes = new ArrayList<CompanyType>();
+    private List<CompanyCode> availableCompanyCodes = new ArrayList<CompanyCode>();
     
     private boolean orphanedOnly;
     
@@ -265,6 +269,8 @@ public class PhoneBookAction extends AbstractCMSAction<PhoneBook, PhoneBookSearc
         	setAvailableCompanies(companies);
     		availableStates = compServ.findAllStates();
     		availableStreets = compServ.listStreets();
+    		availableCompanyTypes = compServ.listCompanyTypes();
+    		availableCompanyCodes = compServ.listCompanyCodes();
         }
         
         
@@ -574,5 +580,21 @@ public class PhoneBookAction extends AbstractCMSAction<PhoneBook, PhoneBookSearc
 
 	public void setAvailableStreets(List<Street> availableStreets) {
 		this.availableStreets = availableStreets;
+	}
+
+	public List<CompanyType> getAvailableCompanyTypes() {
+		return availableCompanyTypes;
+	}
+
+	public void setAvailableCompanyTypes(List<CompanyType> availableCompanyTypes) {
+		this.availableCompanyTypes = availableCompanyTypes;
+	}
+
+	public List<CompanyCode> getAvailableCompanyCodes() {
+		return availableCompanyCodes;
+	}
+
+	public void setAvailableCompanyCodes(List<CompanyCode> availableCompanyCodes) {
+		this.availableCompanyCodes = availableCompanyCodes;
 	}
 }
