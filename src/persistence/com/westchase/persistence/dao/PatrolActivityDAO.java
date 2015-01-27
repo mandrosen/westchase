@@ -12,9 +12,9 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 
 import com.westchase.persistence.criteria.PatrolActivitySearchCriteria;
-import com.westchase.persistence.dto.patrol.PatrolDetailTypeDayTimeCountDTO;
 import com.westchase.persistence.dto.patrol.OfficerCountDTO;
 import com.westchase.persistence.dto.patrol.PatrolActivityReportDTO;
+import com.westchase.persistence.dto.patrol.PatrolDetailTypeDayTimeCountDTO;
 import com.westchase.persistence.model.PatrolActivity;
 
 public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
@@ -542,6 +542,101 @@ public class PatrolActivityDAO extends BaseDAO<PatrolActivity> {
 			log.error("", e);
 		}
 		return counts;
+	}
+
+	public List<PatrolActivityReportDTO> runScoreReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList) {
+		List<PatrolActivityReportDTO> results = null;
+		
+		Date now = new Date(); // date used for coalesce with null patrol times (hikeBike)
+		
+		StringBuffer query = new StringBuffer("select new com.westchase.persistence.dto.patrol.PatrolActivityReportDTO(")
+		
+		.append("pao.officer, ") 
+		.append("sum(timestampdiff(MINUTE, coalesce(p.startDateTime, :now), coalesce(p.endDateTime, :now))), ")
+		
+		.append("case when p.hikePatrolledDateTimeStart1 is not null and p.hikePatrolledDateTimeEnd1 is not null and p.hikePatrolledDateTimeEnd1 > p.hikePatrolledDateTimeStart1 then 1 else 0 end + ")
+		.append("case when p.hikePatrolledDateTimeStart2 is not null and p.hikePatrolledDateTimeEnd2 is not null and p.hikePatrolledDateTimeEnd2 > p.hikePatrolledDateTimeStart2 then 1 else 0 end + ")
+		.append("case when p.hikePatrolledDateTimeStart3 is not null and p.hikePatrolledDateTimeEnd3 is not null and p.hikePatrolledDateTimeEnd3 > p.hikePatrolledDateTimeStart3 then 1 else 0 end,")
+		
+		.append("sum(p.crimeArrestsFelony / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.crimeArrestsClassAbMisdemeanor / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.crimeArrestsClassCTicket / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.crimeArrestsTrafficDrt / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.warrantsCity / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.warrantsFelony / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.warrantsMisdemeanor / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.warrantsSetcic / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.drtInvestigationsWarnings / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.drtInvestigationsAbatements / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.drtInvestigationsTickets / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.drtInvestigationsOffenseReports / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.fieldParking / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.fieldChargesFiled / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.fieldSuspectsInJail / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.fieldHolds / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.fieldTrafficStops / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.trafficMoving / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.trafficNonMoving / (p.patrolOfficerCount * 1.0)), ")
+		
+		.append("sum(p.primaryCalls / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.secondaryCalls / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.onViewsFlaggedDown / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.incidentReports / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.accidentReports / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.supplementReports / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.crimeInitiatives / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.crimeInitiativesInWcVehicle / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(p.adminAssignments / (p.patrolOfficerCount * 1.0)), ")
+		.append("sum(case when p.amChecklistCompleted is true then 1 else 0 end), ")
+		.append("sum(case when p.businessChecksCompletedEast is true then 1 else 0 end), ")
+		.append("sum(case when p.businessChecksCompletedWest is true then 1 else 0 end), ")
+		.append("sum(p.communityApartmentLiaisonMeetings), ")
+		.append("sum(p.communityHotelLiaisonMeetings), ")
+		.append("sum(p.communityRetailLiaisonMeetings), ")
+		.append("sum(p.communityOfficeBuildingLiasonMeetings), ")
+		.append("sum(p.communityCitizenContacts), ")
+		.append("sum(p.communityCrimePreventionPamphlets), ")
+		.append("sum(p.communityEvents), ")
+		.append("sum(p.communityCptedInspections), ")
+		.append("sum(p.communityCrimePreventionSeminars) ")
+		
+		.append(") from PatrolActivity p join p.patrolActivityOfficers pao where p.deleted = 0 ");
+		
+		if (hasListValues(officerIdList)) {
+			query.append(" and pao.officer.id in (:officerIdList) ");
+		}
+		if (startDate != null) {
+			query.append(" and p.startDateTime >= :startDate ");
+		}
+		if (endDate != null) {
+			query.append(" and p.startDateTime < :endDate ");
+		}
+		
+		if (hasListValues(patrolTypeIdList)) {
+			query.append(" and p.patrolType.id in (:patrolTypeIdList) ");
+		}
+		
+		query.append(" group by pao.officer.id order by pao.officer.lastName, pao.officer.firstName ");
+		try {
+			Query q = getSession().createQuery(query.toString());
+			q.setParameter("now", now);
+			if (hasListValues(officerIdList)) {
+				q.setParameterList("officerIdList", officerIdList);
+			}
+			if (startDate != null) {
+				q.setParameter("startDate", startDate);
+			}
+			if (endDate != null) {
+				q.setParameter("endDate", endDate);
+			}
+			if (hasListValues(patrolTypeIdList)) {
+				q.setParameterList("patrolTypeIdList", patrolTypeIdList);
+			}
+			results = q.list();
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return results;
 	}
 
 }

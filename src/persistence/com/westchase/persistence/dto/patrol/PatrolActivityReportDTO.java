@@ -10,11 +10,13 @@ public class PatrolActivityReportDTO implements Serializable {
 	
 	private Officer officer;
 	
+	private Long dutyMinutes;
 	private String dutyHours;
 	
 	private Long miles;
 
 	private String hikePatrolHours;
+	private Integer hikePatrolCount;
 	
 	private Long generalPatrolCount;
 	private Long bikePatrolCount;
@@ -85,7 +87,7 @@ public class PatrolActivityReportDTO implements Serializable {
 
 	public PatrolActivityReportDTO(
 			Officer officer, 
-			Long dutyHours,
+			Long dutyMinutes,
 			Long miles, 
 			Long hikePatrolHours,
 			
@@ -139,7 +141,7 @@ public class PatrolActivityReportDTO implements Serializable {
 			Long communityCrimePreventionSeminars) {
 		this();
 		this.officer = officer;
-		this.dutyHours = convertMinutesToHoursMinutes(dutyHours);
+		this.dutyHours = convertMinutesToHoursMinutes(dutyMinutes);
 		this.miles = miles;
 		this.hikePatrolHours = convertMinutesToHoursMinutes(hikePatrolHours);
 
@@ -150,6 +152,103 @@ public class PatrolActivityReportDTO implements Serializable {
 		this.eventCount = eventCount;
 		this.footPatrolCount = footPatrolCount;
 		this.otherCount = otherCount;
+		
+		this.crimeArrestsFelony = crimeArrestsFelony;
+		this.crimeArrestsClassAbMisdemeanor = crimeArrestsClassAbMisdemeanor;
+		this.crimeArrestsClassCTicket = crimeArrestsClassCTicket;
+		this.crimeArrestsTrafficDrt = crimeArrestsTrafficDrt;
+		this.warrantsCity = warrantsCity;
+		this.warrantsFelony = warrantsFelony;
+		this.warrantsMisdemeanor = warrantsMisdemeanor;
+		this.warrantsSetcic = warrantsSetcic;
+		this.drtInvestigationsWarnings = drtInvestigationsWarnings;
+		this.drtInvestigationsAbatements = drtInvestigationsAbatements;
+		this.drtInvestigationsTickets = drtInvestigationsTickets;
+		this.drtInvestigationsOffenseReports = drtInvestigationsOffenseReports;
+		this.fieldParking = fieldParking;
+		this.fieldChargesFiled = fieldChargesFiled;
+		this.fieldSuspectsInJail = fieldSuspectsInJail;
+		this.fieldHolds = fieldHolds;
+		this.fieldTrafficStops = fieldTrafficStops;
+		this.trafficMoving = trafficMoving;
+		this.trafficNonMoving = trafficNonMoving;
+		this.primaryCalls = primaryCalls;
+		this.secondaryCalls = secondaryCalls;
+		this.onViewsFlaggedDown = onViewsFlaggedDown;
+		this.incidentReports = incidentReports;
+		this.accidentReports = accidentReports;
+		this.supplementReports = supplementReports;
+		this.crimeInitiatives = crimeInitiatives;
+		this.crimeInitiativesInWcVehicle = crimeInitiativesInWcVehicle;
+		this.adminAssignments = adminAssignments;
+		this.amChecklistCompleted = amChecklistCompleted;
+		this.businessChecksCompletedEast = businessChecksCompletedEast;
+		this.businessChecksCompletedWest = businessChecksCompletedWest;
+		this.communityApartmentLiaisonMeetings = communityApartmentLiaisonMeetings;
+		this.communityHotelLiaisonMeetings = communityHotelLiaisonMeetings;
+		this.communityRetailLiaisonMeetings = communityRetailLiaisonMeetings;
+		this.communityOfficeBuildingLiasonMeetings = communityOfficeBuildingLiasonMeetings;
+		this.communityCitizenContacts = communityCitizenContacts;
+		this.communityCrimePreventionPamphlets = communityCrimePreventionPamphlets;
+		this.communityEvents = communityEvents;
+		this.communityCptedInspections = communityCptedInspections;
+		this.communityCrimePreventionSeminars = communityCrimePreventionSeminars;
+	}
+	
+	/**
+	 * Used for Score Report
+	 * @see com.westchase.persistence.dao.PatrolActivityDAO#runScoreReport()
+	 */
+	public PatrolActivityReportDTO(
+			Officer officer, 
+			Long dutyMinutes,
+			Integer hikePatrolCount,
+			
+			Double crimeArrestsFelony, 
+			Double crimeArrestsClassAbMisdemeanor,
+			Double crimeArrestsClassCTicket, 
+			Double crimeArrestsTrafficDrt, 
+			Double warrantsCity, 
+			Double warrantsFelony,
+			Double warrantsMisdemeanor, 
+			Double warrantsSetcic, 
+			Double drtInvestigationsWarnings,
+			Double drtInvestigationsAbatements, 
+			Double drtInvestigationsTickets, 
+			Double drtInvestigationsOffenseReports,
+			Double fieldParking, 
+			Double fieldChargesFiled, 
+			Double fieldSuspectsInJail, 
+			Double fieldHolds,
+			Double fieldTrafficStops, 
+			Double trafficMoving, 
+			Double trafficNonMoving, 
+			Double primaryCalls, 
+			Double secondaryCalls,
+			Double onViewsFlaggedDown, 
+			Double incidentReports, 
+			Double accidentReports, 
+			Double supplementReports,
+			Double crimeInitiatives, 
+			Double crimeInitiativesInWcVehicle, 
+			Double adminAssignments, 
+			Long amChecklistCompleted,
+			Long businessChecksCompletedEast, 
+			Long businessChecksCompletedWest, 
+			Long communityApartmentLiaisonMeetings, 
+			Long communityHotelLiaisonMeetings,
+			Long communityRetailLiaisonMeetings, 
+			Long communityOfficeBuildingLiasonMeetings,
+			Long communityCitizenContacts, 
+			Long communityCrimePreventionPamphlets, 
+			Long communityEvents,
+			Long communityCptedInspections, 
+			Long communityCrimePreventionSeminars) {
+		this();
+		this.officer = officer;
+		this.dutyMinutes = dutyMinutes;
+		this.dutyHours = convertMinutesToHoursMinutes(dutyMinutes);
+		this.hikePatrolCount = hikePatrolCount;
 		
 		this.crimeArrestsFelony = crimeArrestsFelony;
 		this.crimeArrestsClassAbMisdemeanor = crimeArrestsClassAbMisdemeanor;
@@ -703,6 +802,75 @@ public class PatrolActivityReportDTO implements Serializable {
 
 	public void setFootPatrolCount(Long footPatrolCount) {
 		this.footPatrolCount = footPatrolCount;
+	}
+
+	public Integer getHikePatrolCount() {
+		return hikePatrolCount;
+	}
+
+	public void setHikePatrolCount(Integer hikePatrolCount) {
+		this.hikePatrolCount = hikePatrolCount;
+	}
+
+	public Long getDutyMinutes() {
+		return dutyMinutes;
+	}
+
+	public void setDutyMinutes(Long dutyMinutes) {
+		this.dutyMinutes = dutyMinutes;
+	}
+	
+	public Double getPoints() {
+		return new Double(
+			(this.hikePatrolCount * 1) +
+			(this.crimeArrestsFelony * 3) +
+			(this.crimeArrestsClassAbMisdemeanor * 2) +
+			(this.crimeArrestsClassCTicket * 1) +
+			(this.crimeArrestsTrafficDrt * 1) +
+			(this.warrantsCity * 1) +
+			(this.warrantsFelony * 2) +
+			(this.warrantsMisdemeanor * 1) +
+			(this.warrantsSetcic * 1) +
+			(this.drtInvestigationsWarnings * 1) +
+			(this.drtInvestigationsAbatements * 1) +
+			(this.drtInvestigationsTickets * 1) +
+			(this.drtInvestigationsOffenseReports * 0) +
+			(this.fieldParking * 0) +
+			(this.fieldChargesFiled * 0) +
+			(this.fieldSuspectsInJail * 1) +
+			(this.fieldHolds * 1) +
+			(this.fieldTrafficStops * 2) +
+			(this.trafficMoving * 1) +
+			(this.trafficNonMoving * 0) +
+			(this.primaryCalls * 2) +
+			(this.secondaryCalls * 1) +
+			(this.onViewsFlaggedDown * 2) +
+			(this.incidentReports * 1) +
+			(this.accidentReports * 1) +
+			(this.supplementReports * 1) +
+			(this.crimeInitiatives * 2) +
+			(this.crimeInitiativesInWcVehicle * 1) +
+			(this.adminAssignments * 1) +
+			(this.amChecklistCompleted * 1) +
+			(this.businessChecksCompletedEast * 1) +
+			(this.businessChecksCompletedWest * 1) +
+			(this.communityApartmentLiaisonMeetings * 1) +
+			(this.communityHotelLiaisonMeetings * 1) +
+			(this.communityRetailLiaisonMeetings * 1) +
+			(this.communityOfficeBuildingLiasonMeetings * 1) +
+			(this.communityCitizenContacts * 1) +
+			(this.communityCrimePreventionPamphlets * 0) +
+			(this.communityEvents * 2) +
+			(this.communityCptedInspections * 4) +
+			(this.communityCrimePreventionSeminars * 3)
+		);
+	}
+	
+	public Double getScore() {
+		if (this.dutyMinutes == null || this.dutyMinutes.doubleValue() <= 0) {
+			return new Double(0);
+		}
+		return new Double(getPoints().doubleValue() / this.dutyMinutes.doubleValue());
 	}
 
 }

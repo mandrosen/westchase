@@ -100,6 +100,8 @@ public interface PatrolService {
 	// -- Reports -- //
 	List<PatrolActivityReportDTO> runReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList);
 	
+	List<PatrolActivityReportDTO> runScoreReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList);
+	
 	OfficerListCountListDTO<PatrolDetailType> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolDetailTypeIdList);
 
 	OfficerListCountListDTO<PatrolDetailCategory> runOfficerDetailCategoryReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolDetailCategoryIdList);

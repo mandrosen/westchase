@@ -384,6 +384,12 @@ public class PatrolServiceBean implements PatrolService {
 		final PatrolActivityDAO dao = new PatrolActivityDAO();
 		return dao.runReport(officerIdList, startDate, endDate, patrolTypeIdList);
 	}
+	
+	@Override
+	public List<PatrolActivityReportDTO> runScoreReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolTypeIdList) {
+		final PatrolActivityDAO dao = new PatrolActivityDAO();
+		return dao.runScoreReport(officerIdList, startDate, endDate, patrolTypeIdList);
+	}
 
 	@Override
 	public OfficerListCountListDTO<PatrolDetailType> runOfficerDetailTypeReport(List<Integer> officerIdList, Date startDate, Date endDate, List<Integer> patrolDetailTypeIdList) {
