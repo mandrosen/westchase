@@ -7,6 +7,7 @@ import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Order;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -73,6 +74,9 @@ public class CompanyServiceBean implements CompanyService {
 			// not sure why this is necessary, but...
 			if (company.getCompanyType() != null && company.getCompanyType().getId() == null) {
 				company.setCompanyType(null);
+			}
+			if (company.getCompanyCode() != null && StringUtils.isBlank(company.getCompanyCode().getCode())) {
+				company.setCompanyCode(null);
 			}
 			
 			CompanyDAO dao = new CompanyDAO();
