@@ -55,7 +55,7 @@
 	<s:textfield label="Largest Space 6 Months" name="cmuOfficeRetailSvc.largestSpace6mths" size="10" maxlength="20" />
 	<s:textfield label="Largest Space 12 Months" name="cmuOfficeRetailSvc.largestSpace12mths" size="10" maxlength="20" />
 	
-	<s:textfield label="Property Manager" name="cmuOfficeRetailSvc.propertyMgr" size="100" maxlength="255" />
+	<!-- <s:textfield label="Property Manager" name="cmuOfficeRetailSvc.propertyMgr" size="100" maxlength="255" />
 	<s:textfield label="Property Manager Phone" name="cmuOfficeRetailSvc.propertyMgrPhone" size="20" maxlength="20" />
 	<s:textfield label="Property Manager Fax" name="cmuOfficeRetailSvc.propertyMgrFax" size="20" maxlength="20" />
 	<s:textfield label="Property Manager Email" name="cmuOfficeRetailSvc.propertyMgrEmail" size="100" maxlength="255" />
@@ -70,6 +70,7 @@
 	<s:textfield label="Leasing Agent Phone" name="cmuOfficeRetailSvc.leasingAgentPhone" size="20" maxlength="20" />
 	<s:textfield label="Leasing Agent Fax" name="cmuOfficeRetailSvc.leasingAgentFax" size="20" maxlength="20" />
 	<s:textfield label="Leasing Agent Email" name="cmuOfficeRetailSvc.leasingAgentEmail" size="100" maxlength="255" />
+	-->
 	
 	<s:textarea label="Comments" name="cmuOfficeRetailSvc.comments" rows="5" cols="60" />
 	

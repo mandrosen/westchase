@@ -32,9 +32,9 @@
 	
 	<s:textfield label="Completed By" name="cmuHotel.completedBy" size="100" maxlength="255" />
 	
-	<s:textfield label="General Manager" name="cmuHotel.generalMgr" size="100" maxlength="255" />
+	<!-- <s:textfield label="General Manager" name="cmuHotel.generalMgr" size="100" maxlength="255" />
 	<s:textfield label="General Manager Email" name="cmuHotel.generalMgrEmail" size="100" maxlength="255" />
-	<s:textfield label="General Manager Phone" name="cmuHotel.generalMgrPhone" size="20" maxlength="20" />
+	<s:textfield label="General Manager Phone" name="cmuHotel.generalMgrPhone" size="20" maxlength="20" /> -->
 	
 	<s:textfield label="Occupancy" name="cmuHotel.occupancy" size="10" maxlength="20" />
 	

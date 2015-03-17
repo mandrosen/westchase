@@ -16,7 +16,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.westchase.ejb.CmuReportService;
-import com.westchase.persistence.model.CmuDevsite;
+import com.westchase.persistence.dto.cmu.report.DevsiteDTO;
 import com.westchase.persistence.model.CmuQuarter;
 import com.westchase.persistence.model.Property;
 
@@ -26,11 +26,11 @@ import com.westchase.persistence.model.Property;
  */
 public class CmuDevsiteReportAction extends AbstractCmuReportAction {
 
-	private List<CmuDevsite> results;
+	private List<DevsiteDTO> results;
 	
 	@Override
 	public String execute() {
-		results = new ArrayList<CmuDevsite>();
+		results = new ArrayList<DevsiteDTO>();
 		if (getQuarterId() > 0) {
 			try {
 				InitialContext ctx = new InitialContext();
@@ -96,7 +96,7 @@ public class CmuDevsiteReportAction extends AbstractCmuReportAction {
 			if (results != null && !results.isEmpty()) {
 				double totalAcres = 0;
 				int rowNum = FIRST_DATA_ROW;
-				for (CmuDevsite result : results) {
+				for (DevsiteDTO result : results) {
 					Property devsite = result.getProperty();
 					if (devsite != null && devsite.getId() != null && devsite.getId().intValue() > 0) {
 						Row row = sheet.createRow(rowNum);
@@ -164,11 +164,11 @@ public class CmuDevsiteReportAction extends AbstractCmuReportAction {
 		return bos;
 	}
 
-	public List<CmuDevsite> getResults() {
+	public List<DevsiteDTO> getResults() {
 		return results;
 	}
 
-	public void setResults(List<CmuDevsite> results) {
+	public void setResults(List<DevsiteDTO> results) {
 		this.results = results;
 	}
 

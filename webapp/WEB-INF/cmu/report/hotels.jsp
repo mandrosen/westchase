@@ -46,12 +46,12 @@
 <thead>
     <tr>
     	<th>Verified</th>
+    	<th>Correct?</th>
     	<th>Edit</th>
 		<th>Map #</th>
 		<th>Hotel</th>  
 		<th>Address</th>  
-		<th># of Rooms</th>  
-		<th>Occupancy Rate</th>  
+		<th># of Rooms</th>
 		<th>Occupied Rooms</th>  
 		<th>General Manager</th>  
 		<th>Email</th>  
@@ -68,6 +68,7 @@
         <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else> <c:if test="${not empty verified}">verified</c:if>">
 
             <td><c:if test="${not empty result.verified}"><img src="<s:url value="/images/checkmark.gif" />" alt="Verified" /></c:if></td>
+            <td><c:if test="${not staticInfoCorrect}">NO</c:if></td>
             <td><a href="<s:url action="hotelEdit-%{id}" />"><s:property value="id"/></a></td>
 			<td><s:property value="property.id"/></td>
 			<td><s:property value="property.buildingName"/></td>
@@ -83,7 +84,7 @@
     </s:iterator>
     <tr>
     	<td><c:out value="${totalNum}" /></td>
-    	<td colspan="4"><strong>Total</strong></td>
+    	<td colspan="5"><strong>Total</strong></td>
     	<td><strong><fmt:formatNumber maxFractionDigits="0" value="${totRooms}" /></strong></td>
     	<td>&#160;</td>
     	<td colspan="4"></td>

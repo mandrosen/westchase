@@ -33,7 +33,7 @@
 	<s:textfield label="Completed By" name="cmuApartment.completedBy" size="100" maxlength="255" />
 	<s:textfield label="Occupancy Rate" name="cmuApartment.occupancyRate" size="5" maxlength="20" />
 	
-	<s:textfield label="Community Manager" name="cmuApartment.communityMgr" size="100" maxlength="255"/>
+	<!-- <s:textfield label="Community Manager" name="cmuApartment.communityMgr" size="100" maxlength="255"/>
 	<s:textfield label="Community Manager Email" name="cmuApartment.communityMgrEmail" size="100" maxlength="255" />
 	<s:textfield label="Community Manager Phone" name="cmuApartment.communityMgrPhone" size="20" maxlength="20" />
 	<s:textfield label="Community Manager Fax" name="cmuApartment.communityMgrFax" size="20" maxlength="20" />
@@ -49,7 +49,7 @@
 	<s:textfield label="Owner" name="cmuApartment.owner" size="100" maxlength="255" />
 	<s:textfield label="Owner Address" name="cmuApartment.ownerAddress" size="100" maxlength="255" />
 	<s:textfield label="Owner Phone" name="cmuApartment.ownerPhone" size="20" maxlength="20" />
-	<s:textfield label="Owner Fax" name="cmuApartment.ownerFax" size="20" maxlength="20" />
+	<s:textfield label="Owner Fax" name="cmuApartment.ownerFax" size="20" maxlength="20" />-->
 	
 	<s:textarea label="Comments" name="cmuApartment.comments" rows="5" cols="60" />
 	

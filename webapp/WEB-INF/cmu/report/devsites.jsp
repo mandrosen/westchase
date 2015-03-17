@@ -45,6 +45,7 @@
 <thead>
     <tr>
     	<th>Verified</th>
+    	<th>Correct?</th>
     	<th>Edit</th>
     	<th>Map #</th>
 		<th>Location</th>
@@ -63,6 +64,7 @@
     <s:iterator value="results" status="status">
         <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else> <c:if test="${not empty verified}">verified</c:if>"> 
             <td><c:if test="${not empty verified}"><img src="<s:url value="/images/checkmark.gif" />" alt="Verified" /></c:if></td>
+            <td><c:if test="${not staticInfoCorrect}">NO</c:if></td>
             <td><a href="<s:url action="devsiteEdit-%{id}" />"><s:property value="id"/></a></td>
 		    <td><s:property value="property.id" /></td>
 			<td><s:property value="property.geoNumber" /> <s:property value="property.geoAddress" /></td>

@@ -16,7 +16,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.westchase.persistence.dto.cmu.LeasingAgentDTO;
-import com.westchase.persistence.model.CmuOfficeRetailSvc;
+import com.westchase.persistence.dto.cmu.report.OfficeRetailSvcDTO;
 import com.westchase.persistence.model.Property;
 import com.westchase.utils.ejb.ServiceLocator;
 
@@ -29,7 +29,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 	private int businessTypeId;
 	private String name;
 	
-	protected List<CmuOfficeRetailSvc> results;
+	protected List<OfficeRetailSvcDTO> results;
 	
 	public AbstractCmuOfficeRetailSvcReportAction(int businessTypeId, String name) {
 		this.businessTypeId = businessTypeId;
@@ -38,7 +38,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 
 	@Override
 	public String execute() {
-		results = new ArrayList<CmuOfficeRetailSvc>();
+		results = new ArrayList<OfficeRetailSvcDTO>();
 		if (getQuarterId() > 0) {
 			reportServ = ServiceLocator.lookupCmuReportService();
 
@@ -131,7 +131,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 				int totalOcc = 0;
 				int rowNum = 1;
 				StringBuffer problemProperties = new StringBuffer();
-				for (CmuOfficeRetailSvc result : results) {
+				for (OfficeRetailSvcDTO result : results) {
 					Property ors = result.getProperty();
 					if (ors != null && ors.getId() != null && ors.getId().intValue() > 0) {
 						totalOrs++;
@@ -290,11 +290,11 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 		this.businessTypeId = businessTypeId;
 	}
 
-	public List<CmuOfficeRetailSvc> getResults() {
+	public List<OfficeRetailSvcDTO> getResults() {
 		return results;
 	}
 
-	public void setResults(List<CmuOfficeRetailSvc> results) {
+	public void setResults(List<OfficeRetailSvcDTO> results) {
 		this.results = results;
 	}
 

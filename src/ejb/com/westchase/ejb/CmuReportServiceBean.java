@@ -16,12 +16,12 @@ import com.westchase.persistence.dao.CmuOfficeRetailSvcDAO;
 import com.westchase.persistence.dao.CmuQuarterDAO;
 import com.westchase.persistence.dao.PhoneBookDAO;
 import com.westchase.persistence.dto.cmu.LeasingAgentDTO;
+import com.westchase.persistence.dto.cmu.report.ApartmentDTO;
+import com.westchase.persistence.dto.cmu.report.DevsiteDTO;
+import com.westchase.persistence.dto.cmu.report.HotelDTO;
 import com.westchase.persistence.dto.cmu.report.LeaseStatsDTO;
-import com.westchase.persistence.model.CmuApartment;
-import com.westchase.persistence.model.CmuDevsite;
-import com.westchase.persistence.model.CmuHotel;
+import com.westchase.persistence.dto.cmu.report.OfficeRetailSvcDTO;
 import com.westchase.persistence.model.CmuLease;
-import com.westchase.persistence.model.CmuOfficeRetailSvc;
 import com.westchase.persistence.model.CmuQuarter;
 
 /**
@@ -40,25 +40,25 @@ public class CmuReportServiceBean implements CmuReportService {
 	}
 
 	@Override
-	public List<CmuApartment> runCmuApartmentReport(int quarterId) {
+	public List<ApartmentDTO> runCmuApartmentReport(int quarterId) {
 		CmuApartmentDAO dao = new CmuApartmentDAO();
 		return dao.listAll(quarterId);
 	}
 
 	@Override
-	public List<CmuOfficeRetailSvc> runCmuOfficeRetailSvcReport(int quarterId, int businessTypeId) {
+	public List<OfficeRetailSvcDTO> runCmuOfficeRetailSvcReport(int quarterId, int businessTypeId) {
 		CmuOfficeRetailSvcDAO dao = new CmuOfficeRetailSvcDAO();
 		return dao.listAll(quarterId, businessTypeId);
 	}
 
 	@Override
-	public List<CmuHotel> runCmuHotelReport(int quarterId) {
+	public List<HotelDTO> runCmuHotelReport(int quarterId) {
 		CmuHotelDAO dao = new CmuHotelDAO();
 		return dao.listAll(quarterId);
 	}
 
 	@Override
-	public List<CmuDevsite> runCmuDevsiteReport(int quarterId) {
+	public List<DevsiteDTO> runCmuDevsiteReport(int quarterId) {
 		CmuDevsiteDAO dao = new CmuDevsiteDAO();
 		return dao.listAll(quarterId);
 	}

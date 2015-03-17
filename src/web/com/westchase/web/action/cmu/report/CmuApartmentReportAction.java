@@ -20,7 +20,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.westchase.ejb.CmuReportService;
-import com.westchase.persistence.model.CmuApartment;
+import com.westchase.persistence.dto.cmu.report.ApartmentDTO;
 import com.westchase.persistence.model.Property;
 
 /**
@@ -29,11 +29,11 @@ import com.westchase.persistence.model.Property;
  */
 public class CmuApartmentReportAction extends AbstractCmuReportAction {
 	
-	private List<CmuApartment> results;
+	private List<ApartmentDTO> results;
 	
 	@Override
 	public String execute() {
-		results = new ArrayList<CmuApartment>();
+		results = new ArrayList<ApartmentDTO>();
 		if (getQuarterId() > 0) {
 			try {
 				InitialContext ctx = new InitialContext();
@@ -126,7 +126,7 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 				double avgOcc = 0;
 				
 				int rowNum = 1;
-				for (CmuApartment result : results) {
+				for (ApartmentDTO result : results) {
 					Property apartment = result.getProperty();
 					if (apartment != null && apartment.getId() != null && apartment.getId().intValue() > 0) {
 						totalApts++;
@@ -262,11 +262,11 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 		return bos;
 	}
 
-	public List<CmuApartment> getResults() {
+	public List<ApartmentDTO> getResults() {
 		return results;
 	}
 
-	public void setResults(List<CmuApartment> results) {
+	public void setResults(List<ApartmentDTO> results) {
 		this.results = results;
 	}
 
@@ -275,7 +275,7 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 		return "Apartments_" + getReportDate();
 	}
 	
-	static class SortByPropertyNameComparator implements Comparator<CmuApartment> {
+	static class SortByPropertyNameComparator implements Comparator<ApartmentDTO> {
 		private static SortByPropertyNameComparator INSTANCE;
 		public static SortByPropertyNameComparator getInstance() {
 			if (INSTANCE == null) {
@@ -287,7 +287,7 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 			super();
 		}
 		@Override
-		public int compare(CmuApartment o1, CmuApartment o2) {
+		public int compare(ApartmentDTO o1, ApartmentDTO o2) {
 			return o1.getProperty().getBuildingName().compareTo(o2.getProperty().getBuildingName());
 		}
 		

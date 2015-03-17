@@ -17,7 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.westchase.ejb.CmuReportService;
-import com.westchase.persistence.model.CmuHotel;
+import com.westchase.persistence.dto.cmu.report.HotelDTO;
 import com.westchase.persistence.model.Property;
 
 /**
@@ -26,11 +26,11 @@ import com.westchase.persistence.model.Property;
  */
 public class CmuHotelReportAction extends AbstractCmuReportAction {
 
-	private List<CmuHotel> results;
+	private List<HotelDTO> results;
 	
 	@Override
 	public String execute() {
-		results = new ArrayList<CmuHotel>();
+		results = new ArrayList<HotelDTO>();
 		if (getQuarterId() > 0) {
 			try {
 				InitialContext ctx = new InitialContext();
@@ -113,7 +113,7 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 //				int totalOccupied = 0;
 				double avgOcc = 0;
 				int rowNum = 1;
-				for (CmuHotel result : results) {
+				for (HotelDTO result : results) {
 					Property hotel = result.getProperty();
 					if (hotel != null && hotel.getId() != null && hotel.getId().intValue() > 0) {
 						totalHotels++;
@@ -226,11 +226,11 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 		return bos;
 	}
 
-	public List<CmuHotel> getResults() {
+	public List<HotelDTO> getResults() {
 		return results;
 	}
 
-	public void setResults(List<CmuHotel> results) {
+	public void setResults(List<HotelDTO> results) {
 		this.results = results;
 	}
 

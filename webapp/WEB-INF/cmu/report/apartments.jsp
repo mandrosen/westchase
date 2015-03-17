@@ -46,6 +46,7 @@
 <thead>
     <tr>
     	<th>Verified</th>
+    	<th>Correct?</th>
     	<th>Edit</th>
 		<th>Name &amp; Address</th>
 		<th># of Units</th>  
@@ -66,6 +67,7 @@
         <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else> <c:if test="${not empty verified}">verified</c:if>">
 
             <td><c:if test="${not empty verified}"><img src="<s:url value="/images/checkmark.gif" />" alt="Verified" /></c:if></td>
+            <td><c:if test="${not staticInfoCorrect}">NO</c:if></td>
             <td><a href="<s:url action="apartmentEdit-%{id}" />"><s:property value="id"/></a></td>
 		    <td>
 		    	<s:property value="property.buildingName"/><br/>
@@ -100,7 +102,7 @@
     </s:iterator>
     <tr>
     	<td><c:out value="${totalNum}" /></td>
-    	<td colspan="4"><strong>Total</strong></td>
+    	<td colspan="5"><strong>Total</strong></td>
     	<td><strong><fmt:formatNumber maxFractionDigits="0" value="${totRooms}" /></strong></td>
     	<td>&#160;</td>
     	<td colspan="4"></td>

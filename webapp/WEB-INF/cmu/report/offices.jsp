@@ -48,6 +48,7 @@
 <thead>
     <tr>
     	<th>Verified</th>
+    	<th>Correct?</th>
     	<th>Edit</th>
 		<th>Map #</th>
 		<th>Building Name</th>  
@@ -76,6 +77,7 @@
  			<c:set var="occRate" value="${occRate + result.occupancy}" />
  			
             <td><c:if test="${not empty verified}"><img src="<s:url value="/images/checkmark.gif" />" alt="Verified" /></c:if></td>
+            <td><c:if test="${not staticInfoCorrect}">NO</c:if></td>
             <td><a href="<s:url action="officeRetailSvcEdit-%{id}-1" />"><s:property value="id"/></a></td>
 			<td><s:property value="property.id" /></td>
 			<td>
@@ -117,7 +119,7 @@
     <c:if test="${total > 0}">
 	    <tr>
 	    	<td><strong><c:out value="${total}" /></strong></td>
-	    	<td colspan="8"><strong>TOTAL</strong></td>
+	    	<td colspan="9"><strong>TOTAL</strong></td>
 	    	<td><strong><c:out value="${totalSize}" /></strong></td>
 	    	<td><strong><fmt:formatNumber maxFractionDigits="2" value="${occRate / total * 100 }" />%</strong></td>
 	    	<td colspan="7">&#160;</td>
