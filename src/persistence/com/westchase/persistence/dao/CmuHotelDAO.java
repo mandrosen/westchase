@@ -55,7 +55,7 @@ public class CmuHotelDAO extends BaseDAO<CmuHotel> {
 					"inner join phone_book_relation pbr on ca.phonebookid = pbr.phone_book\r\n" + 
 					"inner join phone_book pb on pbr.phone_book = pb.id\r\n" + 
 					"inner join company c on pb.companyid = c.id\r\n" + 
-					"where ca.categorycode = 'la'\r\n" + 
+					"where ca.categorycode = 'hc'\r\n" + 
 					"  and pbr.property = :propertyId";
 			try {
 				Object[] resultAry = (Object[]) getSession().createSQLQuery(query)
