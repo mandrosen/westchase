@@ -52,6 +52,7 @@ public class OfficeRetailSvcDTO implements CmuDTO, Serializable {
 			setForSaleContact(ors.getForSaleContact());
 			setForSalePhone(ors.getForSalePhone());
 			setSqFtForLease(ors.getSqFtForLease());
+			setLargestSpace(ors.getLargestSpace());
 			setOccupancy(ors.getOccupancy());
 			setOccupied(ors.getOccupied());
 			setStaticInfoCorrect(ors.isStaticInfoCorrect());
