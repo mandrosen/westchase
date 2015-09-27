@@ -870,7 +870,7 @@ public class PatrolActivityReportDTO implements Serializable {
 		if (this.dutyMinutes == null || this.dutyMinutes.doubleValue() <= 0) {
 			return new Double(0);
 		}
-		return new Double(getPoints().doubleValue() / this.dutyMinutes.doubleValue());
+		return new Double(getPoints().doubleValue() / (this.dutyMinutes.doubleValue() / 60.0));
 	}
 
 }
