@@ -150,10 +150,10 @@ public class CmuOfficeRetailSvcDAO extends BaseDAO<CmuOfficeRetailSvc> {
 						.setParameter("propertyId", ors.getProperty().getId()).setMaxResults(1).uniqueResult();
 				if (resultAry != null) {
 					ors.setLeasingAgent((String) resultAry[0], (String) resultAry[1]);
-					ors.setLeasingAgentEmail((String) resultAry[2]);
-					ors.setLeasingAgentPhone((String) resultAry[3], (String) resultAry[4]);
-					ors.setLeasingCompany((String) resultAry[6]);
-					ors.setLeasingCompanyAddr((String) resultAry[7], (String) resultAry[8], (String) resultAry[9], (String) resultAry[10], (String) resultAry[11], (String) resultAry[12]); 
+					ors.setLeasingAgentEmail((String) resultAry[12]);
+					ors.setLeasingAgentPhone((String) resultAry[9], (String) resultAry[10]);
+					ors.setLeasingCompany((String) resultAry[2]);
+					ors.setLeasingCompanyAddr((String) resultAry[3], (String) resultAry[4], (String) resultAry[5], (String) resultAry[6], (String) resultAry[7], (String) resultAry[8]); 
 				}
 			} catch (Exception e) {
 				log.error("", e);

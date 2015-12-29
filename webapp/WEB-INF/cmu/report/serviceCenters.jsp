@@ -10,7 +10,7 @@
 		document.getElementById('typeparam').value=typ;
 		document.getElementById('frm').submit();
 	}
-	var TSort_Data = new Array('results_table', '', 'i', 'i', 's', 's', 's', 's', 's', 's', 'g', 's', 'g', 'g', 's', 's', 's', 's', 's');
+	var TSort_Data = new Array('results_table', '','s','i','i','s','s','s','s','s','s','g','i','g','g','s','s','s','s','s');
 	tsRegister();
 	</script>
 

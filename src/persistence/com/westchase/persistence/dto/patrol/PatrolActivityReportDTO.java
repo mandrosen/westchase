@@ -835,7 +835,7 @@ public class PatrolActivityReportDTO implements Serializable {
 			(this.drtInvestigationsAbatements * 1) +
 			(this.drtInvestigationsTickets * 1) +
 			(this.drtInvestigationsOffenseReports * 0) +
-			(this.fieldParking * 0) +
+			(this.fieldParking * 1) +
 			(this.fieldChargesFiled * 0) +
 			(this.fieldSuspectsInJail * 1) +
 			(this.fieldHolds * 1) +
