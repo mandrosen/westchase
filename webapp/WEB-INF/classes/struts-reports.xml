@@ -170,6 +170,19 @@
             <interceptor-ref name="basicStack"/>
         </action>
         
+        <action name="companyContactByAddressInput" class="com.westchase.web.action.report.CompanyContactByAddressAndCategoryCodeReportAction" method="input">
+            <result>/WEB-INF/report/companyContactsByAddressCategory.jsp</result>
+        </action>
+        <action name="companyContactByAddress" class="com.westchase.web.action.report.CompanyContactByAddressAndCategoryCodeReportAction">
+            <result>/WEB-INF/report/companyContactsByAddressCategory.jsp</result>
+            <result name="excel" type="stream"> 
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">excelStream</param> 
+				<param name="bufferSize">4096</param> 
+			</result>   
+            <interceptor-ref name="basicStack"/>
+        </action>
+        
         <!--  CMU (move?) -->
         <!-- 
        	<action name="cmuApartmentAMInput" class="com.westchase.web.action.cmu.ApartmentAMReportAction" method="input">

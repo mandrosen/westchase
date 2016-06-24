@@ -4,18 +4,23 @@ import java.io.Serializable;
 
 public class PropertyCompanyPhoneBookDTO implements Serializable {
 
+	private static final long serialVersionUID = -9093328127732175906L;
+	
 	private Integer propertyId;
 	private Integer companyId;
 	private Integer phoneBookId;
 	private String company;
 	private String firstName;
 	private String lastName;
+	private String jobTitle;
 	private String address;
 	private String roomNo;
 	private String city;
 	private String state;
 	private String zipCode;
 	private String wkPhone;
+	private String faxPhone;
+	private String mobilePhone;
 	private String email;
 	private String cats;
 	
@@ -58,6 +63,11 @@ public class PropertyCompanyPhoneBookDTO implements Serializable {
 				(String) result[11],
 				(String) result[12],
 				(String) result[13]);
+		if (result.length > 14) {
+			faxPhone = (String) result[14];
+			mobilePhone = (String) result[15];
+			jobTitle = (String) result[16];
+		}
 	}
 
 	public Integer getPropertyId() {
@@ -170,6 +180,30 @@ public class PropertyCompanyPhoneBookDTO implements Serializable {
 
 	public void setCats(String cats) {
 		this.cats = cats;
+	}
+
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
+
+	public String getFaxPhone() {
+		return faxPhone;
+	}
+
+	public void setFaxPhone(String faxPhone) {
+		this.faxPhone = faxPhone;
+	}
+
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
 	}
 
 }

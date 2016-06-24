@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import com.westchase.persistence.dto.report.CompanyPhoneBookDTO;
 import com.westchase.persistence.dto.report.ContactDTO;
 import com.westchase.persistence.dto.report.PhoneBookCompanyDTO;
 import com.westchase.persistence.dto.report.PhoneBookPropertyDTO;
@@ -55,5 +56,8 @@ public interface ReportService {
 
 	// added after meeting on 2014-10-23 for Irma/Dave
 	List<PropertyCompanyPhoneBookDTO> runPropertyCompanyPhoneBookReport(List<Integer> propertyIdList);
+
+	// see email from Dave Gilkeson 2016-06-15
+	List<PropertyCompanyPhoneBookDTO> runContactsByAddressCategory(int startAddress, int endAddress, String street, String streetWildcard, List<String> categoryCodes);
 
 }

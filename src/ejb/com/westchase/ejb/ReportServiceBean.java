@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Order;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -12,6 +13,7 @@ import com.westchase.persistence.dao.CategoryDAO;
 import com.westchase.persistence.dao.NaicsDAO;
 import com.westchase.persistence.dao.PhoneBookDAO;
 import com.westchase.persistence.dao.PropertyDAO;
+import com.westchase.persistence.dto.report.CompanyPhoneBookDTO;
 import com.westchase.persistence.dto.report.ContactDTO;
 import com.westchase.persistence.dto.report.PhoneBookCompanyDTO;
 import com.westchase.persistence.dto.report.PhoneBookPropertyDTO;
@@ -97,5 +99,11 @@ public class ReportServiceBean implements ReportService {
 	public List<PropertyCompanyPhoneBookDTO> runPropertyCompanyPhoneBookReport(List<Integer> propertyIdList) {
 		PropertyDAO dao = new PropertyDAO();
 		return dao.listPropertyCompanyPhoneBooks(propertyIdList);
+	}
+
+	@Override
+	public List<PropertyCompanyPhoneBookDTO> runContactsByAddressCategory(int startAddress, int endAddress, String street, String streetWildcard, List<String> categoryCodes) {
+		PropertyDAO dao = new PropertyDAO();
+		return dao.listContactsByAddressCategory(startAddress, endAddress, street, streetWildcard, categoryCodes);
 	}
 }

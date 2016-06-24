@@ -65,6 +65,7 @@
 								<li><a href="<s:url action="companyByNameInput" namespace="/reports" />">Company By Name</a></li>
 								<li><a href="<s:url action="officeBuildingPropertyInput" namespace="/reports" />">Office Building Property</a></li>
 								<li><a href="<s:url action="propertyCompanyPhoneBookInput" namespace="/reports" />">Property Company PhoneBook</a></li>
+								<li><a href="<s:url action="companyContactByAddressInput" namespace="/reports" />">Company Contact by Address</a></li>
 								
 								<!-- 
 								<li><a href="<s:url action="customReportInput" namespace="/reports" />">Custom Report</a></li>

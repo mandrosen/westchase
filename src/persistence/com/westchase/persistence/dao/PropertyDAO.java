@@ -461,5 +461,95 @@ public class PropertyDAO extends BaseDAO<Property> {
 		return dtoList;
 	}
 
+	public List<PropertyCompanyPhoneBookDTO> listContactsByAddressCategory(int startAddress, int endAddress, String street, String streetWildcard, List<String> categoryCodes) {
+		List<PropertyCompanyPhoneBookDTO> dtoList = null;
+		String sql = "select p.id as mapno,\r\n" + 
+				"  c.id as companyid,\r\n" + 
+				"  pb.id phoneBookId,\r\n" + 
+				"  c.company,\r\n" + 
+				"  pb.firstname,\r\n" + 
+				"  pb.lastname,\r\n" + 
+				"  concat(c.stnumber, ' ', c.staddress) address,\r\n" + 
+				"  c.roomno,\r\n" + 
+				"  c.city,\r\n" + 
+				"  c.state,\r\n" + 
+				"  c.zipcode,\r\n" + 
+				"  pb.wkphone,\r\n" + 
+				"  pb.email,\r\n" + 
+				"  group_concat(pbc.categorycode) as cats,\r\n" + 
+				"  pb.faxphone,\r\n" + 
+				"  pb.mobilephone,\r\n" + 
+				"  pb.jobtitle\r\n" + 
+				"from property p\r\n" + 
+				"  inner join company_mapno cm on cm.mapno = p.id\r\n" + 
+				"  inner join company c on cm.companyid = c.id\r\n" + 
+				"  inner join phone_book pb on pb.companyid = c.id\r\n" + 
+				"  inner join phone_book_category pbc on pbc.phonebookid = pb.id " +
+				"where p.id > 0 ";
+		if (startAddress > 0) {
+			sql += " and c.stnumber >= :startAddress ";
+		}
+		if (endAddress > 0) {
+			sql += " and c.stnumber < :endAddress ";
+		}
+
+		if (StringUtils.isNotBlank(street)) {
+			sql += " and (lower(c.staddress) = lower(:street) ";
+			if (StringUtils.isNotBlank(streetWildcard)) {
+				sql += " or lower(c.staddress) like lower(concat('%','" + streetWildcard + "','%'))";
+			}
+			sql += " ) ";
+		} else 	if (StringUtils.isNotBlank(streetWildcard)) {
+			sql += " and lower(c.staddress) like lower(concat('%','" + streetWildcard + "','%'))";
+		}
+		if (categoryCodes != null && !categoryCodes.isEmpty()) {
+			sql += " and pbc.categorycode in (:catlist) ";
+		}
+		sql += " group by p.id, c.id, pb.id";
+		sql += " order by c.company ";
+		try {
+			Query q = getSession().createSQLQuery(sql)
+					.addScalar("mapno", Hibernate.INTEGER)
+					.addScalar("companyId", Hibernate.INTEGER)
+					.addScalar("phoneBookId", Hibernate.INTEGER)
+					.addScalar("company", Hibernate.STRING)
+					.addScalar("firstname", Hibernate.STRING)
+					.addScalar("lastname", Hibernate.STRING)
+					.addScalar("address", Hibernate.STRING)
+					.addScalar("roomno", Hibernate.STRING)
+					.addScalar("city", Hibernate.STRING)
+					.addScalar("state", Hibernate.STRING)
+					.addScalar("zipcode", Hibernate.STRING)
+					.addScalar("wkphone", Hibernate.STRING)
+					.addScalar("email", Hibernate.STRING)
+					.addScalar("cats", Hibernate.STRING)
+					.addScalar("faxphone", Hibernate.STRING)
+					.addScalar("mobilephone", Hibernate.STRING)
+					.addScalar("jobtitle", Hibernate.STRING);
+			if (startAddress > 0) {
+				q.setParameter("startAddress", startAddress);
+			}
+			if (endAddress > 0) {
+				q.setParameter("endAddress", endAddress);
+			}
+			if (StringUtils.isNotBlank(street)) {
+				q.setParameter("street", street);
+			}
+			if (categoryCodes != null && !categoryCodes.isEmpty()) {
+				q.setParameterList("catlist", categoryCodes);
+			}
+			List<Object[]> resultList = q.list();
+			if (resultList != null && !resultList.isEmpty()) {
+				dtoList = new ArrayList<PropertyCompanyPhoneBookDTO>();
+				for (Object[] result : resultList) {
+					dtoList.add(new PropertyCompanyPhoneBookDTO(result));
+				}
+			}
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return dtoList;
+	}
+
 
 }
