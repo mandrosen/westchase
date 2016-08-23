@@ -118,7 +118,7 @@
 	    	<td><strong><c:out value="${total}" /></strong></td>
 	    	<td colspan="9"><strong>TOTAL</strong></td>
 	    	<td><strong><c:out value="${totalSize}" /></strong></td>
-	    	<td><strong><fmt:formatNumber maxFractionDigits="2" value="${occRate / total * 100 }" />%</strong></td>
+	    	<td><strong><fmt:formatNumber maxFractionDigits="2" value="${occRate / total}" />%</strong></td>
 	    	<td colspan="7">&#160;</td>
 	    </tr>
     </c:if>
