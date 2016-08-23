@@ -73,7 +73,7 @@
         <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else> <c:if test="${not empty verified}">verified</c:if>">
  
  			<c:set var="total" value="${total + 1}" />
- 			<c:set var="totalSize" value="${totalSize + result.property.buildingSize}" />
+ 			<c:set var="totalSize" value="${totalSize + sqFtForLease}" />
  			<c:set var="occRate" value="${occRate + result.occupancy}" />
  			
             <td><c:if test="${not empty verified}"><img src="<s:url value="/images/checkmark.gif" />" alt="Verified" /></c:if></td>
