@@ -210,6 +210,16 @@ public class ContactDTO implements Serializable {
 		this.company = company;
 	}
 	
+	/**
+	 * Major Employers constructor
+	 */
+	public ContactDTO(String company, String stNumber, String stAddress) {
+		super();
+		setCompany(company);
+		setStNumber(stNumber);
+		setStAddress(stAddress);
+	}   
+	
 	public String getCategoryCode() {
 		return categoryCode;
 	}

@@ -59,5 +59,8 @@ public interface ReportService {
 
 	// see email from Dave Gilkeson 2016-06-15
 	List<PropertyCompanyPhoneBookDTO> runContactsByAddressCategory(int startAddress, int endAddress, String street, String streetWildcard, List<String> categoryCodes);
+	
+	// see email from Dave Gilkeson 2018-01-30
+	List<ContactDTO> ruMajorEmployersReport();
 
 }

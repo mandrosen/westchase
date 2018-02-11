@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 
 import com.westchase.persistence.criteria.CompanySearchCriteria;
+import com.westchase.persistence.dto.report.ContactDTO;
 import com.westchase.persistence.model.Company;
 
 /**
@@ -282,6 +283,17 @@ public class CompanyDAO extends BaseDAO<Company> {
 		String query = "select c from Company c where c.companyType.id = :ctId and c.latitude is not null and c.latitude != '' and c.longitude is not null and c.longitude != '' order by c.company";
 		try {
 			companies = getSession().createQuery(query).setParameter("ctId", new Integer(companyTypeId)).list();
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return companies;
+	}
+
+	public List<ContactDTO> listMajorEmployers() {
+		List<ContactDTO> companies = new ArrayList<ContactDTO>();
+		String query = "select distinct new com.westchase.persistence.dto.report.ContactDTO(c.company, c.stNumber, c.stAddress) from Company c where c.classification = 'WC Business' and c.noEmployees > 99 order by c.company";
+		try {
+			companies = getSession().createQuery(query).list();
 		} catch (Exception e) {
 			log.error("", e);
 		}
