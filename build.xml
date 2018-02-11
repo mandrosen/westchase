@@ -45,7 +45,7 @@
 	<property name="deploy.webinf.lib.dir" value="${deploy.war.dir}/WEB-INF/lib" />
 	<property name="deploy.webinf.classes.dir" value="${deploy.war.dir}/WEB-INF/classes" />
 
-	<property name="deploy.jboss.dir" value="C:\jboss\jboss-5.1.0.CR1\server\default\deploy" />
+	<property name="deploy.jboss.dir" value="C:\dev\jboss\jboss-5.1.0.GA-jdk6\jboss-5.1.0.GA\server\default\deploy" />
 
     <!-- ================================= 
           target: deploy              
