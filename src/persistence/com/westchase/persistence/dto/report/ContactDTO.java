@@ -213,11 +213,14 @@ public class ContactDTO implements Serializable {
 	/**
 	 * Major Employers constructor
 	 */
-	public ContactDTO(String company, String stNumber, String stAddress) {
+	public ContactDTO(String company, String stNumber, String stAddress, Integer noEmployees) {
 		super();
 		setCompany(company);
 		setStNumber(stNumber);
 		setStAddress(stAddress);
+		if (noEmployees != null) {
+			setNoEmployees(noEmployees.toString());
+		}
 	}   
 	
 	public String getCategoryCode() {

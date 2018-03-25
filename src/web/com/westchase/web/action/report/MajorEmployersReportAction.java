@@ -45,7 +45,7 @@ public class MajorEmployersReportAction extends AbstractReportAction {
 			
 			writeTitle(wb, sheet, "Major Employers Report");
 
-            String[] headers = { "Company Name", "St Number", "St Address" }; 
+            String[] headers = { "Company Name", "Employees", "St Number", "St Address" }; 
             // Write the Header to the excel file
             writeHeaders(wb, sheet, headers);
 
@@ -65,8 +65,9 @@ public class MajorEmployersReportAction extends AbstractReportAction {
 				for (ContactDTO result : results) {
 					Row row = sheet.createRow(rowNum);
 					writeCell(wb, sheet, row, 0, result.getCompany(), style);
-					writeCell(wb, sheet, row, 1, result.getStNumber(), style);
-					writeCell(wb, sheet, row, 2, result.getStAddress(), style);
+					writeCell(wb, sheet, row, 1, result.getNoEmployees(), style);
+					writeCell(wb, sheet, row, 2, result.getStNumber(), style);
+					writeCell(wb, sheet, row, 3, result.getStAddress(), style);
 					rowNum++;
 				}
 			}

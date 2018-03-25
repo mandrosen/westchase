@@ -291,7 +291,7 @@ public class CompanyDAO extends BaseDAO<Company> {
 
 	public List<ContactDTO> listMajorEmployers() {
 		List<ContactDTO> companies = new ArrayList<ContactDTO>();
-		String query = "select distinct new com.westchase.persistence.dto.report.ContactDTO(c.company, c.stNumber, c.stAddress) from Company c where c.classification = 'WC Business' and c.noEmployees > 99 order by c.company";
+		String query = "select distinct new com.westchase.persistence.dto.report.ContactDTO(c.company, c.stNumber, c.stAddress, c.noEmployees) from Company c where c.classification = 'WC Business' and c.noEmployees > 99 order by c.company";
 		try {
 			companies = getSession().createQuery(query).list();
 		} catch (Exception e) {

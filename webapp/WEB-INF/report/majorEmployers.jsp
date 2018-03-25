@@ -8,7 +8,7 @@
 		document.getElementById('typeparam').value=typ;
 		document.getElementById('frm').submit();
 	}
-	var TSort_Data = new Array('results_table', 's', 's', 's');
+	var TSort_Data = new Array('results_table', 's', 's', 's', 's');
 	tsRegister();
 	</script>
 </head>
@@ -34,6 +34,7 @@
 <thead>
     <tr>
 		<th>Company Name</th> 
+		<th>Employees</th> 
 		<th>St Number</th> 
 		<th>St Address</th>
     </tr>
@@ -42,6 +43,7 @@
     <s:iterator value="results" status="status">
         <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>">
 		    <td><s:property value="company"/></td>
+		    <td><s:property value="noEmployees"/></td>
 		    <td><s:property value="stNumber"/></td>
 		    <td><s:property value="stAddress"/></td>
 		</tr>
