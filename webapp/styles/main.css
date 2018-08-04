@@ -274,3 +274,7 @@ thead tr th {
 	text-decoration: underline;
 	padding-right: 12px;
 }
+
+.active-false td {
+    color: #aaa;
+}
