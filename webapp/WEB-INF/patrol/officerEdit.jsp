@@ -41,6 +41,8 @@
     <s:textfield label="Last Name" name="currentOfficer.lastName" size="40" maxlength="255" required="true" />
     <!-- <s:textfield label="Badge" name="currentOfficer.badge" size="10" maxlength="20"/> -->
     <s:textfield label="Cell Phone" name="currentOfficer.cellPhone" size="10" maxlength="25"/>
+    <s:checkbox label="Active" name="currentOfficer.active" fieldValue="true" />
+
 
     <s:submit value="Save" />
 </s:form>

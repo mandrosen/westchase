@@ -57,7 +57,7 @@
 </thead>
 <tbody>
     <s:iterator value="officers" status="status" id="officer">
-        <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>">
+        <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else> active-<s:property value="active"/>">
  
             <td><a href="<s:url action="editOfficer-%{id}" />"><s:property value="id"/></a></td>
             <td><s:property value="firstName"/></td>

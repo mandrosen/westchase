@@ -284,7 +284,7 @@ public class PatrolActivityAction extends AbstractCMSAction<PatrolActivity, Patr
 			availablePatrolTypes = patrolServ.listPatrolTypes();
 			availablePatrolShops = patrolServ.listPatrolShops();
 			availablePatrolPhones = patrolServ.listPatrolPhones();
-			availableOfficers = patrolServ.listOfficers();
+			availableOfficers = patrolServ.listActiveOfficers();
 			availablePatrolHotspotsEast = patrolServ.listPatrolHotspots(false);
 			availablePatrolHotspotsWest = patrolServ.listPatrolHotspots(true);
 

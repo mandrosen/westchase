@@ -28,6 +28,7 @@ public interface PatrolService {
 
 
 	List<Officer> listOfficers();
+	List<Officer> listActiveOfficers();
 	
 	List<PatrolType> listPatrolTypes();
 

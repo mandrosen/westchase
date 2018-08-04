@@ -22,6 +22,13 @@ public class OfficerDAO extends BaseDAO<Officer> {
 		List<Officer> officers = getSession().createCriteria(Officer.class).addOrder(Order.asc("lastName")).addOrder(Order.desc("firstName")).list();
 		return officers;
 	}
+	
+	public List<Officer> findAllActiveOrdered() {
+		List<Officer> officers = getSession().createCriteria(Officer.class)
+				.add(Restrictions.eq("active", true))
+				.addOrder(Order.asc("lastName")).addOrder(Order.desc("firstName")).list();
+		return officers;
+	}
 
 	public List<Officer> findOrdered(List<Integer> officerIdList) {
 		if (!hasListValues(officerIdList)) {

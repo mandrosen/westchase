@@ -65,6 +65,12 @@ public class PatrolServiceBean implements PatrolService {
 		final OfficerDAO dao = new OfficerDAO();
 		return dao.findAllOrdered();
 	}
+	
+	@Override
+	public List<Officer> listActiveOfficers() {
+		final OfficerDAO dao = new OfficerDAO();
+		return dao.findAllActiveOrdered();
+	}
 
 	private List<Officer> listOfficers(List<Integer> officerIdList) {
 		final OfficerDAO dao = new OfficerDAO();

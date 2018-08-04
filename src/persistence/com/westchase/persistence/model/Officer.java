@@ -28,6 +28,7 @@ public class Officer implements java.io.Serializable {
 	private String lastName;
 	private Integer badge;
 	private String cellPhone;
+	private boolean active;
 	private Set<PatrolActivity> patrolActivities = new HashSet<PatrolActivity>(0);
 	private Set<PatrolActivityOfficer> patrolActivityOfficers = new HashSet<PatrolActivityOfficer>(0);
 
@@ -125,6 +126,15 @@ public class Officer implements java.io.Serializable {
 	@Transient
 	public String getFullNameReverse() {
 		return lastName + ", " + firstName;
+	}
+
+	@Column(name = "active")
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }
