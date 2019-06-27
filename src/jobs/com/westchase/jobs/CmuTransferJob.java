@@ -36,7 +36,7 @@ public class CmuTransferJob implements Schedulable {
 		try {
 			InitialContext ctx = new InitialContext();
 			cmuServ = (CmuService) ctx.lookup("westchase/CmuServiceBean/remote");
-			stub = new CMULocator().getCMUPort();
+			stub = new CMULocator().getCMUPort(new java.net.URL("http://cmu.westchasedistrict.com/ws/cmu.php"));
 		} catch (Exception e) {
 			log.error("", e);
 		}
