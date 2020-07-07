@@ -81,7 +81,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 //			writeTitle(wb, sheet, title);
 			
 
-            String[] headers = { "Map #", "Building Name", "Address", "Leasing Agent", "Contact Company", "Email", "Phone", "Size (sq. ft.)", "Occupancy Rate", "Largest Space", "Occupied Sq. Ft", "Building Manager", "Phone" }; 
+            String[] headers = { "Map #", "Building Name", "Address", "Leasing Agent", "Contact Company", "Email", "Phone", "Size (sq. ft.)", "Occupancy Rate", "Largest Space", "Occupied Sq. Ft", "Building Manager", "Manager Email", "Phone" }; 
             // Write the Header to the excel file
             writeHeaders(wb, sheet, headers, -2, true);
 
@@ -205,6 +205,7 @@ public abstract class AbstractCmuOfficeRetailSvcReportAction extends AbstractCmu
 							}
 							
 							writeCell(wb, sheet, row, col++, result.getPropertyMgr(), style);
+							writeCell(wb, sheet, row, col++, result.getPropertyMgrEmail(), style);
 							writeCell(wb, sheet, row, col++, result.getPropertyMgrPhone(), style);
 //							writeCell(wb, sheet, row, col++, result.getPropertyMgrFax(), style);
 							

@@ -79,7 +79,7 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 //			writeTitle(wb, sheet, title);
 			
 
-            String[] headers = { "Map#", "Apartment Community", "Units", "Occupancy", "Vacant Units", "Manager", "Management Co." }; 
+            String[] headers = { "Map#", "Apartment Community", "Units", "Occupancy", "Vacant Units", "Manager", "Email", "Management Co." }; 
             // Write the Header to the excel file
             writeHeaders(wb, sheet, headers, -2, true);
 
@@ -191,6 +191,7 @@ public class CmuApartmentReportAction extends AbstractCmuReportAction {
 						}
 
 						writeCell(wb, sheet, row, col++, propertyManager.toString(), style);
+						writeCell(wb, sheet, row, col++, result.getCommunityMgrEmail(), style);
 						
 //						String email = "";
 //						if (result.getCommunityMgrEmail() != null) {

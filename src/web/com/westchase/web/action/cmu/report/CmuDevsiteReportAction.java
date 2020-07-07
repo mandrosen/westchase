@@ -74,7 +74,7 @@ public class CmuDevsiteReportAction extends AbstractCmuReportAction {
 			writeTitle(wb, sheet, title);
 			
 
-            String[] headers = { "Map #", "Location", "Size (Acres)", "Price ($/sq. ft)", "Frontage", "Contact", "Company", "Phone", "Fax", "Restrictions" }; 
+            String[] headers = { "Map #", "Location", "Size (Acres)", "Price ($/sq. ft)", "Frontage", "Contact", "Company", "Email", "Phone", "Fax", "Restrictions" }; 
             // Write the Header to the excel file
             writeHeaders(wb, sheet, headers);
             
@@ -125,6 +125,7 @@ public class CmuDevsiteReportAction extends AbstractCmuReportAction {
 						
 						writeCell(wb, sheet, row, col++, result.getContact(), style);
 						writeCell(wb, sheet, row, col++, result.getCompany(), style);
+						writeCell(wb, sheet, row, col++, result.getEmail(), style);
 						writeCell(wb, sheet, row, col++, result.getPhone(), style);
 						writeCell(wb, sheet, row, col++, result.getFax(), style);
 						writeCell(wb, sheet, row, col++, result.getRestrictions(), style);

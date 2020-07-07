@@ -77,7 +77,7 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 //			writeTitle(wb, sheet, title);
 			
 
-            String[] headers = { "Map#", "Name & Address", "Units", "Occupancy", "Vacant", "General Manager" }; 
+            String[] headers = { "Map#", "Name & Address", "Units", "Occupancy", "Vacant", "General Manager", "Email" }; 
             // Write the Header to the excel file
             writeHeaders(wb, sheet, headers, -2, true);
 
@@ -179,7 +179,7 @@ public class CmuHotelReportAction extends AbstractCmuReportAction {
 							manager.append(result.getGeneralMgrPhone());
 						}
 						writeCell(wb, sheet, row, col++, manager.toString(), style);
-
+						writeCell(wb, sheet, row, col++, result.getGeneralMgrEmail(), style);
 						rowNum++;
 					}
 				}
